@@ -10,7 +10,9 @@ import random from '../assets/icon/random-play.png'
 
 import { PlayerCore } from '../PlayerCore';
 import PlayerControl from './PlayerControl.vue'
-import MusicList from './PlayList.vue'
+import PlayList from './PlayList.vue'
+import ProgressCom from './Progress.vue'
+import PlayerTitle from './PlayerTitle.vue'
 
 const playerCore = new PlayerCore({
   playList: [
@@ -19,29 +21,14 @@ const playerCore = new PlayerCore({
     {name:'我的美丽',author:'小霞',duration:'5:08',cover:myBeauty}
   ]
 })
-const currentSong = computed(()=>playerCore.currentSong)
-const state=computed(()=>playerCore.playerState)
-const currentTime=computed(()=>playerCore.currentTime)
-const progressMax=computed(()=>playerCore.progressMax)
+
 
 const modeList=ref([loop,single,random])
 const modeListIndex=ref(0)
 const currentMode=computed(()=>{
   return modeList.value[modeListIndex.value]
 })
-
 const isShow=ref(false)
-const coverRef=ref(null)
-
-function addZero(val){
-  return val>=10?''+val:'0'+val
-}
-const currentTimeFormat = computed(()=> {
-  const min = Math.floor(currentTime.value/60)
-  const sec = parseInt(currentTime.value % 60)
-
-  return `${min}:${addZero(sec)}`
-})
 
 function toggleList(){
   isShow.value=!isShow.value
@@ -53,46 +40,28 @@ function handleMode(){
     modeListIndex.value++
   }
 }
-
 provide('playerCore',playerCore)
-
 </script>
 
 <template>
   <div class="player">
-      <img ref="coverRef" :class="{
-        animation: state.value == 'pause'
-      }" class="cover" :src="currentSong.cover">
-      <h3 class="song-name">{{currentSong.name}}</h3>
-        <PlayerControl />
+      <PlayerTitle />
+      <PlayerControl />
       <div class="play-info">
         <button class="player-mode-btn" @click="handleMode">
           <img style="width: 25px; height: 25px;" :src="currentMode" alt="">
         </button>
-        <div class="progress">
-          <label class="duration" for="music-progress">{{currentTimeFormat}}/{{currentSong.duration}}</label>
-          <progress id="music-progress" :max="progressMax" :value="currentTime"></progress>
-          <div id="probnt" class="progress_btn"></div>
-        </div>
+        <ProgressCom />
+
         <button class="list" @click="toggleList">
           <img style="width: 25px; height: 25px;" src="../assets/icon/music-list.png" alt="音乐列表">
         </button>
       </div>
-      
     </div>
-
-    <MusicList v-if="isShow" />
+    <PlayList v-if="isShow" />
 </template>
 
 <style >
-@keyframes rotation {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-  }
   .player{
     padding: 10px;
     position: relative;
@@ -103,28 +72,6 @@ provide('playerCore',playerCore)
     border-radius: 10px;
     border: 3px solid #FF9433;
     margin-bottom: 10px;
-  }
-  
-  .cover{
-    width: 90px;
-    height: 90px;
-    position: absolute;
-    border-radius: 50%;
-    top: -50px;
-    left: 15px;
-    border: 3px solid #FF9433;
-  }
-
-  .song-name{
-    position: absolute;
-    top: -50px;
-    left: 120px;
-    font-size: 18px;
-    font-weight: 400;
-  }
-
-  .animation{
-    animation: rotation 20s linear infinite;
   }
 
   .player-control{
@@ -144,37 +91,15 @@ provide('playerCore',playerCore)
     align-items: center;
     box-sizing: border-box;
   }
+
   button{
     border: none;
     background: none;
     cursor: pointer;
   }
+  
   button img{
     width: 30px;
     height: 30px;
   }
-  .progress{
-    width: 250px;
-    position: relative;
-  }
-  .progress progress{
-    width: 100%;
-  }
-  .duration{
-    font-size: 10px;
-    position: absolute;
-    top: -18px;
-    left: 0;
-  }
-  .progress_btn {
-        width: 12px;
-        height: 12px;
-        background: #ffffff;
-        border: 1px solid #ccc;
-        box-shadow: 0 0 5px 0 #000 0.27;
-        border-radius: 50%;
-        position: absolute;
-        top: 5px;
-        cursor: pointer;
-      }
 </style>
