@@ -1,4 +1,4 @@
-import { nextTick, ref } from "vue";
+import { nextTick, ref,computed } from "vue";
 
 export class PlayerCore {
   audio = document.createElement('audio')
@@ -13,15 +13,15 @@ export class PlayerCore {
     this.initAudioEvents()
   }
 
+
+
   initAudioEvents(){
     this.audio.addEventListener('canplay',()=>{
-      console.log('duration:',this.audio.duration)
+      this.duration=this.audio.duration
     })
     this.audio.addEventListener('timeupdate',()=>{
-      console.log('currentTime',this.audio.currentTime)
       this.currentTime = this.audio.currentTime
-      this.progressMax=this.audio.duration
-      if(this.progressMax==this.progressValue){
+      if(this.duration==this.progressValue){
         this.toNext()
       }
     })
@@ -52,7 +52,7 @@ export class PlayerCore {
 
   _currentTime=ref(0)
 
-  _progressMax=ref(1.0)
+  _duration=ref(1.0)
 
   get songIndex(){
     return this._songIndex.value
@@ -87,26 +87,36 @@ export class PlayerCore {
   }
   set currentTime(_currentTime){
     this._currentTime.value=_currentTime
+    this.audio.currentTime=_currentTime
   }
 
-  get progressMax(){
-    return this._progressMax.value
+  get duration(){
+    return this._duration.value
   }
 
-  set progressMax(_progressMax){
-    this._progressMax.value=_progressMax
+  set duration(_duration){
+    this._duration.value=_duration
+  }
+
+  get progress(){
+    return computed(()=>this.currentTime / this.duration * 100) .value 
+  }
+
+  set progress(value){
+    this.currentTime = value *  this.duration
+
+    console.log( value *  this.duration)
   }
 
   play(){
-    const a= (this.currentTime/this.progressMax)*100 + '%' 
+    var a = 0
+    // const a= (this.currentTime/this.duration)*100 + '%' 
     if(this.playerState.value=='play'){
       this.playerState.value='pause'
       this.audio.play()
-      console.log('playing!!!',a)
     }else{
       this.playerState.value='play'
-      this.audio.pause()
-      console.log('stop!',a)
+      // this.audio.pause()
     }
   }
 
