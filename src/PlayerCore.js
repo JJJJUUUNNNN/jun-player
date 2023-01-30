@@ -2,7 +2,6 @@ import { nextTick, ref } from "vue";
 
 export class PlayerCore {
   audio = document.createElement('audio')
-  // player=document.getElementsByClassName('player-container')
   /**
    * @param { {playList:any} } options 
    */
@@ -16,10 +15,10 @@ export class PlayerCore {
 
   initAudioEvents(){
     this.audio.addEventListener('canplay',()=>{
-      console.log(this.audio.duration)
+      console.log('duration:',this.audio.duration)
     })
     this.audio.addEventListener('timeupdate',()=>{
-      console.log(this.audio.currentTime)
+      console.log('currentTime',this.audio.currentTime)
       this.currentTime = this.audio.currentTime
       this.progressMax=this.audio.duration
       if(this.progressMax==this.progressValue){
@@ -28,6 +27,7 @@ export class PlayerCore {
     })
     this.audio.addEventListener('ended',()=>{
       console.log('end')
+      this.playerState.value="pause"
     })
   }
 
@@ -98,12 +98,15 @@ export class PlayerCore {
   }
 
   play(){
+    const a= (this.currentTime/this.progressMax)*100 + '%' 
     if(this.playerState.value=='play'){
       this.playerState.value='pause'
       this.audio.play()
+      console.log('playing!!!',a)
     }else{
       this.playerState.value='play'
       this.audio.pause()
+      console.log('stop!',a)
     }
   }
 

@@ -51,6 +51,7 @@ provide('playerCore',playerCore)
         <button class="player-mode-btn" @click="handleMode">
           <img style="width: 25px; height: 25px;" :src="currentMode" alt="">
         </button>
+        
         <ProgressCom />
 
         <button class="list" @click="toggleList">

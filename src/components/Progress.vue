@@ -1,10 +1,11 @@
 <script setup>
-import { computed,inject,ref,onMounted  } from 'vue';
+import { computed,inject,ref  } from 'vue';
 
 const playerCore = inject('playerCore')
 const progressMax=computed(()=>playerCore.progressMax)
 const currentSong = computed(()=>playerCore.currentSong)
 const currentTime=computed(()=>playerCore.currentTime)
+const state=computed(()=>playerCore.playerState)
 
 function addZero(val){
   return val>=10?''+val:'0'+val
@@ -21,46 +22,25 @@ const processRef=ref()
 const progressBtnRef=ref()
 const progressLeft=ref(0)
 const progressX=ref(0)
-const a=ref(0)
 
 function mouseDown(event){
-  // progressLeft.value=event.clientX-progressBtnRef.value.offsetLeft
-  // console.log('11',progressLeft.value)
-  console.log('mouseDown')
+  progressLeft.value=event.clientX-progressBtnRef.value.offsetLeft
 }
 
 function mouseMove(event){
   progressX.value = event.clientX - progressLeft.value;
-  if(progressX<=0){
-    progressX = 0;
-    }
-  else if(progressX>=800){
-    progressX = 800;
-    }
-  console.log('mouseMove')
-  console.log('222',progressX.value)
-  processRef.value.style.width = progressX+"px";
-  a.value = Math.round(progressX/8)+"%";
+  processRef.value.style.width = `${(currentTime.value/progressMax.value)*100}%`;
+  progressBtnRef.value.style.right=0;
 }
-function touchStart(){
-  console.log('touchStart')
-}
-function touchEnd(){
-  console.log('touchEnd')
-}
-function touchMove(){
-  console.log('touchMove')
-}
-
 </script>
 <template>
   <div class="progress">
     <label class="duration" for="music-progress">{{currentTimeFormat}}/{{currentSong.duration}}</label>
-    <div ref="musicProRef" class="music-progress">
+    <div ref="musicProRef" class="music-progress" @mousedown="mouseDown">
       <div ref="processRef" class="progress-process">
-       <i ref="progressBtnRef" class="progress_btn" @mousedown="mouseDown" @mousemove="mouseMove" @touchstart="touchStart" @touchmove="touchMove"  @touchend="touchEnd"></i>
+       <i ref="progressBtnRef" class="progress_btn" @mousedown="mouseDown" @mousemove="mouseMove"></i>
       </div>
-      {{ a }}
+      {{ (currentTime/progressMax)*100 + '%' }}
     </div>
     <!-- <progress id="music-progress" :max="progressMax" :value="currentTime"></progress> -->
   </div>
