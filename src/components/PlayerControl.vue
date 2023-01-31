@@ -4,6 +4,7 @@ import play from '../assets/icon/play.png'
 import pause from '../assets/icon/pause.png'
 
 const playerCore = inject('playerCore')
+
 const state=computed(()=>playerCore.playerState)
 
 </script>

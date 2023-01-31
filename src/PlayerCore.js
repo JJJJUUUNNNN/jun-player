@@ -29,6 +29,13 @@ export class PlayerCore {
       console.log('end')
       this.playerState.value="pause"
     })
+
+    this.audio.addEventListener('pause',()=>{
+      console.log('pause')
+    })
+    this.audio.addEventListener('play',()=>{
+      console.log('play')
+    })
   }
 
 
@@ -87,7 +94,9 @@ export class PlayerCore {
   }
   set currentTime(_currentTime){
     this._currentTime.value=_currentTime
-    this.audio.currentTime=_currentTime
+    if(this.audio.currentTime  != _currentTime){
+      this.audio.currentTime=_currentTime
+    }
   }
 
   get duration(){
@@ -99,12 +108,11 @@ export class PlayerCore {
   }
 
   get progress(){
-    return computed(()=>this.currentTime / this.duration * 100) .value 
+    return computed(()=>this.currentTime / this.duration * 100).value 
   }
 
   set progress(value){
     this.currentTime = value *  this.duration
-
     console.log( value *  this.duration)
   }
 
@@ -116,11 +124,12 @@ export class PlayerCore {
       this.audio.play()
     }else{
       this.playerState.value='play'
-      // this.audio.pause()
+      this.audio.pause()
     }
   }
 
   reset(){
+    console.log(123)
     this.playerState.value='play'
   }
 
