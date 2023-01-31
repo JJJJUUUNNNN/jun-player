@@ -7,6 +7,9 @@ import Player from './components/Player.vue'
 <template>
   <div class="player-container">
     <Player />
+    <div class="nnn">
+
+    </div>
   </div>
 </template>
 
@@ -21,4 +24,6 @@ import Player from './components/Player.vue'
     margin: 0 auto;
     background-color: #F8F9FA;
   }
+
+
 </style>

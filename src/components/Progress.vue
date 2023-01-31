@@ -7,7 +7,6 @@ const progress = computed(() => playerCore.progress);
 
 const currentSong = computed(() => playerCore.currentSong);
 const currentTime = computed(() => playerCore.currentTime);
-const state = computed(() => playerCore.playerState);
 
 function addZero(val) {
   return val >= 10 ? "" + val : "0" + val;
@@ -21,53 +20,67 @@ const currentTimeFormat = computed(() => {
 
 const musicProRef = ref();
 const processRef = ref();
-const progressBtnRef = ref();
 const width = computed(() => progress.value + "%");
+// const width=ref('0%')
+const containerWidth = ref(0);
 
 //  是否按下去
-const isDrag = ref(false);
-var diffX = 0
+let isDrag = false;
+
+let barLeft = 0
+
 function handleMouseDown(event) {
-  isDrag.value = true;
-   diffX = event.clientX - musicProRef.value.offsetLeft;
+  isDrag = true;
+  handleMouseMove(event)
 }
 
 function handleMouseMove(event) {
-  if (!isDrag.value) return;
-  var moveX = event.clientX - diffX;
-  if (moveX < 0) {
-    moveX = 0;
-  } else if (moveX > window.innerWidth - musicProRef.value.offsetWidth) {
-    moveX = window.innerWidth - musicProRef.value.offsetWidth;
-  }
-  const newProsess = moveX / 250
-  playerCore.progress  = newProsess
+
+  if (!isDrag) return;
+
+  barLeft =  musicProRef.value.getBoundingClientRect().x
+  
+  const diff  = event.clientX - barLeft
+
+  const per = diff / musicProRef.value.offsetWidth 
+
+  // width.value = per + '%'
+
+  // if (moveX <= 0) {
+  //   moveX = 0;
+  // } else if (moveX > containerWidth.value) {
+  //   moveX = containerWidth.value;
+  // }
+
+  // else if (moveX > window.innerWidth - containerWidth.value) {
+  //   moveX = window.innerWidth - containerWidth.value;
+  // }
+
+  // const newProsess = moveX / containerWidth.value;
+  playerCore.progress = per;
 }
 
-function handleMouseleaveOrUp() {
-  isDrag.value = false
+function handleMouseleaveOrUp(event){
+    isDrag = false;
 }
-
-const s = computed({
-  get(){
-    return  playerCore._currentTime.value
-  },
-  set(v){
-    console.log(v)
-    playerCore._currentTime.value = v
-  }
-})
 </script>
 <template>
   <h1 style="position: fixed; top: 0; left: 0">
-    {{ width }}
+    width:{{ width }}
   </h1>
   <div class="progress">
     <label class="duration" for="music-progress"
       >{{ currentTimeFormat }}/{{ currentSong.duration }}</label
     >
 
-    <div ref="musicProRef" class="music-progress">
+    <div
+      ref="musicProRef"
+      class="music-progress"
+      @mousedown="handleMouseDown"
+      @mousemove="handleMouseMove"
+      @mouseleave="handleMouseleaveOrUp"
+      @mouseup="handleMouseleaveOrUp"
+    >
       <div
         ref="processRef"
         class="progress-process"
@@ -75,25 +88,11 @@ const s = computed({
           width: width,
         }"
       >
-        <i
-          ref="progressBtnRef"
-          class="progress_btn"
-          @mousedown="handleMouseDown"
-          @mousemove="handleMouseMove"
-          @mouseleave="handleMouseleaveOrUp"
-          @mouseup="handleMouseleaveOrUp"
-          :style="{
-            right: 0,
-          }"
-        ></i>
+        <div class="pro_button"></div>
       </div>
-
       {{ progress }}
     </div>
-    <!-- <progress id="music-progress" :max="duration" :value="currentTime"></progress> -->
   </div>
-  <!-- <input type="text" v-model="s"> -->
-
 </template>
 <style>
 .progress {
@@ -108,6 +107,7 @@ const s = computed({
   position: absolute;
   top: -18px;
   left: 0;
+  user-select: none;
 }
 .music-progress {
   width: 100%;
@@ -117,22 +117,23 @@ const s = computed({
   box-sizing: border-box;
   background-color: rgba(51, 51, 51, 0.476);
 }
+
+
 .progress-process {
   height: 100%;
   background-color: red;
   border-radius: 5px;
-  position: relative;
+  display: flex;
+  flex-direction: row-reverse;
 }
-.progress_btn {
-  width: 10px;
-  height: 10px;
+.pro_button {
+  width: 14px;
+  height: 14px;
   background: rgb(0, 255, 13);
   /* box-shadow: 0 0 5px 0 #000 0.27; */
   border-radius: 50%;
-  position: absolute;
   opacity: 0.5;
   cursor: pointer;
-  top: 50%;
-  transform: translate(calc(50% - 0px), -50%);
+  transform: translate(50%, -20%);
 }
 </style>

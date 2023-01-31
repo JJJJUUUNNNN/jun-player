@@ -105,15 +105,20 @@ export class PlayerCore {
 
   set duration(_duration){
     this._duration.value=_duration
+    if(this.audio.duration != _duration){
+      this.audio.duration=_duration
+    }
   }
 
   get progress(){
-    return computed(()=>this.currentTime / this.duration * 100).value 
+    const progress=computed(()=>this.currentTime / this.duration * 100)
+    return  progress.value
   }
 
-  set progress(value){
-    this.currentTime = value *  this.duration
-    console.log( value *  this.duration)
+  set progress(_progress){
+    this.currentTime = _progress *  this.duration
+    
+    console.log('progress:', this.progress)
   }
 
   play(){
