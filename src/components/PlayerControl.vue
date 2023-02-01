@@ -31,5 +31,6 @@ const state=computed(()=>playerCore.playerState)
     padding-left: 167px;
     box-sizing: border-box;
     padding-right: 10px;
+    user-select: none;
   }
 </style>

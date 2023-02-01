@@ -2,7 +2,6 @@
 import { computed, inject, ref } from "vue";
 
 const playerCore = inject("playerCore");
-const duration = computed(() => playerCore.duration.value);
 const progress = computed(() => playerCore.progress);
 
 const currentSong = computed(() => playerCore.currentSong);
@@ -21,42 +20,20 @@ const currentTimeFormat = computed(() => {
 const musicProRef = ref();
 const processRef = ref();
 const width = computed(() => progress.value + "%");
-// const width=ref('0%')
-const containerWidth = ref(0);
 
 //  是否按下去
 let isDrag = false;
-
 let barLeft = 0
-
 function handleMouseDown(event) {
   isDrag = true;
   handleMouseMove(event)
 }
 
 function handleMouseMove(event) {
-
   if (!isDrag) return;
-
   barLeft =  musicProRef.value.getBoundingClientRect().x
-  
   const diff  = event.clientX - barLeft
-
   const per = diff / musicProRef.value.offsetWidth 
-
-  // width.value = per + '%'
-
-  // if (moveX <= 0) {
-  //   moveX = 0;
-  // } else if (moveX > containerWidth.value) {
-  //   moveX = containerWidth.value;
-  // }
-
-  // else if (moveX > window.innerWidth - containerWidth.value) {
-  //   moveX = window.innerWidth - containerWidth.value;
-  // }
-
-  // const newProsess = moveX / containerWidth.value;
   playerCore.progress = per;
 }
 
@@ -64,10 +41,8 @@ function handleMouseleaveOrUp(event){
     isDrag = false;
 }
 </script>
+
 <template>
-  <h1 style="position: fixed; top: 0; left: 0">
-    width:{{ width }}
-  </h1>
   <div class="progress">
     <label class="duration" for="music-progress"
       >{{ currentTimeFormat }}/{{ currentSong.duration }}</label
@@ -90,10 +65,10 @@ function handleMouseleaveOrUp(event){
       >
         <div class="pro_button"></div>
       </div>
-      {{ progress }}
     </div>
   </div>
 </template>
+
 <style>
 .progress {
   width: 250px;
@@ -118,19 +93,19 @@ function handleMouseleaveOrUp(event){
   background-color: rgba(51, 51, 51, 0.476);
 }
 
-
 .progress-process {
   height: 100%;
   background-color: red;
   border-radius: 5px;
-  display: flex;
-  flex-direction: row-reverse;
+  position: relative;
 }
 .pro_button {
+  position: absolute;
+  top: 0;
+  right: 0;
   width: 14px;
   height: 14px;
   background: rgb(0, 255, 13);
-  /* box-shadow: 0 0 5px 0 #000 0.27; */
   border-radius: 50%;
   opacity: 0.5;
   cursor: pointer;

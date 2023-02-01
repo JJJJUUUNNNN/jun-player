@@ -8,12 +8,10 @@ export class PlayerCore {
   constructor(options){
     this.playList = options.playList||[]
     this.songIndex = 0
-    this.audio.controls = true
+    this.audio.controls = false
     document.body.appendChild(this.audio)
     this.initAudioEvents()
   }
-
-
 
   initAudioEvents(){
     this.audio.addEventListener('canplay',()=>{
@@ -21,7 +19,7 @@ export class PlayerCore {
     })
     this.audio.addEventListener('timeupdate',()=>{
       this.currentTime = this.audio.currentTime
-      if(this.duration==this.progressValue){
+      if(this.duration==this.currentTime){
         this.toNext()
       }
     })
@@ -47,7 +45,6 @@ export class PlayerCore {
 
     //随机播放
 
-
     // play
   }
 
@@ -72,7 +69,6 @@ export class PlayerCore {
     })
   }
 
-
   get playList(){
     return this._playList.value
   }
@@ -92,6 +88,7 @@ export class PlayerCore {
   get currentTime(){
     return this._currentTime.value
   }
+
   set currentTime(_currentTime){
     this._currentTime.value=_currentTime
     if(this.audio.currentTime  != _currentTime){
@@ -122,8 +119,6 @@ export class PlayerCore {
   }
 
   play(){
-    var a = 0
-    // const a= (this.currentTime/this.duration)*100 + '%' 
     if(this.playerState.value=='play'){
       this.playerState.value='pause'
       this.audio.play()
@@ -134,8 +129,8 @@ export class PlayerCore {
   }
 
   reset(){
-    console.log(123)
     this.playerState.value='play'
+    this.play()
   }
 
   toNext(){

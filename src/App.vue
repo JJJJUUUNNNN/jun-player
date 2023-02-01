@@ -1,5 +1,4 @@
 <script setup>
-import {ref, onMounted } from 'vue';
 import Player from './components/Player.vue'
 
 </script>
@@ -7,9 +6,6 @@ import Player from './components/Player.vue'
 <template>
   <div class="player-container">
     <Player />
-    <div class="nnn">
-
-    </div>
   </div>
 </template>
 

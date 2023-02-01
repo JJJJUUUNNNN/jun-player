@@ -11,7 +11,7 @@ import random from '../assets/icon/random-play.png'
 import { PlayerCore } from '../PlayerCore';
 import PlayerControl from './PlayerControl.vue'
 import PlayList from './PlayList.vue'
-import ProgressCom from './Progress.vue'
+import PlayerProgress from './PlayerProgress.vue'
 import PlayerTitle from './PlayerTitle.vue'
 
 const playerCore = new PlayerCore({
@@ -52,7 +52,7 @@ provide('playerCore',playerCore)
           <img style="width: 25px; height: 25px;" :src="currentMode" alt="">
         </button>
         
-        <ProgressCom />
+        <PlayerProgress />
 
         <button class="list" @click="toggleList">
           <img style="width: 25px; height: 25px;" src="../assets/icon/music-list.png" alt="音乐列表">
@@ -97,6 +97,7 @@ provide('playerCore',playerCore)
     border: none;
     background: none;
     cursor: pointer;
+    user-select: none;
   }
   
   button img{
