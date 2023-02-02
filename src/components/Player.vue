@@ -52,18 +52,23 @@ provide('playerCore',playerCore)
           <img style="width: 25px; height: 25px;" :src="currentMode" alt="">
         </button>
         
-        <PlayerProgress />
+        <PlayerProgress  type="duration" progressWidth="250px" processColor="#fff" musicProgressColor='hsla(0,0%,100%,.2)' musicProgressHeight="8px" proBtnColor="#fff" BtnWidthHeight="16px" />
 
         <button class="list" @click="toggleList">
-          <img style="width: 25px; height: 25px;" src="../assets/icon/music-list.png" alt="音乐列表">
+          <img style="width: 25px;
+           height: 25px;" src="../assets/icon/music-list.png" alt="音乐列表">
         </button>
       </div>
+      <PlayList v-if="isShow" />
     </div>
-    <PlayList v-if="isShow" />
 </template>
 
 <style >
   .player{
+    width: 360px;
+    background-color: #333;
+    color:#fff;
+    opacity: 0.9;
     padding: 10px;
     position: relative;
     display: flex;
@@ -71,7 +76,7 @@ provide('playerCore',playerCore)
     justify-content: center;
     align-items: center;
     border-radius: 10px;
-    border: 3px solid #FF9433;
+    /* border: 3px solid #ccc; */
     margin-bottom: 10px;
   }
 

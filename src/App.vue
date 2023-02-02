@@ -18,7 +18,7 @@ import Player from './components/Player.vue'
     align-items: center;
     width: 400px;
     margin: 0 auto;
-    background-color: #F8F9FA;
+    /* background-color: #F8F9FA; */
   }
 
 

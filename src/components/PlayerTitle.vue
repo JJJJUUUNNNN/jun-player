@@ -29,7 +29,7 @@ const state=computed(()=>playerCore.playerState)
     border-radius: 50%;
     top: -50px;
     left: 15px;
-    border: 3px solid #FF9433;
+    border: 3px solid #ccc;
   }
 
   .song-name{
@@ -42,5 +42,8 @@ const state=computed(()=>playerCore.playerState)
 
    .animation{
     animation: rotation 20s linear infinite;
+  }
+  h3{
+    color: #000;
   }
 </style>

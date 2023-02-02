@@ -1,5 +1,16 @@
 <script setup>
-import { computed, inject, ref } from "vue";
+import { computed, inject, ref,defineProps } from "vue";
+
+const props = defineProps({
+  type: String,
+  progressWidth:String,
+  musicProgressHeight:String,
+  processColor:String,
+  musicProgressColor:String,
+  proBtnColor:String,
+  BtnWidthHeight:String
+})
+
 
 const playerCore = inject("playerCore");
 const progress = computed(() => playerCore.progress);
@@ -43,8 +54,8 @@ function handleMouseleaveOrUp(event){
 </script>
 
 <template>
-  <div class="progress">
-    <label class="duration" for="music-progress"
+  <div class="progress" :style="{width: progressWidth}">
+    <label v-if="type=='duration'" class="duration" for="music-progress"
       >{{ currentTimeFormat }}/{{ currentSong.duration }}</label
     >
 
@@ -55,15 +66,24 @@ function handleMouseleaveOrUp(event){
       @mousemove="handleMouseMove"
       @mouseleave="handleMouseleaveOrUp"
       @mouseup="handleMouseleaveOrUp"
+      :style="{
+        background: musicProgressColor,
+        height: musicProgressHeight
+      }"
     >
       <div
         ref="processRef"
         class="progress-process"
         :style="{
           width: width,
+          backgroundColor: processColor
         }"
       >
-        <div class="pro_button"></div>
+        <div class="pro_button" :style="{
+          backgroundColor:proBtnColor,
+          width:BtnWidthHeight,
+          height:BtnWidthHeight,
+        }"></div>
       </div>
     </div>
   </div>
@@ -71,7 +91,6 @@ function handleMouseleaveOrUp(event){
 
 <style>
 .progress {
-  width: 250px;
   position: relative;
 }
 .progress progress {
@@ -86,16 +105,12 @@ function handleMouseleaveOrUp(event){
 }
 .music-progress {
   width: 100%;
-  height: 10px;
-  border: 1px solid #111;
   border-radius: 5px;
   box-sizing: border-box;
-  background-color: rgba(51, 51, 51, 0.476);
 }
 
 .progress-process {
   height: 100%;
-  background-color: red;
   border-radius: 5px;
   position: relative;
 }
@@ -103,12 +118,9 @@ function handleMouseleaveOrUp(event){
   position: absolute;
   top: 0;
   right: 0;
-  width: 14px;
-  height: 14px;
-  background: rgb(0, 255, 13);
   border-radius: 50%;
-  opacity: 0.5;
   cursor: pointer;
-  transform: translate(50%, -20%);
+  transform: translate(50%, -25%);
+  box-shadow: 0px 0px 5px #333;
 }
 </style>

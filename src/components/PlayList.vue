@@ -28,13 +28,11 @@ const playList=computed(()=>playerCore.playList)
 
 <style scoped>
   .music-list{
-    border-radius: 10px;
-    border: 3px solid #4263EB;
+    background-color: #333;
   }
   .music-list table{
-    border: 1px solid;
-    width: 300px;
-    color: #4263EB;
+    width: 360px;
+    color: #fff;
     padding: 10px;
   }
 </style>
