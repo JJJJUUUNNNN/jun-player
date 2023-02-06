@@ -58,6 +58,8 @@ export class PlayerCore {
 
   _duration=ref(1.0)
 
+  _likeOrNot=ref(false)
+
   get songIndex(){
     return this._songIndex.value
   }
@@ -118,6 +120,14 @@ export class PlayerCore {
     console.log('progress:', this.progress)
   }
 
+  get likeOrNot(){
+    return this._likeOrNot.value
+  }
+
+  set likeOrNot(_likeOrNot){
+    this._likeOrNot.value=_likeOrNot
+  }
+
   play(){
     if(this.playerState.value=='play'){
       this.playerState.value='pause'
@@ -148,6 +158,14 @@ export class PlayerCore {
       this.songIndex=this.playList.length-1
     }else{
       this.songIndex--
+    }
+  }
+
+  handleLike(){
+    if(this.likeOrNot==false){
+      this.likeOrNot=true
+    }else{
+      this.likeOrNot=false
     }
   }
 

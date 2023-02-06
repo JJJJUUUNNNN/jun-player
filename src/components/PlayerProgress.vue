@@ -1,16 +1,15 @@
 <script setup>
-import { computed, inject, ref,defineProps } from "vue";
+import { computed, inject, ref, defineProps } from "vue";
 
 const props = defineProps({
   type: String,
-  progressWidth:String,
-  musicProgressHeight:String,
-  processColor:String,
-  musicProgressColor:String,
-  proBtnColor:String,
-  BtnWidthHeight:String
-})
-
+  progressWidth: String,
+  musicProgressHeight: String,
+  processColor: String,
+  musicProgressColor: String,
+  proBtnColor: String,
+  BtnWidthHeight: String,
+});
 
 const playerCore = inject("playerCore");
 const progress = computed(() => playerCore.progress);
@@ -34,28 +33,28 @@ const width = computed(() => progress.value + "%");
 
 //  是否按下去
 let isDrag = false;
-let barLeft = 0
+let barLeft = 0;
 function handleMouseDown(event) {
   isDrag = true;
-  handleMouseMove(event)
+  handleMouseMove(event);
 }
 
 function handleMouseMove(event) {
   if (!isDrag) return;
-  barLeft =  musicProRef.value.getBoundingClientRect().x
-  const diff  = event.clientX - barLeft
-  const per = diff / musicProRef.value.offsetWidth 
+  barLeft = musicProRef.value.getBoundingClientRect().x;
+  const diff = event.clientX - barLeft;
+  const per = diff / musicProRef.value.offsetWidth;
   playerCore.progress = per;
 }
 
-function handleMouseleaveOrUp(event){
-    isDrag = false;
+function handleMouseleaveOrUp(event) {
+  isDrag = false;
 }
 </script>
 
 <template>
-  <div class="progress" :style="{width: progressWidth}">
-    <label v-if="type=='duration'" class="duration" for="music-progress"
+  <div class="progress" :style="{ width: progressWidth }">
+    <label v-if="type == 'duration'" class="duration" for="music-progress"
       >{{ currentTimeFormat }}/{{ currentSong.duration }}</label
     >
 
@@ -68,7 +67,7 @@ function handleMouseleaveOrUp(event){
       @mouseup="handleMouseleaveOrUp"
       :style="{
         background: musicProgressColor,
-        height: musicProgressHeight
+        height: musicProgressHeight,
       }"
     >
       <div
@@ -76,14 +75,17 @@ function handleMouseleaveOrUp(event){
         class="progress-process"
         :style="{
           width: width,
-          backgroundColor: processColor
+          backgroundColor: processColor,
         }"
       >
-        <div class="pro_button" :style="{
-          backgroundColor:proBtnColor,
-          width:BtnWidthHeight,
-          height:BtnWidthHeight,
-        }"></div>
+        <div
+          class="pro_button"
+          :style="{
+            backgroundColor: proBtnColor,
+            width: BtnWidthHeight,
+            height: BtnWidthHeight,
+          }"
+        ></div>
       </div>
     </div>
   </div>
