@@ -1,7 +1,7 @@
 <script setup>
 import { computed, inject, ref } from "vue";
-import play from "../assets/icon/play.png";
-import pause from "../assets/icon/pause.png";
+import play from "../assets/icon/pause.png";
+import pause from "../assets/icon/play.png";
 import PlayerProgress from "./PlayerProgress.vue";
 
 const playerCore = inject("playerCore");
