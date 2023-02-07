@@ -3,10 +3,11 @@ import { nextTick, ref,computed } from "vue";
 export class PlayerCore {
   audio = document.createElement('audio')
   /**
-   * @param { {playList:any} } options 
+   * @param { {playList:any,modeList:any} } options 
    */
   constructor(options){
     this.playList = options.playList||[]
+    this.modeList=options.modeList||[]
     this.songIndex = 0
     this.audio.controls = false
     document.body.appendChild(this.audio)
@@ -36,18 +37,6 @@ export class PlayerCore {
     })
   }
 
-
-  // 改变index
-  playNextSong(){
-    //单曲循环
-    
-    //列表循环
-
-    //随机播放
-
-    // play
-  }
-
   playerState = ref('play')
 
   _playList = ref([])
@@ -59,6 +48,13 @@ export class PlayerCore {
   _duration=ref(1.0)
 
   _likeOrNot=ref(false)
+
+  _modeList=ref([])
+
+  _modeListIndex=ref(0)
+
+  _currentMode=ref('')
+
 
   get songIndex(){
     return this._songIndex.value
@@ -128,6 +124,26 @@ export class PlayerCore {
     this._likeOrNot.value=_likeOrNot
   }
 
+  get modeList(){
+    return this._modeList.value
+  }
+
+  set modeList(_modeList){
+    this._modeList.value=_modeList
+  }
+
+  get modeListIndex(){
+    return this._modeListIndex.value
+  }
+  
+  set modeListIndex(_modeListIndex){
+    this._modeListIndex.value=_modeListIndex
+  }
+
+  get currentMode(){
+    return this.modeList[this.modeListIndex]
+  }
+
   play(){
     if(this.playerState.value=='play'){
       this.playerState.value='pause'
@@ -138,22 +154,30 @@ export class PlayerCore {
     }
   }
 
+  autoPlay(){
+    if(this.currentTime==0){
+      this.playerState.value='play'
+      this.audio.play()
+    }
+  }
+
   reset(){
-    this.playerState.value='play'
-    this.play()
+    this.currentTime=0
   }
 
   toNext(){
-    this.reset()
+    // this.reset()
+    console.log('99',this.currentTime)
     if(this.songIndex==this.playList.length-1){
       this.songIndex=0
+      this.autoPlay()
     }else{
       this.songIndex++
+      this.autoPlay()
     }
   }
 
   toPerv(){
-    this.reset()
     if(this.songIndex==0){
       this.songIndex=this.playList.length-1
     }else{
@@ -166,6 +190,20 @@ export class PlayerCore {
       this.likeOrNot=true
     }else{
       this.likeOrNot=false
+    }
+  }
+
+  handleMode(){
+    if (this.modeListIndex + 1 == this.modeList.length) {
+      this.modeListIndex = 0;
+      console.log('列表循环')
+    } else {
+      this.modeListIndex++;
+      if(this.modeListIndex==1){
+      console.log('单曲循环')
+    }else if(this.modeListIndex==2){
+      console.log('随机播放')
+    }
     }
   }
 
