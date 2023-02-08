@@ -16,7 +16,6 @@ function popOut() {
 }
 
 const likeOrNot = computed(() => playerCore.likeOrNot);
-const s = ref(0)
 </script>
 
 <template>
@@ -28,14 +27,8 @@ const s = ref(0)
           src="../assets/icon/voice.png"
           alt=""
         />
-        <div class="popUp">
-          <div>
-    {{ playerCore.volume }}
-
-          </div>
-          <SliderBar class="sliderBar" style="width:120px" v-model="playerCore.volume">
-            
-          </SliderBar>
+        <div class="pop-up">
+          <SliderBar class="sliderBar" style="width:120px" v-model="playerCore.volume" />
         </div>
       </button>
     </div>
@@ -79,7 +72,7 @@ const s = ref(0)
   display: flex;
   position: relative;
 }
-.popUp {
+.pop-up {
   padding: 10px 15px;
   background-color: rgb(211, 2, 75);
   border-radius: 10px;

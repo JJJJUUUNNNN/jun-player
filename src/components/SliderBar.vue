@@ -1,7 +1,6 @@
 <script setup>
 import { computed, ref,  } from "vue";
 
-
 const props = defineProps({
   modelValue:{
     type:Number,
@@ -24,11 +23,12 @@ const value = computed({
 
 const sliderBarRef = ref();
 
-
 //  是否按下去
 let isDrag = false;
 let barLeft = 0;
 function handleMouseDown(event) {
+  // event.preventDefault();
+  
   isDrag = true;
   handleMouseMove(event);
 }
@@ -41,7 +41,13 @@ function handleMouseMove(event) {
   value.value = per;
 }
 
-function handleMouseleaveOrUp() {
+function handleMouseleaveOrUp(event) {
+  if(!isDrag) return
+  // handleMouseMove(event)
+  // sliderBarRef.value.removeEventListener('onmousedown',handleMouseDown)
+  sliderBarRef.value.removeEventListener('onmousemove',handleMouseMove)
+  sliderBarRef.value.removeEventListener('onmouseleave',handleMouseleaveOrUp)
+  sliderBarRef.value.removeEventListener('onmouseup',handleMouseleaveOrUp)
   isDrag = false;
 }
 </script>
@@ -55,9 +61,6 @@ function handleMouseleaveOrUp() {
       @mousemove="handleMouseMove"
       @mouseleave="handleMouseleaveOrUp"
       @mouseup="handleMouseleaveOrUp"
-      :style="{
-     
-      }"
     >
       <div
         ref="processRef"
