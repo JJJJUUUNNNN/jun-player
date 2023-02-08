@@ -47,7 +47,7 @@ function handleMouseMove(event) {
   playerCore.progress = per;
 }
 
-function handleMouseleaveOrUp(event) {
+function handleMouseleaveOrUp() {
   isDrag = false;
 }
 </script>

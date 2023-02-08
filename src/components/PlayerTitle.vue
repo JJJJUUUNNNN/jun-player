@@ -8,7 +8,7 @@ const state=computed(()=>playerCore.playerState)
 
 <template>
   <img :class="{
-        animation: state.value == 'pause'
+        animation: state.value == 'play'
       }" class="cover" :src="currentSong.cover">
   <h3 class="song-name">{{currentSong.name}}</h3>
 </template>

@@ -38,7 +38,6 @@ provide("playerCore", playerCore);
     <PlayerControl />
     <div class="play-info">
       <button class="player-mode-btn" @click="playerCore.handleMode">
-        {{ playerCore.modeListIndex }}
         <img style="width: 25px; height: 25px" :src="playerCore.currentMode" alt="" />
       </button>
 

@@ -161,10 +161,16 @@ export class PlayerCore {
 
   toNext() {
     this.pause();
-    if (this.songIndex == this.playList.length - 1) {
-      this.songIndex = 0;
-    } else {
-      this.songIndex++;
+    if(this.modeListIndex==0){
+      if (this.songIndex == this.playList.length - 1) {
+        this.songIndex = 0;
+      } else {
+        this.songIndex++;
+      }  
+    }else if(this.modeListIndex==1){
+      this.songIndex=this.songIndex
+    }else if(this.modeListIndex==2){
+      this.songIndex=this.getRandomInt(this.playList.length)
     }
 
     nextTick(() => {
@@ -199,14 +205,12 @@ export class PlayerCore {
   handleMode() {
     if (this.modeListIndex + 1 == this.modeList.length) {
       this.modeListIndex = 0;
-      console.log("列表循环");
     } else {
       this.modeListIndex++;
-      if (this.modeListIndex == 1) {
-        console.log("单曲循环");
-      } else if (this.modeListIndex == 2) {
-        console.log("随机播放");
-      }
     }
+  }
+
+  getRandomInt(max) {
+    return Math.floor(Math.random() * max);
   }
 }
