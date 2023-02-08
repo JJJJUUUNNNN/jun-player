@@ -42,13 +42,7 @@ provide("playerCore", playerCore);
       </button>
 
       <PlayerProgress
-        type="duration"
-        progressWidth="250px"
-        processColor="#fff"
-        musicProgressColor="hsla(0,0%,100%,.2)"
-        musicProgressHeight="8px"
-        proBtnColor="#fff"
-        BtnWidthHeight="16px"
+        style="margin:0 10px"
       />
 
       <button class="list" @click="toggleList">

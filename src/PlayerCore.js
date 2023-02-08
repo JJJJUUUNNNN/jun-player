@@ -35,6 +35,10 @@ export class PlayerCore {
     this.audio.addEventListener("play", () => {
       console.log("play");
     });
+
+    this.audio.addEventListener('volumechange',()=>{
+      this.volume = this.audio.volume
+    })
   }
 
   playerState = ref("pause");
@@ -55,11 +59,26 @@ export class PlayerCore {
 
   _currentMode = ref("");
 
+  _volume = ref(this.audio.volume)
+
+  get volume (){
+    return this._volume.value
+  }
+
+  set volume(value){
+    if(value == this._volume.value) return
+    this._volume.value = value;
+    this.audio.volume = value
+  }
+
+
+
   get songIndex() {
     return this._songIndex.value;
   }
 
   set songIndex(_songIndex) {
+    if(_songIndex == this._songIndex.value) return
     this._songIndex.value = _songIndex;
     this.audio.src = this.src;
   }
@@ -103,14 +122,12 @@ export class PlayerCore {
   }
 
   get progress() {
-    const progress = computed(() => (this.currentTime / this.duration) * 100);
+    const progress = computed(() => (this.currentTime / this.duration));
     return progress.value;
   }
 
   set progress(_progress) {
     this.currentTime = _progress * this.duration;
-
-    console.log("progress:", this.progress);
   }
 
   get likeOrNot() {

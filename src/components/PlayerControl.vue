@@ -2,7 +2,7 @@
 import { computed, inject, ref } from "vue";
 import pause from "../assets/icon/pause.png";
 import play from "../assets/icon/play.png";
-import PlayerProgress from "./PlayerProgress.vue";
+import SliderBar from "./SliderBar.vue";
 
 const playerCore = inject("playerCore");
 const state = computed(() => playerCore.playerState);
@@ -16,6 +16,7 @@ function popOut() {
 }
 
 const likeOrNot = computed(() => playerCore.likeOrNot);
+const s = ref(0)
 </script>
 
 <template>
@@ -27,15 +28,14 @@ const likeOrNot = computed(() => playerCore.likeOrNot);
           src="../assets/icon/voice.png"
           alt=""
         />
-        <div v-if="isShow" class="popUp">
-          <PlayerProgress
-            progressWidth="100px"
-            processColor="#01AAFF"
-            musicProgressColor="#ebebeb"
-            musicProgressHeight="4px"
-            proBtnColor="#01AAFF"
-            BtnWidthHeight="10px"
-          />
+        <div class="popUp">
+          <div>
+    {{ playerCore.volume }}
+
+          </div>
+          <SliderBar class="sliderBar" style="width:120px" v-model="playerCore.volume">
+            
+          </SliderBar>
         </div>
       </button>
     </div>
@@ -80,13 +80,17 @@ const likeOrNot = computed(() => playerCore.likeOrNot);
   position: relative;
 }
 .popUp {
-  height: 4px;
-  background-color: #fff;
+  padding: 10px 15px;
+  background-color: rgb(211, 2, 75);
   border-radius: 10px;
   position: absolute;
-  bottom: -22px;
-  left: -47px;
-  padding: 10px;
-  box-shadow: 0px 0px 2px #fff;
+  left: 50%;
+  transform: translate(-50%);
+  
+
+}
+:deep(.sliderBar){
+  --pro-button-size: 10px;
+  --music-slider-bar-height: 5px;
 }
 </style>
