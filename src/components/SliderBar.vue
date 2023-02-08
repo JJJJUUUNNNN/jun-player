@@ -1,36 +1,40 @@
 <script setup>
-import { computed, ref,  } from "vue";
+import { computed, ref } from "vue";
 
 const props = defineProps({
-  modelValue:{
-    type:Number,
-    default: 0
-  }
-})
-const emit = defineEmits(['update:modelValue'])
+  modelValue: {
+    type: Number,
+    default: 0,
+  },
+});
+const emit = defineEmits(["update:modelValue"]);
 
 const value = computed({
-  get(){
-    return props.modelValue
+  get() {
+    return props.modelValue;
   },
-  set(value){
-    if(value >= 0 && value<=1)
-      emit('update:modelValue',value)
-    else
-      console.log('error value:',value )
-  }
-})
+  set(value) {
+    if (value >= 0 && value <= 1) emit("update:modelValue", value);
+    else console.log("error value:", value);
+  },
+});
 
 const sliderBarRef = ref();
 
 //  是否按下去
 let isDrag = false;
 let barLeft = 0;
+
 function handleMouseDown(event) {
-  // event.preventDefault();
-  
   isDrag = true;
+
+  document.onmousemove = document.ontouchmove = handleMouseMove;
   handleMouseMove(event);
+  
+  document.onmouseup =
+  document.ontouchend =
+  document.onmouseleave =
+  document.onvisibilitychange = handleMouseleaveOrUp;
 }
 
 function handleMouseMove(event) {
@@ -42,13 +46,13 @@ function handleMouseMove(event) {
 }
 
 function handleMouseleaveOrUp(event) {
-  if(!isDrag) return
-  // handleMouseMove(event)
-  // sliderBarRef.value.removeEventListener('onmousedown',handleMouseDown)
-  sliderBarRef.value.removeEventListener('onmousemove',handleMouseMove)
-  sliderBarRef.value.removeEventListener('onmouseleave',handleMouseleaveOrUp)
-  sliderBarRef.value.removeEventListener('onmouseup',handleMouseleaveOrUp)
   isDrag = false;
+  document.onmousemove = null;
+  document.ontouchmove = null;
+  document.onmouseup = null;
+  document.ontouchend = null;
+  document.onmouseleave = null;
+  document.onvisibilitychange = null;
 }
 </script>
 
@@ -58,21 +62,17 @@ function handleMouseleaveOrUp(event) {
       ref="sliderBarRef"
       class="music-slider-bar"
       @mousedown="handleMouseDown"
-      @mousemove="handleMouseMove"
-      @mouseleave="handleMouseleaveOrUp"
-      @mouseup="handleMouseleaveOrUp"
+      @ontouchstart="handleMouseDown"
     >
       <div
         ref="processRef"
         class="slider-bar-process"
         :style="{
-          width: (value*100) + '%',
+          width: value * 100 + '%',
           backgroundColor: 'red',
         }"
       >
-        <div
-          class="pro_button"
-        ></div>
+        <div class="pro_button"></div>
       </div>
     </div>
   </div>
@@ -90,7 +90,7 @@ function handleMouseleaveOrUp(event) {
   width: 100%;
   border-radius: 5px;
   box-sizing: border-box;
-  background: hsla(0,0%,100%,.2);
+  background: hsla(0, 0%, 100%, 0.2);
   height: var(--music-slider-bar-height);
 }
 
