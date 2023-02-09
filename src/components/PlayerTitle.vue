@@ -18,7 +18,7 @@ function loop() {
  timer = setTimeout(() => {
     clearTimeout(timer);
     roll();
-  }, 10);
+  }, 40);
 }
 
 function reset(){
@@ -26,18 +26,24 @@ function reset(){
 }
 const rotate = computed(()=>`rotate(${rotateValue.value}deg)`)
 loop()
+
 onBeforeUnmount(()=>{
   clearTimeout(timer);
 })
+
+playerCore.emitter.on('play:next',()=>{
+  reset()
+})
+
+playerCore.emitter.on('play:perv',()=>{
+  reset()
+})
+
 </script>
 
 <template>
   <div class="player-info">
-    <div style="color: red;">
-      {{ r }}
-    </div>
-    
-    <div class="cover-container" :style="{ transform: rotate }">
+    <div class="cover-container" :style="{ transform: rotate, backgroundColor: `#${currentSong.theme}` }">
       <img class="cover" :src="currentSong.cover" />
     </div>
     <h3 class="song-name">{{ currentSong.name }}</h3>
@@ -45,29 +51,20 @@ onBeforeUnmount(()=>{
 </template>
 
 <style>
-@keyframes roll {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .player-info {
   position: absolute;
   left: 10px;
-  top: calc(-50% - 20px);
+  top: calc(-50% - 15px);
   display: flex;
   align-items: center;
 }
+
 .cover-container {
   width: 90px;
   height: 90px;
   border: 3px solid #ccc;
   overflow: hidden;
   border-radius: 50%;
-  background: red;
 }
 
 .cover {
@@ -77,10 +74,6 @@ onBeforeUnmount(()=>{
   border-radius: 50%;
 }
 
-.cover-container.animation {
-  animation: roll 20s linear infinite;
-}
-
 .song-name {
   font-size: 18px;
   font-weight: 400;
@@ -88,12 +81,4 @@ onBeforeUnmount(()=>{
   margin: 0;
   margin-left: 10px;
 }
-
-/* 
-
-
-
-h3 {
-  color: #000;
-} */
 </style>

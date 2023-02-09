@@ -1,7 +1,10 @@
 import { nextTick, ref, computed } from "vue";
+import { EventEmitter } from "./EventEmitter";
 
 export class PlayerCore {
   audio = document.createElement("audio");
+  emitter = new EventEmitter();
+
   /**
    * @param { {playList:any,modeList:any} } options
    */
@@ -36,9 +39,9 @@ export class PlayerCore {
       console.log("play");
     });
 
-    this.audio.addEventListener('volumechange',()=>{
-      this.volume = this.audio.volume
-    })
+    this.audio.addEventListener("volumechange", () => {
+      this.volume = this.audio.volume;
+    });
   }
 
   playerState = ref("pause");
@@ -59,26 +62,24 @@ export class PlayerCore {
 
   _currentMode = ref("");
 
-  _volume = ref(this.audio.volume)
+  _volume = ref(this.audio.volume);
 
-  get volume (){
-    return this._volume.value
+  get volume() {
+    return this._volume.value;
   }
 
-  set volume(value){
-    if(value == this._volume.value) return
+  set volume(value) {
+    if (value == this._volume.value) return;
     this._volume.value = value;
-    this.audio.volume = value
+    this.audio.volume = value;
   }
-
-
 
   get songIndex() {
     return this._songIndex.value;
   }
 
   set songIndex(_songIndex) {
-    if(_songIndex == this._songIndex.value) return
+    if (_songIndex == this._songIndex.value) return;
     this._songIndex.value = _songIndex;
     this.audio.src = this.src;
   }
@@ -122,7 +123,7 @@ export class PlayerCore {
   }
 
   get progress() {
-    const progress = computed(() => (this.currentTime / this.duration));
+    const progress = computed(() => this.currentTime / this.duration);
     return progress.value;
   }
 
@@ -178,17 +179,19 @@ export class PlayerCore {
 
   toNext() {
     this.pause();
-    if(this.modeListIndex==0){
+    if (this.modeListIndex == 0) {
       if (this.songIndex == this.playList.length - 1) {
         this.songIndex = 0;
       } else {
         this.songIndex++;
-      }  
-    }else if(this.modeListIndex==1){
-      this.songIndex=this.songIndex
-    }else if(this.modeListIndex==2){
-      this.songIndex=this.getRandomInt(this.playList.length)
+      }
+    } else if (this.modeListIndex == 1) {
+      this.songIndex = this.songIndex;
+    } else if (this.modeListIndex == 2) {
+      this.songIndex = this.getRandomInt(this.playList.length);
     }
+
+    this.emitter.emit("play:next");
 
     nextTick(() => {
       setTimeout(() => {
@@ -204,6 +207,9 @@ export class PlayerCore {
     } else {
       this.songIndex--;
     }
+
+    this.emitter.emit("play:perv");
+    
     nextTick(() => {
       setTimeout(() => {
         this.play();

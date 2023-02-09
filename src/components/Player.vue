@@ -16,9 +16,9 @@ import PlayerTitle from "./PlayerTitle.vue";
 
 const playerCore = new PlayerCore({
   playList: [
-    { name: "勾指起誓言", author: "洛天依", duration: "3:03", cover: faith, theme:"f3aed6", },
-    { name: "盛夏的果实", author: "莫文蔚", duration: "4:10", cover: summer },
-    { name: "我的美丽", author: "小霞", duration: "5:08", cover: myBeauty },
+    { name: "勾指起誓言", author: "洛天依", duration: "3:03", cover: faith, theme:"fffaf5"},
+    { name: "盛夏的果实", author: "莫文蔚", duration: "4:10", cover: summer,theme:"c1d3df"},
+    { name: "我的美丽", author: "小霞", duration: "5:08", cover: myBeauty,theme:"b7b7b7"},
   ],
   modeList: [loop, single, random],
 });
@@ -30,19 +30,13 @@ function toggleList() {
 }
 
 provide("playerCore", playerCore);
-
-const btnRef = ref();
-
-function throwBall() {
-  console.log("throwBall!");
-}
 </script>
 
 <template>
   <div class="player">
     <PlayerTitle />
     <PlayerControl />
-    <div class="play-info">
+    <div class="player-action">
       <button class="player-mode-btn" @click="playerCore.handleMode">
         <img
           style="width: 25px; height: 25px"
@@ -62,34 +56,6 @@ function throwBall() {
       </button>
     </div>
     <PlayList v-if="isShow" />
-  </div>
-
-  <!-- ***************text************************** -->
-  <div
-    style="
-      margin-top: 100px;
-      background-color: #ccc;
-      width: 400px;
-      height: 400px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    "
-  >
-    <button
-      @click="throwBall"
-      ref="btnRef"
-      style="
-        background-color: red;
-        color: #fff;
-        border-radius: 10px;
-        width: 80px;
-        height: 40px;
-        font-size: 24px;
-      "
-    >
-      Click
-    </button>
   </div>
 </template>
 
@@ -118,7 +84,7 @@ function throwBall() {
   padding-right: 10px;
 }
 
-.play-info {
+.player-action {
   margin-top: 20px;
   display: flex;
   width: 100%;

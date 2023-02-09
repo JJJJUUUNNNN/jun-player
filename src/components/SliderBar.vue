@@ -1,6 +1,8 @@
 <script setup>
 import { debounce } from "@/utils";
-import { computed, ref, watch } from "vue";
+import { computed, ref, watch,inject } from "vue";
+const playerCore = inject("playerCore");
+const currentSong = computed(() => playerCore.currentSong);
 
 const props = defineProps({
   modelValue: {
@@ -93,7 +95,7 @@ watch(clickValue, update);
         class="slider-bar-process"
         :style="{
           width: clickValue * 100 + '%',
-          backgroundColor: 'red',
+          backgroundColor: `#${currentSong.theme}`,
         }"
       >
         <div class="pro_button"></div>
