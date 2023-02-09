@@ -23,6 +23,8 @@ const sliderBarRef = ref();
 
 //  是否按下去
 let isDrag = false;
+let isTouch=false;
+
 let barLeft = 0;
 
 function handleMouseDown(event) {
@@ -39,8 +41,14 @@ function handleMouseDown(event) {
 
 function handleMouseMove(event) {
   if (!isDrag) return;
+  if(event.type=='touchstart'||event.type=='touchmove'){
+    isTouch=true
+  }else{
+    isTouch=false
+  }
   barLeft = sliderBarRef.value.getBoundingClientRect().x;
-  const diff = event.clientX - barLeft;
+  const x = isTouch ? event.changedTouches[0].clientX : event.clientX;
+  const diff = x - barLeft;
   const per = diff / sliderBarRef.value.offsetWidth;
   value.value = per;
 }
@@ -62,7 +70,7 @@ function handleMouseleaveOrUp(event) {
       ref="sliderBarRef"
       class="music-slider-bar"
       @mousedown="handleMouseDown"
-      @ontouchstart="handleMouseDown"
+      @touchstart="handleMouseDown"
     >
       <div
         ref="processRef"
