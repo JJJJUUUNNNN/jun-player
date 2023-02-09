@@ -55,5 +55,6 @@ export function usePlayer() {
     timeBar,
     durationText,
     currentText,
+    handleLike:playerCore.handleLike
   };
 }
