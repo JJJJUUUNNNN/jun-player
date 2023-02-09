@@ -20,6 +20,11 @@ export function usePlayer() {
     currentTime.value = value;
   });
 
+  const like = ref(playerCore.like);
+  playerCore.emitter.on("likeChange", (value) => {
+    like.value = value;
+  });
+
   const progress = ref(playerCore.progress);
 
   function progressRefUpdatePlayerCore() {
@@ -31,7 +36,7 @@ export function usePlayer() {
   playerCore.emitter.on("durationChange", progressRefUpdatePlayerCore);
 
   watch(progress, (value) => {
-    console.log('watch(progress)')
+    console.log("watch(progress)");
     playerCore.progress = value;
   });
 
@@ -57,5 +62,6 @@ export function usePlayer() {
     durationText,
     currentText,
     handleLike: playerCore.handleLike,
+    like
   };
 }

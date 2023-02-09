@@ -1,4 +1,4 @@
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { EventEmitter } from "./EventEmitter";
 
 export class PlayerCore {
@@ -25,10 +25,10 @@ export class PlayerCore {
     this.audio.addEventListener("timeupdate", () => {
       this.currentTime = this.audio.currentTime;
       this.emitter.emit("timeupdate");
-      console.log(['timeupdate'])
+      console.log(["timeupdate"]);
     });
     this.audio.addEventListener("ended", () => {
-      this.playerState.value = "pause";
+      this.playerState = "pause";
       this.emitter.emit("ended");
       if (this.duration == this.currentTime) {
         this.toNext();
@@ -48,6 +48,12 @@ export class PlayerCore {
     });
   }
 
+  /**
+   * @description 播放状态
+   * @type { string }
+   * @private
+   */
+
   _playerState = "pause";
 
   get playerState() {
@@ -62,8 +68,6 @@ export class PlayerCore {
   _playList = ref([]);
 
   _songIndex = ref(-1);
-
-  _likeOrNot = ref(false);
 
   _modeList = ref([]);
 
@@ -110,7 +114,7 @@ export class PlayerCore {
   }
 
   /**
-   * @description 音频时长
+   * @description 当前时间
    * @type { number }
    * @private
    */
@@ -122,12 +126,11 @@ export class PlayerCore {
 
   set currentTime(value) {
     if (this._currentTime != value) {
-      console.log('set currentTime')
+      console.log("set currentTime");
       this._currentTime = value;
       this.emitter.emit("onCurrentTimeChange", value);
-      if(this.audio.currentTime != value){
-
-        console.log('currentTime change this.audio.currentTime')
+      if (this.audio.currentTime != value) {
+        console.log("currentTime change this.audio.currentTime");
         this.audio.currentTime = value;
       }
     }
@@ -149,23 +152,35 @@ export class PlayerCore {
     this.emitter.emit("durationChange", value);
   }
 
+  /**
+   * @description 进度条比率
+   *
+   */
   get progress() {
     return this.duration === 0 ? 0 : this.currentTime / this.duration;
   }
 
   set progress(value) {
-    if (value != this.currentTime / this.duration){
-      console.log('set progress')
+    if (value != this.currentTime / this.duration) {
+      console.log("set progress");
       this.currentTime = value * this.duration;
     }
   }
 
-  get likeOrNot() {
-    return this._likeOrNot.value;
+  /**
+   * @description 喜欢音乐
+   * @type { boolean }
+   * @private
+   */
+  _like = false;
+
+  get like() {
+    return this._like;
   }
 
-  set likeOrNot(_likeOrNot) {
-    this._likeOrNot.value = _likeOrNot;
+  set like(value) {
+    this._like = value;
+    this.emitter.emit("likeChange", value);
   }
 
   get modeList() {
@@ -237,10 +252,10 @@ export class PlayerCore {
   }
 
   handleLike() {
-    if (this.likeOrNot == false) {
-      this.likeOrNot = true;
+    if (this.like == false) {
+      this.like = true;
     } else {
-      this.likeOrNot = false;
+      this.like = false;
     }
   }
 

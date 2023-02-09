@@ -9,7 +9,7 @@ import { usePlayer } from "@/hooks/usePlayer";
  * @type { PlayerCore }
  */
 const playerCore = inject("playerCore");
-const { state } = usePlayer() 
+const { state, like, handleLike } = usePlayer();
 
 const isShow = ref(false);
 
@@ -19,8 +19,6 @@ function popUp() {
 function popOut() {
   isShow.value = false;
 }
-
-const likeOrNot = computed(() => playerCore.likeOrNot);
 </script>
 
 <template>
@@ -33,13 +31,17 @@ const likeOrNot = computed(() => playerCore.likeOrNot);
           alt=""
         />
         <div class="pop-up">
-          <SliderBar class="sliderBar" style="width:120px" v-model="playerCore.volume" />
+          <SliderBar
+            class="sliderBar"
+            style="width: 120px"
+            v-model="playerCore.volume"
+          />
         </div>
       </button>
     </div>
-    <button contenteditable="true" @click="playerCore.handleLike">
+    <button contenteditable="true" @click="handleLike">
       <img
-        v-if="!likeOrNot"
+        v-if="!like"
         style="width: 20px; height: 20px"
         src="../assets/icon/unlike.png"
         alt=""
@@ -84,10 +86,8 @@ const likeOrNot = computed(() => playerCore.likeOrNot);
   position: absolute;
   left: 50%;
   transform: translate(-50%);
-  
-
 }
-:deep(.sliderBar){
+:deep(.sliderBar) {
   --pro-button-size: 10px;
   --music-slider-bar-height: 5px;
 }
