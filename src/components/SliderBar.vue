@@ -1,29 +1,34 @@
 <script setup>
-import { computed, ref } from "vue";
+import { debounce } from "@/utils";
+import { computed, ref, watch } from "vue";
 
 const props = defineProps({
   modelValue: {
     type: Number,
     default: 0,
   },
+  duration:{
+    type: Number,
+    default: 500,
+  }
 });
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue","update"]);
+const clickValue = ref(props.modelValue);
 
-const value = computed({
-  get() {
-    return props.modelValue;
-  },
-  set(value) {
-    if (value >= 0 && value <= 1) emit("update:modelValue", value);
-    else console.log("error value:", value);
-  },
-});
+// const value = computed({
+//   get() {
+//     return props.modelValue;
+//   },
+//   set(value) {
+//     if (value >= 0 && value <= 1) emit("update:modelValue", value);
+//     else console.log("error value:", value);
+//   },
+// });
 
 const sliderBarRef = ref();
-
 //  是否按下去
 let isDrag = false;
-let isTouch=false;
+let isTouch = false;
 
 let barLeft = 0;
 
@@ -32,25 +37,26 @@ function handleMouseDown(event) {
 
   document.onmousemove = document.ontouchmove = handleMouseMove;
   handleMouseMove(event);
-  
+
   document.onmouseup =
-  document.ontouchend =
-  document.onmouseleave =
-  document.onvisibilitychange = handleMouseleaveOrUp;
+    document.ontouchend =
+    document.onmouseleave =
+    document.onvisibilitychange =
+      handleMouseleaveOrUp;
 }
 
 function handleMouseMove(event) {
   if (!isDrag) return;
-  if(event.type=='touchstart'||event.type=='touchmove'){
-    isTouch=true
-  }else{
-    isTouch=false
+  if (event.type == "touchstart" || event.type == "touchmove") {
+    isTouch = true;
+  } else {
+    isTouch = false;
   }
   barLeft = sliderBarRef.value.getBoundingClientRect().x;
   const x = isTouch ? event.changedTouches[0].clientX : event.clientX;
   const diff = x - barLeft;
   const per = diff / sliderBarRef.value.offsetWidth;
-  value.value = per;
+  clickValue.value = per;
 }
 
 function handleMouseleaveOrUp(event) {
@@ -62,6 +68,16 @@ function handleMouseleaveOrUp(event) {
   document.onmouseleave = null;
   document.onvisibilitychange = null;
 }
+
+const update = debounce(updateValue, props.duration);
+function updateValue(clickValue) {
+  // value.value = clickValue
+  if (clickValue >= 0 && clickValue <= 1)
+    emit("update:modelValue", clickValue);
+  else 
+    console.log("error value:", clickValue);
+}
+watch(clickValue, update);
 </script>
 
 <template>
@@ -76,7 +92,7 @@ function handleMouseleaveOrUp(event) {
         ref="processRef"
         class="slider-bar-process"
         :style="{
-          width: value * 100 + '%',
+          width: clickValue * 100 + '%',
           backgroundColor: 'red',
         }"
       >
