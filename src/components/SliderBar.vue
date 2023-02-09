@@ -17,6 +17,7 @@ const props = defineProps({
 const emit = defineEmits(["update:modelValue","update"]);
 const clickValue = ref(props.modelValue);
 
+
 // const value = computed({
 //   get() {
 //     return props.modelValue;
@@ -79,6 +80,11 @@ function updateValue(clickValue) {
   else 
     console.log("error value:", clickValue);
 }
+
+watch(()=>props.modelValue,()=>{
+  if (!isDrag) return;
+  clickValue.value = props.modelValue
+})
 watch(clickValue, update);
 </script>
 

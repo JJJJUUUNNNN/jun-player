@@ -2,7 +2,7 @@
 import { computed,inject} from 'vue';
 
 const playerCore = inject('playerCore')
-const playList=computed(()=>playerCore.playList)
+const playList = computed(()=>playerCore.playList)
 </script>
 
 <template>

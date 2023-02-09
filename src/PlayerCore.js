@@ -1,4 +1,4 @@
-import {  ref, computed } from "vue";
+import { ref, computed } from "vue";
 import { EventEmitter } from "./EventEmitter";
 
 export class PlayerCore {
@@ -20,52 +20,48 @@ export class PlayerCore {
   initAudioEvents() {
     this.audio.addEventListener("canplay", () => {
       this.duration = this.audio.duration;
-      this.emitter.emit('canplay')
+      this.emitter.emit("canplay");
     });
     this.audio.addEventListener("timeupdate", () => {
       this.currentTime = this.audio.currentTime;
       if (this.duration == this.currentTime) {
         this.toNext();
       }
-      this.emitter.emit('timeupdate')
+      this.emitter.emit("timeupdate");
     });
     this.audio.addEventListener("ended", () => {
       console.log("end");
       this.playerState.value = "pause";
-      this.emitter.emit('ended')
+      this.emitter.emit("ended");
     });
 
     this.audio.addEventListener("pause", () => {
-      this.emitter.emit('pause')
+      this.emitter.emit("pause");
     });
     this.audio.addEventListener("play", () => {
-      this.emitter.emit('play')
+      this.emitter.emit("play");
     });
 
     this.audio.addEventListener("volumechange", () => {
       this.volume = this.audio.volume;
-      this.emitter.emit('volumechange')
+      this.emitter.emit("volumechange");
     });
   }
 
-  _playerState = 'pause';
+  _playerState = "pause";
 
-  get playerState(){
-    return this._playerState
+  get playerState() {
+    return this._playerState;
   }
 
-  set playerState(value){
-    this._playerState = value
-    this.emitter.emit('playerStateChange', value)
+  set playerState(value) {
+    this._playerState = value;
+    this.emitter.emit("playerStateChange", value);
   }
 
   _playList = ref([]);
 
   _songIndex = ref(-1);
-
-  _currentTime = ref(0);
-
-  _duration = ref(1.0);
 
   _likeOrNot = ref(false);
 
@@ -113,35 +109,48 @@ export class PlayerCore {
     return `/music/${this.currentSong.name}-${this.currentSong.author}.mp3`;
   }
 
+  /**
+   * @description 音频时长
+   * @type { number }
+   * @private
+   */
+  _currentTime = 0;
+
   get currentTime() {
-    return this._currentTime.value;
+    return this._currentTime;
   }
 
-  set currentTime(_currentTime) {
-    this._currentTime.value = _currentTime;
-    if (this.audio.currentTime != _currentTime) {
-      this.audio.currentTime = _currentTime;
+  set currentTime(value) {
+    this._currentTime = value;
+    if (this.audio.currentTime != value) {
+      this.audio.currentTime = value;
     }
+    this.emitter.emit("onCurrentTimeChange", value);
   }
+
+  /**
+   * @description 音频时长
+   * @type { number }
+   * @private
+   */
+  _duration = 0;
 
   get duration() {
-    return this._duration.value;
+    return this._duration;
   }
 
-  set duration(_duration) {
-    this._duration.value = _duration;
-    if (this.audio.duration != _duration) {
-      this.audio.duration = _duration;
-    }
+  set duration(value) {
+    this._duration = value;
+    this.emitter.emit("durationChange", value);
   }
 
   get progress() {
-    const progress = computed(() => this.currentTime / this.duration);
-    return progress.value;
+    return this.duration === 0 ? 0 : this.currentTime / this.duration;
   }
 
-  set progress(_progress) {
-    this.currentTime = _progress * this.duration;
+  set progress(value) {
+    this.currentTime = value * this.duration;
+    console.log([])
   }
 
   get likeOrNot() {
@@ -206,7 +215,6 @@ export class PlayerCore {
     this.play();
     this.emitter.emit("play:next");
     this.emitter.emit("toggle:song");
-    
   }
 
   toPerv() {

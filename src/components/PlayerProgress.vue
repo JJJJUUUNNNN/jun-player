@@ -1,10 +1,18 @@
 <script setup>
-import { inject } from "vue";
+import { usePlayer } from "@/hooks/usePlayer";
 import SliderBar from "./SliderBar.vue";
-
-const playerCore = inject("playerCore");
+const { timeBar, progress } = usePlayer();
 </script>
 
 <template>
-  <SliderBar v-model="playerCore.progress" />
+  <div class="progress">
+    <p>{{ timeBar }}=={{ progress }}</p>
+    <SliderBar v-model="progress" />
+  </div>
 </template>
+
+<style>
+.progress {
+  width: 100%;
+}
+</style>
