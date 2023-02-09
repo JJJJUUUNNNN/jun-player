@@ -16,11 +16,14 @@ export class EventEmitter {
   }
 
   once(type, listener) {
-    const callback = (...args) =>  {
+    // const callback = (...args) =>  {
+    //   // console.log(arguments)
+    //   // listener(...args)
+    // }
+
+    function callback(){
       this.off(type, callback);
-      // Reflect.apply(listener, this, arguments);
-      console.log(arguments)
-      listener(...args)
+      Reflect.apply(listener, this, arguments);
     }
     this.on(type, callback);
     return this;
@@ -46,10 +49,10 @@ export class EventEmitter {
     const events = this.events;
     const handlers = events[type];
     for (let listener of Object.values(handlers)) {
-      // Reflect.apply(listener, this, args);
+      Reflect.apply(listener, this, args);
 
-      console.log(listener)
-      listener(...args)
+      // console.log(listener)
+      // listener(...args)
     }
   }
 }
