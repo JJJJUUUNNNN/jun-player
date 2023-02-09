@@ -25,6 +25,19 @@ export function usePlayer() {
     like.value = value;
   });
 
+const volume = ref(playerCore.volume)
+const audioVolume=ref(playerCore.audio.volume)
+
+ watch(volume,(value)=>{
+  console.log('666',volume.value,audioVolume.value)
+  playerCore.volume=value
+ })
+
+ watch(audioVolume,(value)=>{
+  console.log('888')
+  playerCore.volume=value
+ })
+
   const progress = ref(playerCore.progress);
 
   function progressRefUpdatePlayerCore() {
@@ -54,6 +67,7 @@ export function usePlayer() {
   const timeBar = computed(() => `${currentText.value}/${durationText.value}`);
 
   return {
+    // attrs
     state,
     duration,
     currentTime,
@@ -61,7 +75,10 @@ export function usePlayer() {
     timeBar,
     durationText,
     currentText,
+    like,
+    volume,
+
+    // methods
     handleLike: playerCore.handleLike,
-    like
   };
 }

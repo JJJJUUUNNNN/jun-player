@@ -29,13 +29,14 @@ const clickValue = ref(props.modelValue);
 
 const sliderBarRef = ref();
 //  是否按下去
-let isDrag = false;
+const isDrag = ref(false);
+let isEnd = false
 let isTouch = false;
 
 let barLeft = 0;
 
 function handleMouseDown(event) {
-  isDrag = true;
+  isDrag.value = true;
 
   document.onmousemove = document.ontouchmove = handleMouseMove;
   handleMouseMove(event);
@@ -48,7 +49,7 @@ function handleMouseDown(event) {
 }
 
 function handleMouseMove(event) {
-  if (!isDrag) return;
+  if (!isDrag.value) return;
   if (event.type == "touchstart" || event.type == "touchmove") {
     isTouch = true;
   } else {
@@ -62,7 +63,7 @@ function handleMouseMove(event) {
 }
 
 function handleMouseleaveOrUp(event) {
-  isDrag = false;
+  isDrag.value = false;
   document.onmousemove = null;
   document.ontouchmove = null;
   document.onmouseup = null;
@@ -70,11 +71,21 @@ function handleMouseleaveOrUp(event) {
   document.onmouseleave = null;
   document.onvisibilitychange = null;
 }
+const updateIsDrag = debounce((value)=>{
+  isEnd = value
+}, props.duration);
 
+watch(isDrag,(v)=>{
+  if(v == true) {
+    isEnd = true
+  }else{
+    updateIsDrag(v)
+  }
+})
 watch(
   () => props.modelValue,
   () => {
-    if (isDrag) return;
+    if (isEnd) return;
     if (clickValue.value == props.value) return;
     clickValue.value = props.modelValue;
   }

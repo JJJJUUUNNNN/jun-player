@@ -53,7 +53,6 @@ export class PlayerCore {
    * @type { string }
    * @private
    */
-
   _playerState = "pause";
 
   get playerState() {
@@ -65,27 +64,7 @@ export class PlayerCore {
     this.emitter.emit("playerStateChange", value);
   }
 
-  _playList = ref([]);
-
   _songIndex = ref(-1);
-
-  _modeList = ref([]);
-
-  _modeListIndex = ref(0);
-
-  _currentMode = ref("");
-
-  _volume = ref(this.audio.volume);
-
-  get volume() {
-    return this._volume.value;
-  }
-
-  set volume(value) {
-    if (value == this._volume.value) return;
-    this._volume.value = value;
-    this.audio.volume = value;
-  }
 
   get songIndex() {
     return this._songIndex.value;
@@ -96,6 +75,8 @@ export class PlayerCore {
     this._songIndex.value = _songIndex;
     this.audio.src = this.src;
   }
+
+  _playList = ref([]);
 
   get playList() {
     return this._playList.value;
@@ -168,6 +149,23 @@ export class PlayerCore {
   }
 
   /**
+   * @description 音量
+   * @type { number }
+   * @private
+   */
+  _volume = this.audio.volume;
+
+  get volume() {
+    return this._volume;
+  }
+
+  set volume(value) {
+    if (value == this._volume) return;
+    this._volume = value;
+    this.audio.volume = value;
+  }
+
+  /**
    * @description 喜欢音乐
    * @type { boolean }
    * @private
@@ -183,6 +181,8 @@ export class PlayerCore {
     this.emitter.emit("likeChange", value);
   }
 
+  _modeList = ref([]);
+
   get modeList() {
     return this._modeList.value;
   }
@@ -190,6 +190,8 @@ export class PlayerCore {
   set modeList(_modeList) {
     this._modeList.value = _modeList;
   }
+
+  _modeListIndex = ref(0);
 
   get modeListIndex() {
     return this._modeListIndex.value;

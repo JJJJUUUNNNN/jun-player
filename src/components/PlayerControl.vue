@@ -9,7 +9,7 @@ import { usePlayer } from "@/hooks/usePlayer";
  * @type { PlayerCore }
  */
 const playerCore = inject("playerCore");
-const { state, like, handleLike } = usePlayer();
+const { state, like,volume, handleLike } = usePlayer();
 
 const isShow = ref(false);
 
@@ -34,7 +34,7 @@ function popOut() {
           <SliderBar
             class="sliderBar"
             style="width: 120px"
-            v-model="playerCore.volume"
+            v-model="volume"
           />
         </div>
       </button>

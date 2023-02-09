@@ -23,13 +23,14 @@ const playerCore = new PlayerCore({
   modeList: [loop, single, random],
 });
 
+provide("playerCore", playerCore);
+
 const isShow = ref(false);
 
 function toggleList() {
   isShow.value = !isShow.value;
 }
 
-provide("playerCore", playerCore);
 </script>
 
 <template>
