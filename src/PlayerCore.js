@@ -149,8 +149,8 @@ export class PlayerCore {
   }
 
   set progress(value) {
-    this.currentTime = value * this.duration;
-    console.log([])
+    if(value!=this.currentTime / this.duration)
+      this.currentTime = value * this.duration;
   }
 
   get likeOrNot() {
