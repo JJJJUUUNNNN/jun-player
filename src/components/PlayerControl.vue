@@ -3,9 +3,14 @@ import { computed, inject, ref } from "vue";
 import pause from "../assets/icon/pause.png";
 import play from "../assets/icon/play.png";
 import SliderBar from "./SliderBar.vue";
-
+import { PlayerCore } from "../PlayerCore";
+import { usePlayer } from "@/hooks/usePlayer";
+/**
+ * @type { PlayerCore }
+ */
 const playerCore = inject("playerCore");
-const state = computed(() => playerCore.playerState);
+const { state } = usePlayer() 
+
 const isShow = ref(false);
 
 function popUp() {
@@ -50,7 +55,7 @@ const likeOrNot = computed(() => playerCore.likeOrNot);
       <img src="../assets/icon/pre.png" alt="" />
     </button>
     <button @click="playerCore.toggle">
-      <img :src="state.value == 'play' ? play : pause" alt="" />
+      <img :src="state == 'play' ? play : pause" alt="" />
     </button>
     <button @click="playerCore.toNext">
       <img src="../assets/icon/next.png" alt="" />

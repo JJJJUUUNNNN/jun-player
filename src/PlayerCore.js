@@ -36,11 +36,9 @@ export class PlayerCore {
     });
 
     this.audio.addEventListener("pause", () => {
-      console.log("pause");
       this.emitter.emit('pause')
     });
     this.audio.addEventListener("play", () => {
-      console.log("play");
       this.emitter.emit('play')
     });
 
@@ -50,7 +48,16 @@ export class PlayerCore {
     });
   }
 
-  playerState = ref("pause");
+  _playerState = 'pause';
+
+  get playerState(){
+    return this._playerState
+  }
+
+  set playerState(value){
+    this._playerState = value
+    this.emitter.emit('playerStateChange', value)
+  }
 
   _playList = ref([]);
 
@@ -166,17 +173,17 @@ export class PlayerCore {
   }
 
   play() {
-    this.playerState.value = "play";
+    this.playerState = "play";
     this.audio.play();
   }
 
   pause() {
-    this.playerState.value = "pause";
+    this.playerState = "pause";
     this.audio.pause();
   }
 
   toggle() {
-    this.playerState.value == "play" ? this.pause() : this.play();
+    this.playerState == "play" ? this.pause() : this.play();
   }
 
   reset() {

@@ -1,13 +1,13 @@
 <script setup>
+import { usePlayer } from "@/hooks/usePlayer";
 import { computed, inject, ref, onBeforeUnmount, unref } from "vue";
 import { PlayerCore } from "../PlayerCore";
 /**
  * @type { PlayerCore }
  */
 const playerCore = inject("playerCore");
+const { state } = usePlayer()
 const currentSong = computed(() => playerCore.currentSong);
-const state = computed(() => unref(playerCore.playerState));
-
 const rotateValue = ref(0);
 function roll() {
   if (state.value == "play") {
