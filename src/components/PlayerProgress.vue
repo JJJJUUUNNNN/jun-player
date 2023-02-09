@@ -6,7 +6,7 @@ const { timeBar, progress } = usePlayer();
 
 <template>
   <div class="progress">
-    <p>{{ timeBar }}=={{ progress }}</p>
+    <p>{{ timeBar }}=={{ progress.toFixed(2) }}</p>
     <SliderBar v-model="progress" />
   </div>
 </template>

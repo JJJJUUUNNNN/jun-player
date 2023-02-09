@@ -24,15 +24,15 @@ export class PlayerCore {
     });
     this.audio.addEventListener("timeupdate", () => {
       this.currentTime = this.audio.currentTime;
+      this.emitter.emit("timeupdate");
+      console.log(['timeupdate'])
+    });
+    this.audio.addEventListener("ended", () => {
+      this.playerState.value = "pause";
+      this.emitter.emit("ended");
       if (this.duration == this.currentTime) {
         this.toNext();
       }
-      this.emitter.emit("timeupdate");
-    });
-    this.audio.addEventListener("ended", () => {
-      console.log("end");
-      this.playerState.value = "pause";
-      this.emitter.emit("ended");
     });
 
     this.audio.addEventListener("pause", () => {
@@ -121,11 +121,16 @@ export class PlayerCore {
   }
 
   set currentTime(value) {
-    this._currentTime = value;
-    if (this.audio.currentTime != value) {
-      this.audio.currentTime = value;
+    if (this._currentTime != value) {
+      console.log('set currentTime')
+      this._currentTime = value;
+      this.emitter.emit("onCurrentTimeChange", value);
+      if(this.audio.currentTime != value){
+
+        console.log('currentTime change this.audio.currentTime')
+        this.audio.currentTime = value;
+      }
     }
-    this.emitter.emit("onCurrentTimeChange", value);
   }
 
   /**
@@ -149,8 +154,10 @@ export class PlayerCore {
   }
 
   set progress(value) {
-    if(value!=this.currentTime / this.duration)
+    if (value != this.currentTime / this.duration){
+      console.log('set progress')
       this.currentTime = value * this.duration;
+    }
   }
 
   get likeOrNot() {

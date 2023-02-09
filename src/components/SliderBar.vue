@@ -1,6 +1,6 @@
 <script setup>
 import { debounce } from "@/utils";
-import { computed, ref, watch,inject } from "vue";
+import { computed, ref, watch, inject } from "vue";
 const playerCore = inject("playerCore");
 const currentSong = computed(() => playerCore.currentSong);
 
@@ -9,14 +9,13 @@ const props = defineProps({
     type: Number,
     default: 0,
   },
-  duration:{
+  duration: {
     type: Number,
     default: 500,
-  }
+  },
 });
-const emit = defineEmits(["update:modelValue","update"]);
+const emit = defineEmits(["update:modelValue", "update"]);
 const clickValue = ref(props.modelValue);
-
 
 // const value = computed({
 //   get() {
@@ -72,20 +71,28 @@ function handleMouseleaveOrUp(event) {
   document.onvisibilitychange = null;
 }
 
-const update = debounce(updateValue, props.duration);
-function updateValue(clickValue) {
-  // value.value = clickValue
-  if (clickValue >= 0 && clickValue <= 1)
-    emit("update:modelValue", clickValue);
-  else 
-    console.log("error value:", clickValue);
-}
+watch(
+  () => props.modelValue,
+  () => {
+    if (isDrag) return;
+    if (clickValue.value == props.value) return;
+    clickValue.value = props.modelValue;
+  }
+);
 
-watch(()=>props.modelValue,()=>{
-  if (!isDrag) return;
-  clickValue.value = props.modelValue
-})
-watch(clickValue, update);
+function updateValue(clickValue) {
+  if (clickValue >= 0 && clickValue <= 1) {
+    if (props.modelValue != clickValue) {
+      console.log("[ update:modelValue ]");
+      emit("update:modelValue", clickValue);
+    }
+  } else {
+    console.log("error value:", clickValue);
+  }
+}
+const update = debounce(updateValue, props.duration);
+
+watch(clickValue, updateValue);
 </script>
 
 <template>

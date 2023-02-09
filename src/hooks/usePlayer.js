@@ -1,4 +1,4 @@
-import { computed, inject, ref, watch, unref } from "vue";
+import { computed, inject, ref, watch, unref, nextTick } from "vue";
 import { PlayerCore } from "../PlayerCore";
 export function usePlayer() {
   /**
@@ -21,16 +21,17 @@ export function usePlayer() {
   });
 
   const progress = ref(playerCore.progress);
-  playerCore.emitter.on("onCurrentTimeChange", () => {
-    if (progress.value != playerCore.progress)
+
+  function progressRefUpdatePlayerCore() {
+    if (progress.value != playerCore.progress) {
       progress.value = playerCore.progress;
-  });
-  playerCore.emitter.on("durationChange", () => {
-    if (progress.value != playerCore.progress)
-      progress.value = playerCore.progress;
-  });
+    }
+  }
+  playerCore.emitter.on("timeupdate", progressRefUpdatePlayerCore);
+  playerCore.emitter.on("durationChange", progressRefUpdatePlayerCore);
 
   watch(progress, (value) => {
+    console.log('watch(progress)')
     playerCore.progress = value;
   });
 
@@ -55,6 +56,6 @@ export function usePlayer() {
     timeBar,
     durationText,
     currentText,
-    handleLike:playerCore.handleLike
+    handleLike: playerCore.handleLike,
   };
 }
