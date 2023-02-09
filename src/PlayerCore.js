@@ -1,4 +1,4 @@
-import { nextTick, ref, computed } from "vue";
+import {  ref, computed } from "vue";
 import { EventEmitter } from "./EventEmitter";
 
 export class PlayerCore {
@@ -20,27 +20,33 @@ export class PlayerCore {
   initAudioEvents() {
     this.audio.addEventListener("canplay", () => {
       this.duration = this.audio.duration;
+      this.emitter.emit('canplay')
     });
     this.audio.addEventListener("timeupdate", () => {
       this.currentTime = this.audio.currentTime;
       if (this.duration == this.currentTime) {
         this.toNext();
       }
+      this.emitter.emit('timeupdate')
     });
     this.audio.addEventListener("ended", () => {
       console.log("end");
       this.playerState.value = "pause";
+      this.emitter.emit('ended')
     });
 
     this.audio.addEventListener("pause", () => {
       console.log("pause");
+      this.emitter.emit('pause')
     });
     this.audio.addEventListener("play", () => {
       console.log("play");
+      this.emitter.emit('play')
     });
 
     this.audio.addEventListener("volumechange", () => {
       this.volume = this.audio.volume;
+      this.emitter.emit('volumechange')
     });
   }
 
@@ -190,14 +196,10 @@ export class PlayerCore {
     } else if (this.modeListIndex == 2) {
       this.songIndex = this.getRandomInt(this.playList.length);
     }
-
+    this.play();
     this.emitter.emit("play:next");
-
-    nextTick(() => {
-      setTimeout(() => {
-        this.play();
-      }, 1000);
-    });
+    this.emitter.emit("toggle:song");
+    
   }
 
   toPerv() {
@@ -207,14 +209,9 @@ export class PlayerCore {
     } else {
       this.songIndex--;
     }
-
+    this.play();
     this.emitter.emit("play:perv");
-    
-    nextTick(() => {
-      setTimeout(() => {
-        this.play();
-      }, 1000);
-    });
+    this.emitter.emit("toggle:song");
   }
 
   handleLike() {

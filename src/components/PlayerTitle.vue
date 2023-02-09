@@ -1,49 +1,52 @@
 <script setup>
-import { computed, inject,ref,onBeforeUnmount,unref } from "vue";
-
+import { computed, inject, ref, onBeforeUnmount, unref } from "vue";
+import { PlayerCore } from "../PlayerCore";
+/**
+ * @type { PlayerCore }
+ */
 const playerCore = inject("playerCore");
 const currentSong = computed(() => playerCore.currentSong);
 const state = computed(() => unref(playerCore.playerState));
 
 const rotateValue = ref(0);
 function roll() {
-  if(state.value == 'play'){
+  if (state.value == "play") {
     rotateValue.value++;
   }
-  loop()
+  loop();
 }
 
-let timer = null
+let timer = null;
 function loop() {
- timer = setTimeout(() => {
+  timer = setTimeout(() => {
     clearTimeout(timer);
     roll();
   }, 40);
 }
 
-function reset(){
-  rotateValue.value = 0
+function reset() {
+  rotateValue.value = 0;
 }
-const rotate = computed(()=>`rotate(${rotateValue.value}deg)`)
-loop()
+const rotate = computed(() => `rotate(${rotateValue.value}deg)`);
+loop();
 
-onBeforeUnmount(()=>{
+onBeforeUnmount(() => {
   clearTimeout(timer);
-})
+});
 
-playerCore.emitter.on('play:next',()=>{
+playerCore.emitter.on("toggle:song",()=>{
+  console.log(123)
   reset()
-})
-
-playerCore.emitter.on('play:perv',()=>{
-  reset()
-})
+});
 
 </script>
 
 <template>
   <div class="player-info">
-    <div class="cover-container" :style="{ transform: rotate, backgroundColor: `#${currentSong.theme}` }">
+    <div
+      class="cover-container"
+      :style="{ transform: rotate, backgroundColor: `#${currentSong.theme}` }"
+    >
       <img class="cover" :src="currentSong.cover" />
     </div>
     <h3 class="song-name">{{ currentSong.name }}</h3>
