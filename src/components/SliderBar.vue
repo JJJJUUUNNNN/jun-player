@@ -103,7 +103,7 @@ function updateValue(clickValue) {
 }
 const update = debounce(updateValue, props.duration);
 
-watch(clickValue, updateValue);
+watch(clickValue, update);
 </script>
 
 <template>
