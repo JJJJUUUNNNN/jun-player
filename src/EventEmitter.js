@@ -16,9 +16,11 @@ export class EventEmitter {
   }
 
   once(type, listener) {
-    function callback() {
+    const callback = (...args) =>  {
       this.off(type, callback);
-      Reflect.apply(listener, this, arguments);
+      // Reflect.apply(listener, this, arguments);
+      console.log(arguments)
+      listener(...args)
     }
     this.on(type, callback);
     return this;
@@ -44,7 +46,29 @@ export class EventEmitter {
     const events = this.events;
     const handlers = events[type];
     for (let listener of Object.values(handlers)) {
-      Reflect.apply(listener, this, args);
+      // Reflect.apply(listener, this, args);
+
+      console.log(listener)
+      listener(...args)
     }
   }
 }
+
+class Person {
+  name = "";
+  constructor(params) {
+    this.name = params;
+  }
+  sayHello(e) {
+    console.log(e)
+    console.log(this.name);
+  }
+}
+// test
+const zd = new Person('zhu dan')
+const t = new EventEmitter();
+t.once("run",zd.sayHello);
+
+setTimeout(()=>{
+  t.emit("run", Date.now());
+},1)
