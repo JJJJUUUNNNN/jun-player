@@ -80,7 +80,7 @@ function popOut() {
   position: relative;
 }
 .pop-up {
-  padding: 10px 15px;
+  padding: 0 15px;
   background-color: rgb(211, 2, 75);
   border-radius: 10px;
   position: absolute;
