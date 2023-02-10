@@ -49,7 +49,6 @@ const audioVolume=ref(playerCore.audio.volume)
   playerCore.emitter.on("durationChange", progressRefUpdatePlayerCore);
 
   watch(progress, (value) => {
-    console.log("watch(progress)");
     playerCore.progress = value;
   });
 
@@ -77,6 +76,7 @@ const audioVolume=ref(playerCore.audio.volume)
     currentText,
     like,
     volume,
+    formatTime,
 
     // methods
     handleLike: playerCore.handleLike,
