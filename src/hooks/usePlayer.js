@@ -26,15 +26,16 @@ export function usePlayer() {
   });
 
 const volume = ref(playerCore.volume)
-const audioVolume=ref(playerCore.audio.volume)
+
+function volumeRefUpdatePlayerCore() {
+  if (volume.value != playerCore.volume) {
+    volume.value = playerCore.volume;
+  }
+}
+
+playerCore.emitter.on('volumechange',volumeRefUpdatePlayerCore)
 
  watch(volume,(value)=>{
-  console.log('666',volume.value,audioVolume.value)
-  playerCore.volume=value
- })
-
- watch(audioVolume,(value)=>{
-  console.log('888')
   playerCore.volume=value
  })
 
