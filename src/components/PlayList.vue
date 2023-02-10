@@ -1,11 +1,11 @@
 <script setup>
 import { usePlayer } from '@/hooks/usePlayer';
-const {playList} =usePlayer()
+const {playList,currentSong} =usePlayer()
 </script>
 
 <template>
    <div class="music-list" >
-      <table>
+      <table :style="{color:`#${currentSong.theme}`}">
         <thead>
           <tr>
             <td>歌曲名</td>
@@ -30,7 +30,6 @@ const {playList} =usePlayer()
   }
   .music-list table{
     width: 360px;
-    color: #fff;
     padding: 10px;
   }
 </style>

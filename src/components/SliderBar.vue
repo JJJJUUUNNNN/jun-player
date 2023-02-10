@@ -1,5 +1,4 @@
 <script setup>
-import { debounce } from "@/utils";
 import { computed, ref, watch, inject } from "vue";
 const playerCore = inject("playerCore");
 const currentSong = computed(() => playerCore.currentSong);

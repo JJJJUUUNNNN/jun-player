@@ -2,7 +2,7 @@
 import { usePlayer } from "@/hooks/usePlayer";
 import { ref, watch } from "vue";
 import SliderBar from "./SliderBar.vue";
-const { progress, formatTime, currentTime, duration, durationText } =  usePlayer();
+const { progress, formatTime, currentTime, duration, durationText,currentSong } =  usePlayer();
 
 const ctime = ref(currentTime.value);
 watch(currentTime, (value) => {
@@ -15,7 +15,7 @@ function changeClickValue(pre) {
 
 <template>
   <div class="progress">
-    <p>{{ formatTime(ctime) }}/{{ durationText }}</p>
+    <p :style="{color:`#${currentSong.theme}`}">{{ formatTime(ctime) }}/{{ durationText }}</p>
     <SliderBar @changeClickValue="changeClickValue" v-model="progress" />
   </div>
 </template>

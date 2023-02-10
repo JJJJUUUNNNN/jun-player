@@ -1,6 +1,6 @@
 <script setup>
 import { usePlayer } from "@/hooks/usePlayer";
-import { computed, inject, ref, onBeforeUnmount } from "vue";
+import { computed, ref, onBeforeUnmount } from "vue";
 const { emitter,state,currentSong } = usePlayer()
 const rotateValue = ref(0);
 function roll() {
@@ -74,7 +74,7 @@ emitter.on("toggle:song",()=>{
 .song-name {
   font-size: 18px;
   font-weight: 400;
-  color: red;
+  color: #333;
   margin: 0;
   margin-left: 10px;
 }

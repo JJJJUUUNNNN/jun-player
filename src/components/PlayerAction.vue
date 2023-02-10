@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { usePlayer } from "@/hooks/usePlayer";
 import PlayerProgress from "./PlayerProgress.vue";
 import PlayList from "./PlayList.vue";
-const { currentMode, toggleMode } = usePlayer();
+const { currentMode, toggleMode,currentSong } = usePlayer();
 const isShow = ref(false);
 function toggleList() {
   isShow.value = !isShow.value;
@@ -12,15 +12,11 @@ function toggleList() {
 <template>
   <div class="player-action">
     <button class="player-mode-btn" @click="toggleMode">
-      <img style="width: 25px; height: 25px" :src="currentMode.icon" alt="" />
+      <svg-icon :name="currentMode.key" size="2em" :style="{color:`#${currentSong.theme}`}"></svg-icon>
     </button>
     <PlayerProgress style="margin: 0 10px" />
     <button class="list" @click="toggleList">
-      <img
-        style="width: 25px; height: 25px"
-        src="../assets/icon/music-list.png"
-        alt="音乐列表"
-      />
+      <svg-icon name="music-list" size="2em" :style="{color:`#${currentSong.theme}`}"></svg-icon>
     </button>
   </div>
 

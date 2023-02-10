@@ -1,10 +1,9 @@
 <script setup>
 import { ref } from "vue";
-import pause from "../assets/icon/pause.png";
-import play from "../assets/icon/play.png";
 import SliderBar from "./SliderBar.vue";
 import { usePlayer } from "@/hooks/usePlayer";
-const { state, like, volume, handleLike, toPerv, toggle, toNext } = usePlayer();
+
+const { state, like, volume, handleLike, toPerv, toggle, toNext,currentSong } = usePlayer();
 
 const isShow = ref(false);
 
@@ -20,38 +19,24 @@ function popOut() {
   <div class="player-control">
     <div class="voice">
       <button @mousedown="popUp" @mouseleave="popOut">
-        <img
-          style="width: 20px; height: 20px"
-          src="../assets/icon/voice.png"
-          alt=""
-        />
-        <div class="pop-up">
+        <svg-icon name="volume" size="20px" :style="{color:`#${currentSong.theme}`}"></svg-icon>
+        <div class="pop-up" v-if="isShow">
           <SliderBar class="sliderBar" style="width: 120px" v-model="volume" />
         </div>
       </button>
     </div>
     <button contenteditable="true" @click="handleLike">
-      <img
-        v-if="!like"
-        style="width: 20px; height: 20px"
-        src="../assets/icon/unlike.png"
-        alt=""
-      />
-      <img
-        v-else
-        style="width: 20px; height: 20px"
-        src="../assets/icon/liked.png"
-        alt=""
-      />
+      <svg-icon v-if="!like" name="unlike" size="20px" :style="{color:`#${currentSong.theme}`}"></svg-icon>
+      <svg-icon v-else name="like" size="20px" :style="{color:`#${currentSong.theme}`}"></svg-icon>
     </button>
     <button @click="toPerv">
-      <img src="../assets/icon/pre.png" alt="" />
+      <svg-icon name="pre" size="2em" :style="{color:`#${currentSong.theme}`}"></svg-icon>
     </button>
     <button @click="toggle">
-      <img :src="state == 'play' ? play : pause" alt="" />
+      <svg-icon :name="state == 'play' ? 'play' : 'pause'" size="2em" :style="{color:`#${currentSong.theme}`}"></svg-icon>
     </button>
     <button @click="toNext">
-      <img src="../assets/icon/next.png" alt="" />
+      <svg-icon name="next" size="2em" :style="{color:`#${currentSong.theme}`}"></svg-icon>
     </button>
   </div>
 </template>
