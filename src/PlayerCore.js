@@ -64,15 +64,21 @@ export class PlayerCore {
     this.emitter.emit("playerStateChange", value);
   }
 
-  _songIndex = ref(-1);
+  /**
+   * @description 歌曲索引
+   * @type { number }
+   * @private
+   */
+  _songIndex = -1;
 
   get songIndex() {
-    return this._songIndex.value;
+    return this._songIndex;
   }
 
-  set songIndex(_songIndex) {
-    if (_songIndex == this._songIndex.value) return;
-    this._songIndex.value = _songIndex;
+  set songIndex(value) {
+    console.log('33',value)
+    if (value == this._songIndex) return;
+    this._songIndex = value;
     this.audio.src = this.src;
   }
 
@@ -90,6 +96,10 @@ export class PlayerCore {
     return this.playList[this.songIndex];
   }
 
+  /**
+   * @description 歌曲路径
+   * @type { string }
+   */
   get src() {
     return `/music/${this.currentSong.name}-${this.currentSong.author}.mp3`;
   }
