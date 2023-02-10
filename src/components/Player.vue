@@ -3,24 +3,20 @@ import { ref, provide } from "vue";
 import faith from "../assets/faith.jpg";
 import summer from "../assets/summer.jpg";
 import myBeauty from "../assets/myBeauty.jpg";
-
-import loop from "../assets/icon/list-loop.png";
-import single from "../assets/icon/single-play.png";
-import random from "../assets/icon/random-play.png";
-
 import { PlayerCore } from "../PlayerCore";
 import PlayerControl from "./PlayerControl.vue";
 import PlayList from "./PlayList.vue";
 import PlayerProgress from "./PlayerProgress.vue";
 import PlayerTitle from "./PlayerTitle.vue";
-
+/**
+ * @type {PlayerCore}
+ */
 const playerCore = new PlayerCore({
   playList: [
     { name: "勾指起誓言", author: "洛天依", duration: "3:03", cover: faith, theme:"fffaf5"},
     { name: "盛夏的果实", author: "莫文蔚", duration: "4:10", cover: summer,theme:"c1d3df"},
     { name: "我的美丽", author: "小霞", duration: "5:08", cover: myBeauty,theme:"b7b7b7"},
   ],
-  modeList: [loop, single, random],
 });
 
 provide("playerCore", playerCore);
@@ -38,7 +34,7 @@ function toggleList() {
     <PlayerTitle />
     <PlayerControl />
     <div class="player-action">
-      <button class="player-mode-btn" @click="playerCore.handleMode">
+      <button class="player-mode-btn" @click="playerCore.toggleMode">
         <img
           style="width: 25px; height: 25px"
           :src="playerCore.currentMode"

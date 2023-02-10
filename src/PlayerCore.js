@@ -1,16 +1,18 @@
 import { ref } from "vue";
 import { EventEmitter } from "./EventEmitter";
+import loop from "@/assets/icon/list-loop.png";
+import single from "@/assets/icon/single-play.png";
+import random from "@/assets/icon/random-play.png";
 
 export class PlayerCore {
   audio = document.createElement("audio");
   emitter = new EventEmitter();
 
   /**
-   * @param { {playList:any,modeList:any} } options
+   * @param { {playList:any} } options
    */
   constructor(options) {
     this.playList = options.playList || [];
-    this.modeList = options.modeList || [];
     this.songIndex = 0;
     this.audio.controls = true;
     document.body.appendChild(this.audio);
@@ -75,10 +77,10 @@ export class PlayerCore {
   }
 
   set songIndex(value) {
-    console.log('33',value)
-    if (value == this._songIndex) return;
-    this._songIndex = value;
-    this.audio.src = this.src;
+    if (value != this._songIndex) {
+      this._songIndex = value;
+      this.audio.src = this.src;
+    }
   }
 
   _playList = ref([]);
@@ -187,24 +189,35 @@ export class PlayerCore {
     this.emitter.emit("likeChange", value);
   }
 
-  _modeList = ref([]);
-
   get modeList() {
-    return this._modeList.value;
+    return [
+      {
+        name: "列表循环",
+        key: "loop",
+        icon: loop,
+      },
+      {
+        name: "1111",
+        key: "single",
+        icon: single,
+      },
+      {
+        name: "111",
+        key: "random",
+        icon: random,
+      },
+    ];
   }
 
-  set modeList(_modeList) {
-    this._modeList.value = _modeList;
-  }
-
-  _modeListIndex = ref(0);
+  _modeListIndex = 0;
 
   get modeListIndex() {
-    return this._modeListIndex.value;
+    return this._modeListIndex;
   }
 
   set modeListIndex(_modeListIndex) {
-    this._modeListIndex.value = _modeListIndex;
+    this._modeListIndex = _modeListIndex;
+    this.emitter.emit("modeChange", _modeListIndex);
   }
 
   get currentMode() {
@@ -229,30 +242,50 @@ export class PlayerCore {
     this.currentTime = 0;
   }
 
+  getNextSongIndex() {
+    if (this.currentMode.key == "loop") {
+      if (this.songIndex == this.playList.length - 1) {
+        return 0;
+      } else {
+        return this.songIndex + 1;
+      }
+    } else if (this.currentMode.key == "single") {
+      return undefined;
+    } else if (this.currentMode.key == "random") {
+      return this.getRandomIndex();
+    }
+  }
+
   toNext() {
     this.pause();
-    if (this.modeListIndex == 0) {
-      if (this.songIndex == this.playList.length - 1) {
-        this.songIndex = 0;
-      } else {
-        this.songIndex++;
-      }
-    } else if (this.modeListIndex == 1) {
-      this.songIndex = this.songIndex;
-    } else if (this.modeListIndex == 2) {
-      this.songIndex = this.getRandomInt(this.playList.length);
+    const nextSongIndex = this.getNextSongIndex();
+    if (nextSongIndex != undefined) {
+      this.songIndex = this.getNextSongIndex();
     }
     this.play();
     this.emitter.emit("play:next");
     this.emitter.emit("toggle:song");
   }
 
+  getPervSongIndex() {
+    if (this.currentMode.key == "loop") {
+      if (this.songIndex == 0) {
+        return this.playList.length - 1;
+      } else {
+        return this.songIndex - 1;
+      }
+    } else if (this.currentMode.key == "single") {
+      return undefined;
+    } else if (this.currentMode.key == "random") {
+      return this.getRandomIndex();
+    }
+  }
+
   toPerv() {
     this.pause();
-    if (this.songIndex == 0) {
-      this.songIndex = this.playList.length - 1;
-    } else {
-      this.songIndex--;
+    const prevSongIndex = this.getPervSongIndex();
+    if (prevSongIndex != undefined) {
+      this.songIndex = this.getPervSongIndex();
     }
     this.play();
     this.emitter.emit("play:perv");
@@ -260,14 +293,10 @@ export class PlayerCore {
   }
 
   handleLike() {
-    if (this.like == false) {
-      this.like = true;
-    } else {
-      this.like = false;
-    }
+    this.like = !this.like;
   }
 
-  handleMode() {
+  toggleMode() {
     if (this.modeListIndex + 1 == this.modeList.length) {
       this.modeListIndex = 0;
     } else {
@@ -275,7 +304,7 @@ export class PlayerCore {
     }
   }
 
-  getRandomInt(max) {
-    return Math.floor(Math.random() * max);
+  getRandomIndex() {
+    return Math.floor(Math.random() * this.playList.length);
   }
 }

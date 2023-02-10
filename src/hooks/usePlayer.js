@@ -46,6 +46,7 @@ playerCore.emitter.on('volumechange',volumeRefUpdatePlayerCore)
       progress.value = playerCore.progress;
     }
   }
+  
   playerCore.emitter.on("timeupdate", progressRefUpdatePlayerCore);
   playerCore.emitter.on("durationChange", progressRefUpdatePlayerCore);
 
@@ -56,6 +57,7 @@ playerCore.emitter.on('volumechange',volumeRefUpdatePlayerCore)
   function add0(value) {
     return value >= 10 ? value + "" : "0" + value;
   }
+
   function formatTime(value) {
     const min = Math.floor(value / 60);
     const sec = Math.floor(value % 60);
