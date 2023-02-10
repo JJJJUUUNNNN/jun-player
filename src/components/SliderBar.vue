@@ -17,16 +17,6 @@ const props = defineProps({
 const emit = defineEmits(["update:modelValue", "changeClickValue"]);
 const clickValue = ref(props.modelValue);
 
-// const value = computed({
-//   get() {
-//     return props.modelValue;
-//   },
-//   set(value) {
-//     if (value >= 0 && value <= 1) emit("update:modelValue", value);
-//     else console.log("error value:", value);
-//   },
-// });
-
 const sliderBarRef = ref();
 let isDrag = false;
 let isTouch = false;
@@ -58,7 +48,7 @@ function handleMouseMove(event) {
   const per = diff / sliderBarRef.value.offsetWidth;
   const perValue = per >= 0 ? (per <= 1 ? per : 1) : 0;
   clickValue.value = perValue;
-  emit('changeClickValue',clickValue.value)
+  emit("changeClickValue", clickValue.value);
 }
 
 function updateValue() {
@@ -95,28 +85,33 @@ watch(
 </script>
 
 <template>
-  <div class="slider-bar">
-    <div
-      ref="sliderBarRef"
-      class="music-slider-bar"
-      @mousedown="handleMouseDown"
-      @touchstart="handleMouseDown"
-    >
-      <div
-        ref="processRef"
-        class="slider-bar-process"
-        :style="{
-          width: clickValue * 100 + '%',
-          backgroundColor: `#${currentSong.theme}`,
-        }"
-      >
-        <div class="pro_button"></div>
+  <div
+    class="slider-bar-container"
+    @mousedown="handleMouseDown"
+    @touchstart="handleMouseDown"
+  >
+    <div class="slider-bar">
+      <div ref="sliderBarRef" class="music-slider-bar">
+        <div
+          ref="processRef"
+          class="slider-bar-process"
+          :style="{
+            width: clickValue * 100 + '%',
+            backgroundColor: `#${currentSong.theme}`,
+          }"
+        >
+          <div class="pro_button"></div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style>
+.slider-bar-container {
+  padding: 10px 0;
+  width: 100%;
+}
 .slider-bar {
   position: relative;
   width: 100%;
