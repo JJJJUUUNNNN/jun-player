@@ -1,9 +1,13 @@
-import { ref } from "vue";
 import { EventEmitter } from "./EventEmitter";
 import loop from "@/assets/icon/list-loop.png";
 import single from "@/assets/icon/single-play.png";
 import random from "@/assets/icon/random-play.png";
+import { getItem } from "./utils";
+import { setItem } from "./utils";
 
+/**
+ * @typedef {{name:string;key:string;icon:string;isShow:boolean}} ModeType
+ */
 export class PlayerCore {
   audio = document.createElement("audio");
   emitter = new EventEmitter();
@@ -16,7 +20,17 @@ export class PlayerCore {
     this.songIndex = 0;
     this.audio.controls = true;
     document.body.appendChild(this.audio);
+    this.iniTpLAYERT()
     this.initAudioEvents();
+  }
+
+  iniTpLAYERT(){
+    // CHUSHIHUA VO
+
+    const volumeCache = getItem('player_volume');
+    if(volumeCache != null) {
+      this.audio.volume = Number(volumeCache)
+    }
   }
 
   initAudioEvents() {
@@ -83,16 +97,25 @@ export class PlayerCore {
     }
   }
 
-  _playList = ref([]);
+  /**
+   * @description 歌曲列表
+   * @type { Array }
+   * @private
+   */
+  _playList = [];
 
   get playList() {
-    return this._playList.value;
+    return this._playList;
   }
 
   set playList(_playList) {
-    this._playList.value = _playList;
+    this._playList = _playList;
   }
 
+   /**
+   * @description 当前歌曲
+   * @type { string }
+   */
   get currentSong() {
     return this.playList[this.songIndex];
   }
@@ -102,7 +125,7 @@ export class PlayerCore {
    * @type { string }
    */
   get src() {
-    return `/music/${this.currentSong.name}-${this.currentSong.author}.mp3`;
+    return  this.currentSong.songUrl;
   }
 
   /**
@@ -161,7 +184,7 @@ export class PlayerCore {
    * @type { number }
    * @private
    */
-  _volume = this.audio.volume;
+  _volume = Number(getItem('player_volume')) || this.audio.volume;
 
   get volume() {
     return this._volume;
@@ -171,6 +194,7 @@ export class PlayerCore {
     if (value == this._volume) return;
     this._volume = value;
     this.audio.volume = value;
+    setItem('player_volume',value)
   }
 
   /**
@@ -189,41 +213,57 @@ export class PlayerCore {
     this.emitter.emit("likeChange", value);
   }
 
+  /**
+   * @description 播放模式列表
+   * @type { ModeType[] }
+   */
   get modeList() {
     return [
       {
         name: "列表循环",
         key: "loop",
         icon: loop,
+        isShow:true
       },
       {
-        name: "1111",
+        name: "单曲循环",
         key: "single",
         icon: single,
+        isShow:false
       },
       {
-        name: "111",
+        name: "随机播放",
         key: "random",
         icon: random,
+        isShow:false
       },
     ];
   }
 
+  /**
+   * @description 播放模式索引
+   * @type { number }
+   * @private
+   */
   _modeListIndex = 0;
 
   get modeListIndex() {
     return this._modeListIndex;
   }
 
-  set modeListIndex(_modeListIndex) {
-    this._modeListIndex = _modeListIndex;
-    this.emitter.emit("modeChange", _modeListIndex);
+  set modeListIndex(value) {
+    this._modeListIndex = value;
   }
 
+  /**
+   * @description 当前播放模式
+   * @type { ModeType }
+   */
   get currentMode() {
     return this.modeList[this.modeListIndex];
   }
 
+  // methods
   play() {
     this.playerState = "play";
     this.audio.play();
@@ -264,7 +304,7 @@ export class PlayerCore {
     }
     this.play();
     this.emitter.emit("play:next");
-    this.emitter.emit("toggle:song");
+    this.emitter.emit("toggle:song",this.currentSong);
   }
 
   getPervSongIndex() {
@@ -302,6 +342,7 @@ export class PlayerCore {
     } else {
       this.modeListIndex++;
     }
+    this.emitter.emit("modeChange",this.currentMode);
   }
 
   getRandomIndex() {

@@ -1,15 +1,10 @@
 <script setup>
-import { computed, inject, ref } from "vue";
+import { ref } from "vue";
 import pause from "../assets/icon/pause.png";
 import play from "../assets/icon/play.png";
 import SliderBar from "./SliderBar.vue";
-import { PlayerCore } from "../PlayerCore";
 import { usePlayer } from "@/hooks/usePlayer";
-/**
- * @type { PlayerCore }
- */
-const playerCore = inject("playerCore");
-const { state, like,volume, handleLike } = usePlayer();
+const { state, like, volume, handleLike, toPerv, toggle, toNext } = usePlayer();
 
 const isShow = ref(false);
 
@@ -31,11 +26,7 @@ function popOut() {
           alt=""
         />
         <div class="pop-up">
-          <SliderBar
-            class="sliderBar"
-            style="width: 120px"
-            v-model="volume"
-          />
+          <SliderBar class="sliderBar" style="width: 120px" v-model="volume" />
         </div>
       </button>
     </div>
@@ -53,13 +44,13 @@ function popOut() {
         alt=""
       />
     </button>
-    <button @click="playerCore.toPerv">
+    <button @click="toPerv">
       <img src="../assets/icon/pre.png" alt="" />
     </button>
-    <button @click="playerCore.toggle">
+    <button @click="toggle">
       <img :src="state == 'play' ? play : pause" alt="" />
     </button>
-    <button @click="playerCore.toNext">
+    <button @click="toNext">
       <img src="../assets/icon/next.png" alt="" />
     </button>
   </div>

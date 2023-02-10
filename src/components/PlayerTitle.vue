@@ -1,13 +1,7 @@
 <script setup>
 import { usePlayer } from "@/hooks/usePlayer";
-import { computed, inject, ref, onBeforeUnmount, unref } from "vue";
-import { PlayerCore } from "../PlayerCore";
-/**
- * @type { PlayerCore }
- */
-const playerCore = inject("playerCore");
-const { state } = usePlayer()
-const currentSong = computed(() => playerCore.currentSong);
+import { computed, inject, ref, onBeforeUnmount } from "vue";
+const { emitter,state,currentSong } = usePlayer()
 const rotateValue = ref(0);
 function roll() {
   if (state.value == "play") {
@@ -34,7 +28,7 @@ onBeforeUnmount(() => {
   clearTimeout(timer);
 });
 
-playerCore.emitter.on("toggle:song",()=>{
+emitter.on("toggle:song",()=>{
   reset()
 });
 
@@ -53,10 +47,11 @@ playerCore.emitter.on("toggle:song",()=>{
 </template>
 
 <style>
+
 .player-info {
   position: absolute;
   left: 10px;
-  top: calc(-50% - 15px);
+  top: calc(-45px - 15px);
   display: flex;
   align-items: center;
 }

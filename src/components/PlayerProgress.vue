@@ -2,8 +2,7 @@
 import { usePlayer } from "@/hooks/usePlayer";
 import { ref, watch } from "vue";
 import SliderBar from "./SliderBar.vue";
-const { progress, formatTime, currentTime, duration, durationText } =
-  usePlayer();
+const { progress, formatTime, currentTime, duration, durationText } =  usePlayer();
 
 const ctime = ref(currentTime.value);
 watch(currentTime, (value) => {

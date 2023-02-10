@@ -131,6 +131,7 @@ watch(
   border-radius: 5px;
   position: relative;
 }
+
 .pro_button {
   position: absolute;
   top: 0;

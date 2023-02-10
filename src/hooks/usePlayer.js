@@ -1,4 +1,4 @@
-import { computed, inject, ref, watch, unref, nextTick } from "vue";
+import { computed, inject, ref, watch } from "vue";
 import { PlayerCore } from "../PlayerCore";
 export function usePlayer() {
   /**
@@ -20,24 +20,34 @@ export function usePlayer() {
     currentTime.value = value;
   });
 
+  const currentMode = ref(playerCore.currentMode);
+  playerCore.emitter.on("modeChange", (value) => {
+    currentMode.value = value;
+  });
+
+  const currentSong = ref(playerCore.currentSong);
+  playerCore.emitter.on("toggle:song", (value) => {
+    currentSong.value = value;
+  });
+
   const like = ref(playerCore.like);
   playerCore.emitter.on("likeChange", (value) => {
     like.value = value;
   });
 
-const volume = ref(playerCore.volume)
+  const volume = ref(playerCore.volume);
 
-function volumeRefUpdatePlayerCore() {
-  if (volume.value != playerCore.volume) {
-    volume.value = playerCore.volume;
+  function volumeRefUpdatePlayerCore() {
+    if (volume.value != playerCore.volume) {
+      volume.value = playerCore.volume;
+    }
   }
-}
 
-playerCore.emitter.on('volumechange',volumeRefUpdatePlayerCore)
+  playerCore.emitter.on("volumechange", volumeRefUpdatePlayerCore);
 
- watch(volume,(value)=>{
-  playerCore.volume=value
- })
+  watch(volume, (value) => {
+    playerCore.volume = value;
+  });
 
   const progress = ref(playerCore.progress);
 
@@ -46,7 +56,7 @@ playerCore.emitter.on('volumechange',volumeRefUpdatePlayerCore)
       progress.value = playerCore.progress;
     }
   }
-  
+
   playerCore.emitter.on("timeupdate", progressRefUpdatePlayerCore);
   playerCore.emitter.on("durationChange", progressRefUpdatePlayerCore);
 
@@ -73,15 +83,22 @@ playerCore.emitter.on('volumechange',volumeRefUpdatePlayerCore)
     state,
     duration,
     currentTime,
+    currentMode,
+    currentSong,
     progress,
     timeBar,
     durationText,
     currentText,
     like,
     volume,
-    formatTime,
-
+    playList: playerCore.playList,
+    emitter:    playerCore.emitter,
     // methods
-    handleLike: playerCore.handleLike,
+    handleLike:   playerCore.handleLike.bind(playerCore),
+    toggleMode:   playerCore.toggleMode.bind(playerCore),
+    toPerv:   playerCore.toPerv.bind(playerCore),
+    toggle:   playerCore.toggle.bind(playerCore),
+    toNext:   playerCore.toNext.bind(playerCore),
+    formatTime,
   };
 }

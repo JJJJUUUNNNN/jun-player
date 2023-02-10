@@ -1,8 +1,6 @@
 <script setup>
-import { computed,inject} from 'vue';
-
-const playerCore = inject('playerCore')
-const playList = computed(()=>playerCore.playList)
+import { usePlayer } from '@/hooks/usePlayer';
+const {playList} =usePlayer()
 </script>
 
 <template>
