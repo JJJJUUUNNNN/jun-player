@@ -14,7 +14,7 @@ const props = defineProps({
     default: 500,
   },
 });
-const emit = defineEmits(["update:modelValue", "update"]);
+const emit = defineEmits(["update:modelValue", "changeClickValue"]);
 const clickValue = ref(props.modelValue);
 
 // const value = computed({
@@ -28,15 +28,12 @@ const clickValue = ref(props.modelValue);
 // });
 
 const sliderBarRef = ref();
-//  是否按下去
-const isDrag = ref(false);
-let isEnd = false
+let isDrag = false;
 let isTouch = false;
-
 let barLeft = 0;
 
 function handleMouseDown(event) {
-  isDrag.value = true;
+  isDrag = true;
 
   document.onmousemove = document.ontouchmove = handleMouseMove;
   handleMouseMove(event);
@@ -49,7 +46,7 @@ function handleMouseDown(event) {
 }
 
 function handleMouseMove(event) {
-  if (!isDrag.value) return;
+  if (!isDrag) return;
   if (event.type == "touchstart" || event.type == "touchmove") {
     isTouch = true;
   } else {
@@ -59,51 +56,42 @@ function handleMouseMove(event) {
   const x = isTouch ? event.changedTouches[0].clientX : event.clientX;
   const diff = x - barLeft;
   const per = diff / sliderBarRef.value.offsetWidth;
-  clickValue.value = per;
+  const perValue = per >= 0 ? (per <= 1 ? per : 1) : 0;
+  clickValue.value = perValue;
+  emit('changeClickValue',clickValue.value)
+}
+
+function updateValue() {
+  const value = clickValue.value;
+  if (value >= 0 && value <= 1) {
+    if (props.modelValue != value) {
+      console.log("[ update:modelValue ]");
+      emit("update:modelValue", value);
+    }
+  } else {
+    console.log("error value:", value);
+  }
 }
 
 function handleMouseleaveOrUp(event) {
-  isDrag.value = false;
+  isDrag = false;
   document.onmousemove = null;
   document.ontouchmove = null;
   document.onmouseup = null;
   document.ontouchend = null;
   document.onmouseleave = null;
   document.onvisibilitychange = null;
+  updateValue();
 }
-const updateIsDrag = debounce((value)=>{
-  isEnd = value
-}, props.duration);
 
-watch(isDrag,(v)=>{
-  if(v == true) {
-    isEnd = true
-  }else{
-    updateIsDrag(v)
-  }
-})
 watch(
   () => props.modelValue,
   () => {
-    if (isEnd) return;
+    if (isDrag) return;
     if (clickValue.value == props.value) return;
     clickValue.value = props.modelValue;
   }
 );
-
-function updateValue(clickValue) {
-  if (clickValue >= 0 && clickValue <= 1) {
-    if (props.modelValue != clickValue) {
-      console.log("[ update:modelValue ]");
-      emit("update:modelValue", clickValue);
-    }
-  } else {
-    console.log("error value:", clickValue);
-  }
-}
-const update = debounce(updateValue, props.duration);
-
-watch(clickValue, update);
 </script>
 
 <template>

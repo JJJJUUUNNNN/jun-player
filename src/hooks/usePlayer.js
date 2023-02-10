@@ -77,6 +77,7 @@ playerCore.emitter.on('volumechange',volumeRefUpdatePlayerCore)
     currentText,
     like,
     volume,
+    formatTime,
 
     // methods
     handleLike: playerCore.handleLike,

@@ -25,7 +25,6 @@ export class PlayerCore {
     this.audio.addEventListener("timeupdate", () => {
       this.currentTime = this.audio.currentTime;
       this.emitter.emit("timeupdate");
-      console.log(["timeupdate"]);
     });
     this.audio.addEventListener("ended", () => {
       this.playerState = "pause";
@@ -117,11 +116,9 @@ export class PlayerCore {
 
   set currentTime(value) {
     if (this._currentTime != value) {
-      console.log("set currentTime");
       this._currentTime = value;
       this.emitter.emit("onCurrentTimeChange", value);
       if (this.audio.currentTime != value) {
-        console.log("currentTime change this.audio.currentTime");
         this.audio.currentTime = value;
       }
     }
@@ -153,7 +150,6 @@ export class PlayerCore {
 
   set progress(value) {
     if (value != this.currentTime / this.duration) {
-      console.log("set progress");
       this.currentTime = value * this.duration;
     }
   }
