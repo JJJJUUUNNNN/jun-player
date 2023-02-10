@@ -65,7 +65,6 @@ function updateValue() {
   const value = clickValue.value;
   if (value >= 0 && value <= 1) {
     if (props.modelValue != value) {
-      console.log("[ update:modelValue ]");
       emit("update:modelValue", value);
     }
   } else {

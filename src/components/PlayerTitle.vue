@@ -35,7 +35,6 @@ onBeforeUnmount(() => {
 });
 
 playerCore.emitter.on("toggle:song",()=>{
-  console.log(123)
   reset()
 });
 
