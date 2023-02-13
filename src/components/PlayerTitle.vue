@@ -1,5 +1,6 @@
 <script setup>
 import { usePlayer } from "@/hooks/usePlayer";
+import { LightDarkenColor } from "@/utils";
 import { computed, ref, onBeforeUnmount } from "vue";
 const { emitter,state,currentSong } = usePlayer()
 const rotateValue = ref(0);
@@ -42,7 +43,7 @@ emitter.on("toggle:song",()=>{
     >
       <img class="cover" :src="currentSong.cover" />
     </div>
-    <h3 class="song-name">{{ currentSong.name }}</h3>
+    <h3 class="song-name" :style="{color:LightDarkenColor(`#${currentSong.theme}`,-70)}">{{ currentSong.name }}</h3>
   </div>
 </template>
 
@@ -74,7 +75,6 @@ emitter.on("toggle:song",()=>{
 .song-name {
   font-size: 18px;
   font-weight: 400;
-  color: #333;
   margin: 0;
   margin-left: 10px;
 }

@@ -1,11 +1,10 @@
 <script setup>
 import Player from './components/Player.vue'
-
 </script>
 
 <template>
   <div class="player-container">
-    <Player />
+    <Player class="player" />
   </div>
 </template>
 
@@ -20,6 +19,4 @@ import Player from './components/Player.vue'
     margin: 0 auto;
     /* background-color: #F8F9FA; */
   }
-
-
 </style>

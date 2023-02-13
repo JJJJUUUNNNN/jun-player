@@ -20,13 +20,11 @@ export class PlayerCore {
     this.songIndex = 0;
     this.audio.controls = true;
     document.body.appendChild(this.audio);
-    this.iniTpLAYERT()
+    this.initPlayer()
     this.initAudioEvents();
   }
 
-  iniTpLAYERT(){
-    // CHUSHIHUA VO
-
+  initPlayer(){
     const volumeCache = getItem('player_volume');
     if(volumeCache != null) {
       this.audio.volume = Number(volumeCache)

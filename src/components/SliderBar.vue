@@ -1,6 +1,6 @@
 <script setup>
-import { usePlayer } from "@/hooks/usePlayer";
 import {ref, watch } from "vue";
+import { usePlayer } from "@/hooks/usePlayer";
 import { LightDarkenColor } from '@/utils/index'
 
 const { currentSong } = usePlayer()
@@ -96,13 +96,10 @@ watch(
           class="slider-bar-process"
           :style="{
             width: clickValue * 100 + '%',
-            backgroundColor: LightDarkenColor(`#${currentSong.theme}`,5),
+            backgroundColor: LightDarkenColor(`#${currentSong.theme}`,-70),
           }"  
         >
-        
-        {{ `#${currentSong.theme}` }}{{ LightDarkenColor(`#${currentSong.theme}`,5) }}
-
-          <div class="pro_button" :style="{backgroundColor: LightDarkenColor(`#${currentSong.theme}`,12)}"></div>
+          <div class="pro_button" :style="{backgroundColor: LightDarkenColor(`#${currentSong.theme}`,-70)}"></div>
         </div>
       </div>
     </div>

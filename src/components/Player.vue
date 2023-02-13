@@ -1,5 +1,5 @@
 <script setup>
-import { provide } from "vue";
+import { provide,ref } from "vue";
 import { PlayerCore } from "../PlayerCore";
 import PlayerControl from "./PlayerControl.vue";
 import PlayerTitle from "./PlayerTitle.vue";
@@ -15,7 +15,7 @@ const playerCore = new PlayerCore({
       duration: "3:03",
       cover: "/cover/faith.jpg",
       songUrl:'/music/勾指起誓言-洛天依.mp3',
-      theme: "fffaf5",
+      theme: "f6b3d8",
     },
     {
       name: "盛夏的果实",
@@ -37,10 +37,16 @@ const playerCore = new PlayerCore({
 });
 
 provide("playerCore", playerCore);
+
+const song = ref(playerCore.currentSong)
+playerCore.emitter.on('toggle:song',(value)=>{
+  song.value=value
+})
+
 </script>
 
 <template>
-  <div class="player">
+  <div class="player" :style="{backgroundColor:`#${song.theme}`}">
     <PlayerTitle />
     <PlayerControl />
     <PlayerAction />
@@ -50,7 +56,6 @@ provide("playerCore", playerCore);
 <style>
 .player {
   width: 360px;
-  background-color: #333;
   color: #fff;
   opacity: 0.9;
   padding: 10px;
