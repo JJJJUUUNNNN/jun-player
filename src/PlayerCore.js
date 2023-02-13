@@ -330,7 +330,7 @@ export class PlayerCore {
     }
     this.play();
     this.emitter.emit("play:perv");
-    this.emitter.emit("toggle:song");
+    this.emitter.emit("toggle:song", this.currentSong);
   }
 
   handleLike() {

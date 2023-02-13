@@ -40,19 +40,25 @@ provide("playerCore", playerCore);
 
 const song = ref(playerCore.currentSong)
 playerCore.emitter.on('toggle:song',(value)=>{
-  song.value=value
+  console.log(value)
+  song.value = value
 })
 
 </script>
 
 <template>
-  <div class="player" :style="{backgroundColor:`#${song.theme}`}">
-    <PlayerTitle />
-    <PlayerControl />
-    <PlayerAction />
+  <div>
+    <div class="player" :style="{backgroundColor:`#${song?song.theme:''}`}">
+      <PlayerTitle />
+      <PlayerControl />
+      <PlayerAction />
+    </div>
+    <pre style="color:red">
+      <code>
+        {{ {song} }}
+      </code>
+    </pre>
   </div>
-  {{ song }}
-
 </template>
 
 <style>
