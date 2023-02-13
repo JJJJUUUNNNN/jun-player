@@ -1,8 +1,9 @@
 <script setup>
-import { computed, ref, watch, inject } from "vue";
-const playerCore = inject("playerCore");
-const currentSong = computed(() => playerCore.currentSong);
+import { usePlayer } from "@/hooks/usePlayer";
+import {ref, watch } from "vue";
+import { LightDarkenColor } from '@/utils/index'
 
+const { currentSong } = usePlayer()
 const props = defineProps({
   modelValue: {
     type: Number,
@@ -95,10 +96,13 @@ watch(
           class="slider-bar-process"
           :style="{
             width: clickValue * 100 + '%',
-            backgroundColor: `#${currentSong.theme}`,
-          }"
+            backgroundColor: LightDarkenColor(`#${currentSong.theme}`,5),
+          }"  
         >
-          <div class="pro_button"></div>
+        
+        {{ `#${currentSong.theme}` }}{{ LightDarkenColor(`#${currentSong.theme}`,5) }}
+
+          <div class="pro_button" :style="{backgroundColor: LightDarkenColor(`#${currentSong.theme}`,12)}"></div>
         </div>
       </div>
     </div>
@@ -139,7 +143,6 @@ watch(
   cursor: pointer;
   transform: translate(50%, -25%);
   box-shadow: 0px 0px 5px #333;
-  background-color: red;
   width: var(--pro-button-size);
   height: var(--pro-button-size);
 }
