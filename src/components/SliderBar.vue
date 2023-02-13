@@ -1,9 +1,9 @@
 <script setup>
-import {ref, watch } from "vue";
+import { ref, watch } from "vue";
 import { usePlayer } from "@/hooks/usePlayer";
-import { LightDarkenColor } from '@/utils/index'
+import { LightDarkenColor } from "@/utils/index";
 
-const { currentSong } = usePlayer()
+const { currentSong } = usePlayer();
 const props = defineProps({
   modelValue: {
     type: Number,
@@ -18,9 +18,13 @@ const emit = defineEmits(["update:modelValue", "changeClickValue"]);
 const clickValue = ref(props.modelValue);
 
 const sliderBarRef = ref();
-let isDrag = false;
+let isDrag = ref(false);
 let isTouch = false;
 let barLeft = 0;
+
+watch(isDrag, () => {
+  emit("drag", isDrag);
+});
 
 function handleMouseDown(event) {
   isDrag = true;
@@ -96,10 +100,15 @@ watch(
           class="slider-bar-process"
           :style="{
             width: clickValue * 100 + '%',
-            backgroundColor: LightDarkenColor(`#${currentSong.theme}`,-70),
-          }"  
+            backgroundColor: LightDarkenColor(`#${currentSong.theme}`, -70),
+          }"
         >
-          <div class="pro_button" :style="{backgroundColor: LightDarkenColor(`#${currentSong.theme}`,-70)}"></div>
+          <div
+            class="pro_button"
+            :style="{
+              backgroundColor: LightDarkenColor(`#${currentSong.theme}`, -70),
+            }"
+          ></div>
         </div>
       </div>
     </div>
