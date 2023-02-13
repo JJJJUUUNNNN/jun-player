@@ -51,6 +51,8 @@ playerCore.emitter.on('toggle:song',(value)=>{
     <PlayerControl />
     <PlayerAction />
   </div>
+  {{ song }}
+
 </template>
 
 <style>

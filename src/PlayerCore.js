@@ -51,6 +51,7 @@ export class PlayerCore {
     this.audio.addEventListener("pause", () => {
       this.emitter.emit("pause");
     });
+
     this.audio.addEventListener("play", () => {
       this.emitter.emit("play");
     });
@@ -295,6 +296,7 @@ export class PlayerCore {
   }
 
   toNext() {
+    console.log('22')
     this.pause();
     const nextSongIndex = this.getNextSongIndex();
     if (nextSongIndex != undefined) {
@@ -320,6 +322,7 @@ export class PlayerCore {
   }
 
   toPerv() {
+    console.log('11')
     this.pause();
     const prevSongIndex = this.getPervSongIndex();
     if (prevSongIndex != undefined) {

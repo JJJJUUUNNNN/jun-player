@@ -12,7 +12,7 @@ const {
   currentSong,
 } = usePlayer();
 
-const isDrag = ref(false);
+const isDrag = false;
 
 const ctime = ref(currentTime.value);
 watch(currentTime, (value) => {
