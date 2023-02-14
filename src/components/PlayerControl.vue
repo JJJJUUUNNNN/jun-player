@@ -3,7 +3,7 @@ import { ref } from "vue";
 import SliderBar from "./SliderBar.vue";
 import { usePlayer } from "@/hooks/usePlayer";
 
-const { state, like, volume, handleLike, toPerv, toggle, toNext } = usePlayer();
+const { state, like, volume, handleLike, toPerv, toggle, toNext,currentSong } = usePlayer();
 
 const isShow = ref(false);
 
@@ -24,16 +24,25 @@ function popOut() {
           <SliderBar class="sliderBar" style="width: 120px" v-model="volume" />
         </div>
       </button>
-    </div> 
+    </div>
+    {{ like }}
     <button contenteditable="true" @click="handleLike">
-      <svg-icon v-if="!like" name="unlike" size="20px" class="player-button"></svg-icon>
-      <svg-icon v-else name="like" size="20px" class="player-button"></svg-icon>
+      <svg-icon
+      v-model="like"
+        :name="like?'like':'unlike'"
+        size="20px"
+        class="player-button"
+      ></svg-icon>
     </button>
     <button @click="toPerv">
       <svg-icon name="pre" size="2em" class="player-button"></svg-icon>
     </button>
     <button @click="toggle">
-      <svg-icon :name="state == 'play' ? 'play' : 'pause'" size="2em" class="player-button"></svg-icon>
+      <svg-icon
+        :name="state == 'play' ? 'play' : 'pause'"
+        size="2em"
+        class="player-button"
+      ></svg-icon>
     </button>
     <button @click="toNext">
       <svg-icon name="next" size="2em" class="player-button"></svg-icon>
@@ -57,7 +66,7 @@ function popOut() {
 }
 .pop-up {
   padding: 0 15px;
-  background-color: rgb(211, 2, 75);
+  background-color: #e2dede;
   border-radius: 10px;
   position: absolute;
   left: 50%;

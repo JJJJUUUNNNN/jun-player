@@ -1,5 +1,5 @@
 <script setup>
-import Player from './components/Player.vue'
+import Player from "./components/Player.vue";
 </script>
 
 <template>
@@ -9,14 +9,13 @@ import Player from './components/Player.vue'
 </template>
 
 <style scoped>
-  .player-container {
-    padding: 100px 0 50px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 400px;
-    margin: 0 auto;
-    /* background-color: #F8F9FA; */
-  }
+.player-container {
+  padding: 100px 0 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 400px;
+  margin: 0 auto;
+}
 </style>

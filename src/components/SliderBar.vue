@@ -85,12 +85,6 @@ watch(
 </script>
 
 <template>
-  <div ref="el" style="--color:#7fa998; color:var(--color)">{{ color }}</div>
-  <button @click="switchColor">change color</button>
-
-  <div ref="elv" style="--color:#7fa998; --color-one:#df8543" :style="{color:colorVal}">{{ key }} : {{ colorVal }}</div>
-  <button @click="changeVar">change color var</button>
-
   <div
     class="slider-bar-container"
     @mousedown="handleMouseDown"
@@ -100,14 +94,12 @@ watch(
       <div ref="sliderBarRef" class="music-slider-bar">
         <div
           ref="processRef"
-          class="slider-bar-process "
+          class="slider-bar-process"
           :style="{
             width: clickValue * 100 + '%',
           }"
         >
-          <div
-            class="pro_button"
-          ></div>
+          <div class="pro_button"></div>
         </div>
       </div>
     </div>

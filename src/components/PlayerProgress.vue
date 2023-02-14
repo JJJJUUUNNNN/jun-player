@@ -2,13 +2,8 @@
 import { usePlayer } from "@/hooks/usePlayer";
 import { ref, watch } from "vue";
 import SliderBar from "./SliderBar.vue";
-const {
-  formatTime,
-  progress,
-  currentTime,
-  duration,
-  durationText,
-} = usePlayer();
+const { formatTime, progress, currentTime, duration, durationText } =
+  usePlayer();
 
 let isDrag = false;
 
@@ -23,18 +18,19 @@ function changeClickValue(pre) {
   ctime.value = duration.value * pre;
 }
 
-function updateIsDrag(val){
-  isDrag = val
+function updateIsDrag(val) {
+  isDrag = val;
 }
-
 </script>
 
 <template>
   <div class="progress">
-    <p class="player-info-time">
-      {{ formatTime(ctime) }}/{{ durationText }}
-    </p>
-    <SliderBar @changeClickValue="changeClickValue" v-model="progress" @drag="updateIsDrag" />
+    <p class="player-info-time">{{ formatTime(ctime) }}/{{ durationText }}</p>
+    <SliderBar
+      @changeClickValue="changeClickValue"
+      v-model="progress"
+      @drag="updateIsDrag"
+    />
   </div>
 </template>
 

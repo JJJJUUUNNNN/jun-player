@@ -20,14 +20,14 @@ export class PlayerCore {
     this.songIndex = 0;
     this.audio.controls = true;
     document.body.appendChild(this.audio);
-    this.initPlayer()
+    this.initPlayer();
     this.initAudioEvents();
   }
 
-  initPlayer(){
-    const volumeCache = getItem('player_volume');
-    if(volumeCache != null) {
-      this.audio.volume = Number(volumeCache)
+  initPlayer() {
+    const volumeCache = getItem("player_volume");
+    if (volumeCache != null) {
+      this.audio.volume = Number(volumeCache);
     }
   }
 
@@ -111,7 +111,7 @@ export class PlayerCore {
     this._playList = _playList;
   }
 
-   /**
+  /**
    * @description 当前歌曲
    * @type { string }
    */
@@ -124,7 +124,7 @@ export class PlayerCore {
    * @type { string }
    */
   get src() {
-    return  this.currentSong.songUrl;
+    return this.currentSong.songUrl;
   }
 
   /**
@@ -183,7 +183,7 @@ export class PlayerCore {
    * @type { number }
    * @private
    */
-  _volume = Number(getItem('player_volume')) || this.audio.volume;
+  _volume = Number(getItem("player_volume")) || this.audio.volume;
 
   get volume() {
     return this._volume;
@@ -193,7 +193,7 @@ export class PlayerCore {
     if (value == this._volume) return;
     this._volume = value;
     this.audio.volume = value;
-    setItem('player_volume',value)
+    setItem("player_volume", value);
   }
 
   /**
@@ -201,14 +201,16 @@ export class PlayerCore {
    * @type { boolean }
    * @private
    */
-  _like = false;
+
+  // _like = false;
 
   get like() {
-    return this._like;
+    return this.currentSong.like;
   }
 
   set like(value) {
-    this._like = value;
+    console.log('like:',this.currentSong)
+    this.currentSong.like = value;
     this.emitter.emit("likeChange", value);
   }
 
@@ -222,19 +224,19 @@ export class PlayerCore {
         name: "列表循环",
         key: "loop",
         icon: loop,
-        isShow:true
+        isShow: true,
       },
       {
         name: "单曲循环",
         key: "single",
         icon: single,
-        isShow:false
+        isShow: false,
       },
       {
         name: "随机播放",
         key: "random",
         icon: random,
-        isShow:false
+        isShow: false,
       },
     ];
   }
@@ -296,7 +298,7 @@ export class PlayerCore {
   }
 
   toNext() {
-    console.log('22')
+    console.log("22");
     this.pause();
     const nextSongIndex = this.getNextSongIndex();
     if (nextSongIndex != undefined) {
@@ -304,7 +306,7 @@ export class PlayerCore {
     }
     this.play();
     this.emitter.emit("play:next");
-    this.emitter.emit("toggle:song",this.currentSong);
+    this.emitter.emit("toggle:song", this.currentSong);
   }
 
   getPervSongIndex() {
@@ -322,7 +324,7 @@ export class PlayerCore {
   }
 
   toPerv() {
-    console.log('11')
+    console.log("11");
     this.pause();
     const prevSongIndex = this.getPervSongIndex();
     if (prevSongIndex != undefined) {
@@ -343,7 +345,7 @@ export class PlayerCore {
     } else {
       this.modeListIndex++;
     }
-    this.emitter.emit("modeChange",this.currentMode);
+    this.emitter.emit("modeChange", this.currentMode);
   }
 
   getRandomIndex() {

@@ -1,8 +1,7 @@
 <script setup>
 import { usePlayer } from "@/hooks/usePlayer";
-import { lightDarkenColor } from "@/utils";
 import { computed, ref, onBeforeUnmount } from "vue";
-const { emitter,state,currentSong } = usePlayer()
+const { emitter, state, currentSong } = usePlayer();
 const rotateValue = ref(0);
 function roll() {
   if (state.value == "play") {
@@ -29,18 +28,14 @@ onBeforeUnmount(() => {
   clearTimeout(timer);
 });
 
-emitter.on("toggle:song",()=>{
-  reset()
+emitter.on("toggle:song", () => {
+  reset();
 });
-
 </script>
 
 <template>
   <div class="player-info">
-    <div
-      class="cover-container"
-      :style="{ transform: rotate, backgroundColor: `#${currentSong.theme}` }"
-    >
+    <div class="cover-container" :style="{ transform: rotate }">
       <img class="cover" :src="currentSong.cover" />
     </div>
     <h3 class="song-name player-info-name">{{ currentSong.name }}</h3>
@@ -48,7 +43,6 @@ emitter.on("toggle:song",()=>{
 </template>
 
 <style>
-
 .player-info {
   position: absolute;
   left: 10px;

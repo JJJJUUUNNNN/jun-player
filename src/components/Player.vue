@@ -16,6 +16,7 @@ const playerCore = new PlayerCore({
       cover: "/cover/faith.jpg",
       songUrl: "/music/勾指起誓言-洛天依.mp3",
       theme: "f6b3d8",
+      like:true
     },
     {
       name: "盛夏的果实",
@@ -24,6 +25,7 @@ const playerCore = new PlayerCore({
       cover: "/cover/summer.jpg",
       songUrl: "/music/盛夏的果实-莫文蔚.mp3",
       theme: "c1d3df",
+      like:false
     },
     {
       name: "我的美丽",
@@ -32,6 +34,7 @@ const playerCore = new PlayerCore({
       cover: "/cover/myBeauty.jpg",
       songUrl: "/music/我的美丽-小霞.mp3",
       theme: "b7b7b7",
+      like:false
     },
   ],
 });
@@ -40,24 +43,28 @@ provide("playerCore", playerCore);
 </script>
 
 <template>
-    <div class="player">
-      <PlayerTitle />
-      <PlayerControl />
-      <PlayerAction />
-    </div>
+  <div class="player">
+    <PlayerTitle />
+    <PlayerControl />
+    <PlayerAction />
+  </div>
 </template>
 
 <style>
-.player{
+.player,
+.cover-container {
   background-color: var(--theme-light-color) !important;
 }
 .player-button,
 .player-info-time,
 .player-info-name,
-.music-list-table,
+.music-list-table {
+  color: var(--theme-dark-color) !important;
+}
+
 .slider-bar-process,
 .slider-bar-process .pro_button {
-  color: var(--theme-dark-color) !important;
+  background-color: var(--theme-dark-color) !important;
 }
 
 .player {

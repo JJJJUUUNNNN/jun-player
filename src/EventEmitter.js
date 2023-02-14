@@ -43,7 +43,7 @@ export class EventEmitter {
   emit(type, ...args) {
     const events = this.events;
     const handlers = events[type];
-    if(!handlers) return
+    if (!handlers) return;
     for (let listener of Object.values(handlers)) {
       Reflect.apply(listener, this, args);
     }
