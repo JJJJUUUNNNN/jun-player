@@ -2,9 +2,8 @@
 import { ref } from "vue";
 import SliderBar from "./SliderBar.vue";
 import { usePlayer } from "@/hooks/usePlayer";
-import { LightDarkenColor } from "@/utils";
 
-const { state, like, volume, handleLike, toPerv, toggle, toNext,currentSong } = usePlayer();
+const { state, like, volume, handleLike, toPerv, toggle, toNext } = usePlayer();
 
 const isShow = ref(false);
 
@@ -20,24 +19,24 @@ function popOut() {
   <div class="player-control">
     <div class="voice">
       <button @mousedown="popUp" @mouseleave="popOut">
-        <svg-icon name="volume" size="20px" :style="{color:LightDarkenColor(`#${currentSong.theme}`,-70)}"></svg-icon>
+        <svg-icon name="volume" size="20px" class="player-button"></svg-icon>
         <div class="pop-up" v-if="isShow">
           <SliderBar class="sliderBar" style="width: 120px" v-model="volume" />
         </div>
       </button>
     </div> 
     <button contenteditable="true" @click="handleLike">
-      <svg-icon v-if="!like" name="unlike" size="20px" :style="{color:LightDarkenColor(`#${currentSong.theme}`,-70)}"></svg-icon>
-      <svg-icon v-else name="like" size="20px" :style="{color:LightDarkenColor(`#${currentSong.theme}`,-70)}"></svg-icon>
+      <svg-icon v-if="!like" name="unlike" size="20px" class="player-button"></svg-icon>
+      <svg-icon v-else name="like" size="20px" class="player-button"></svg-icon>
     </button>
     <button @click="toPerv">
-      <svg-icon name="pre" size="2em" :style="{color:LightDarkenColor(`#${currentSong.theme}`,-70)}"></svg-icon>
+      <svg-icon name="pre" size="2em" class="player-button"></svg-icon>
     </button>
     <button @click="toggle">
-      <svg-icon :name="state == 'play' ? 'play' : 'pause'" size="2em" :style="{color:LightDarkenColor(`#${currentSong.theme}`,-70)}"></svg-icon>
+      <svg-icon :name="state == 'play' ? 'play' : 'pause'" size="2em" class="player-button"></svg-icon>
     </button>
     <button @click="toNext">
-      <svg-icon name="next" size="2em" :style="{color:LightDarkenColor(`#${currentSong.theme}`,-70)}"></svg-icon>
+      <svg-icon name="next" size="2em" class="player-button"></svg-icon>
     </button>
   </div>
 </template>

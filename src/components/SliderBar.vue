@@ -1,28 +1,6 @@
 <script setup>
 import { ref, watch } from "vue";
-import { usePlayer } from "@/hooks/usePlayer";
-import { LightDarkenColor } from "@/utils/index";
-import { useCssVar } from "@vueuse/core";
 
-const el = ref(null);
-const color = useCssVar("--color", el);
-
-const switchColor = () => {
-  if (color.value === "#df8543") color.value = "#7fa998";
-  else color.value = "#df8543";
-};
-
-const elv = ref(null)
-const key = ref('--color')
-const colorVal = useCssVar(key, elv)
-const changeVar = () => {
-  if (key.value === '--color')
-    key.value = '--color-one'
-  else
-    key.value = '--color'
-}
-
-const { currentSong } = usePlayer();
 const props = defineProps({
   modelValue: {
     type: Number,
@@ -122,17 +100,13 @@ watch(
       <div ref="sliderBarRef" class="music-slider-bar">
         <div
           ref="processRef"
-          class="slider-bar-process"
+          class="slider-bar-process "
           :style="{
             width: clickValue * 100 + '%',
-            backgroundColor: LightDarkenColor(`#${currentSong.theme}`, -70),
           }"
         >
           <div
             class="pro_button"
-            :style="{
-              backgroundColor: LightDarkenColor(`#${currentSong.theme}`, -70),
-            }"
           ></div>
         </div>
       </div>

@@ -1,35 +1,40 @@
 <script setup>
 import { usePlayer } from "@/hooks/usePlayer";
-import { LightDarkenColor } from "@/utils";
 import { ref, watch } from "vue";
 import SliderBar from "./SliderBar.vue";
 const {
-  progress,
   formatTime,
+  progress,
   currentTime,
   duration,
   durationText,
-  currentSong,
 } = usePlayer();
 
-const isDrag = false;
+let isDrag = false;
 
 const ctime = ref(currentTime.value);
+
 watch(currentTime, (value) => {
   if (isDrag) return;
   ctime.value = value;
 });
+
 function changeClickValue(pre) {
   ctime.value = duration.value * pre;
 }
+
+function updateIsDrag(val){
+  isDrag = val
+}
+
 </script>
 
 <template>
   <div class="progress">
-    <p :style="{ color: LightDarkenColor(`#${currentSong.theme}`, -70) }">
+    <p class="player-info-time">
       {{ formatTime(ctime) }}/{{ durationText }}
     </p>
-    <SliderBar @changeClickValue="changeClickValue" v-model="progress" @drag="isDrag" />
+    <SliderBar @changeClickValue="changeClickValue" v-model="progress" @drag="updateIsDrag" />
   </div>
 </template>
 

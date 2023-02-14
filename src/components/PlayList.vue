@@ -1,12 +1,12 @@
 <script setup>
 import { usePlayer } from '@/hooks/usePlayer';
-import { LightDarkenColor } from '@/utils';
+import { lightDarkenColor } from '@/utils';
 const {playList,currentSong} =usePlayer()
 </script>
 
 <template>
    <div class="music-list">
-      <table :style="{color:LightDarkenColor(`#${currentSong.theme}`,-70)}">
+      <table class="music-list-table">
         <thead>
           <tr>
             <td> </td>
@@ -18,7 +18,7 @@ const {playList,currentSong} =usePlayer()
         <tbody>
           <tr v-for="item in playList">
             <td>
-              <svg-icon name="unlike" size="20px" :style="{color:LightDarkenColor(`#${currentSong.theme}`,-70)}"></svg-icon>
+              <svg-icon name="unlike" size="20px" :style="{color:lightDarkenColor(`#${currentSong.theme}`,-70)}"></svg-icon>
             </td>
             <td>{{item.name}}</td>
             <td>{{item.author}}</td>
