@@ -1,9 +1,6 @@
 <script setup>
 import { ref, watch } from "vue";
-import { usePlayer } from "@/hooks/usePlayer";
-import { LightDarkenColor } from "@/utils/index";
 
-const { currentSong } = usePlayer();
 const props = defineProps({
   modelValue: {
     type: Number,
@@ -97,17 +94,13 @@ watch(
       <div ref="sliderBarRef" class="music-slider-bar">
         <div
           ref="processRef"
-          class="slider-bar-process"
+          class="slider-bar-process "
           :style="{
             width: clickValue * 100 + '%',
-            backgroundColor: LightDarkenColor(`#${currentSong.theme}`, -70),
           }"
         >
           <div
             class="pro_button"
-            :style="{
-              backgroundColor: LightDarkenColor(`#${currentSong.theme}`, -70),
-            }"
           ></div>
         </div>
       </div>

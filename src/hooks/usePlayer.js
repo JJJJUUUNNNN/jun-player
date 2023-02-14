@@ -1,3 +1,6 @@
+import { ThemeDarkColor, ThemeLightColor } from "@/utils/const";
+import { lightDarkenColor } from "@/utils/index";
+import { useCssVar } from "@vueuse/core";
 import { computed, inject, ref, watch } from "vue";
 import { PlayerCore } from "../PlayerCore";
 export function usePlayer() {
@@ -78,6 +81,16 @@ export function usePlayer() {
   const currentText = computed(() => formatTime(currentTime.value));
   const timeBar = computed(() => `${currentText.value}/${durationText.value}`);
 
+  const darkColor = useCssVar(ThemeDarkColor);
+  const lightColor = useCssVar(ThemeLightColor);
+
+  function updateColor(_currentSong) {
+    darkColor.value = lightDarkenColor(`#${_currentSong.theme}`, -70);
+    lightColor.value = "#" + _currentSong.theme;
+  }
+
+  watch(currentSong, updateColor, { immediate: true });
+
   return {
     // attrs
     state,
@@ -91,14 +104,15 @@ export function usePlayer() {
     currentText,
     like,
     volume,
+
     playList: playerCore.playList,
-    emitter:    playerCore.emitter,
+    emitter: playerCore.emitter,
     // methods
-    handleLike:   playerCore.handleLike.bind(playerCore),
-    toggleMode:   playerCore.toggleMode.bind(playerCore),
-    toPerv:   playerCore.toPerv.bind(playerCore),
-    toggle:   playerCore.toggle.bind(playerCore),
-    toNext:   playerCore.toNext.bind(playerCore),
+    handleLike: playerCore.handleLike.bind(playerCore),
+    toggleMode: playerCore.toggleMode.bind(playerCore),
+    toPerv: playerCore.toPerv.bind(playerCore),
+    toggle: playerCore.toggle.bind(playerCore),
+    toNext: playerCore.toNext.bind(playerCore),
     formatTime,
   };
 }
