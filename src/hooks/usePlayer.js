@@ -1,5 +1,9 @@
 import { computed, inject, ref, watch } from "vue";
 import { PlayerCore } from "../PlayerCore";
+import { useCssVar } from '@vueuse/core'
+import { LightDarkenColor } from "@/utils/index";
+
+
 export function usePlayer() {
   /**
    * @type { PlayerCore }
@@ -74,6 +78,12 @@ export function usePlayer() {
     return `${add0(min)}:${add0(sec)}`;
   }
 
+  // function setColor(el,color){
+  //    el = ref(null)
+  //    color = useCssVar('--background-color', el, { initialValue: LightDarkenColor(`#${currentSong.value.theme}`, -70) })
+  //   return color
+  // }
+
   const durationText = computed(() => formatTime(duration.value));
   const currentText = computed(() => formatTime(currentTime.value));
   const timeBar = computed(() => `${currentText.value}/${durationText.value}`);
@@ -100,5 +110,6 @@ export function usePlayer() {
     toggle:   playerCore.toggle.bind(playerCore),
     toNext:   playerCore.toNext.bind(playerCore),
     formatTime,
+    // setColor
   };
 }
