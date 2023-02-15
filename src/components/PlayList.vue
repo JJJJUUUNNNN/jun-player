@@ -1,14 +1,6 @@
 <script setup>
 import { usePlayer } from "@/hooks/usePlayer";
 const { playList, like,handleLike } = usePlayer();
-
-function likeSong(val) {
-  const song = playList.find((el, index) => {
-    if (index === val) return el;
-  });
-  song.like=like
-  console.log("like!", song.like, like);
-}
 </script>
 
 <template>
@@ -23,10 +15,9 @@ function likeSong(val) {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in playList">
-          <!-- <td @click="likeSong(index)"> -->
-          <td @click="handleLike">
-            {{ item.like }}
+        <tr v-for="item in playList">
+          <td @click="handleLike(item.id)">
+            {{ item.like }} || {{ like }}
             <svg-icon
               v-model="like"
               :name="item.like?'like':'unlike'"

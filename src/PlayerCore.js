@@ -17,6 +17,7 @@ export class PlayerCore {
    */
   constructor(options) {
     this.playList = options.playList || [];
+    this.like=false;
     this.songIndex = 0;
     this.audio.controls = true;
     document.body.appendChild(this.audio);
@@ -202,15 +203,15 @@ export class PlayerCore {
    * @private
    */
 
-  // _like = false;
+  _like = false;
 
   get like() {
-    return this.currentSong.like;
+     return this._like
   }
 
   set like(value) {
-    console.log('like:',this.currentSong)
-    this.currentSong.like = value;
+    if(value==this._like) return
+    this._like=value
     this.emitter.emit("likeChange", value);
   }
 
@@ -335,8 +336,14 @@ export class PlayerCore {
     this.emitter.emit("toggle:song", this.currentSong);
   }
 
-  handleLike() {
-    this.like = !this.like;
+  handleLike(value) {
+    this.like=this.playList.find(e=>e.id==value).like
+    if(this.like!=undefined){
+      console.log('oldLike:',this.like)
+      this.like=!this.like
+      console.log('newLike:',this.like)
+      return this.like
+    }
   }
 
   toggleMode() {

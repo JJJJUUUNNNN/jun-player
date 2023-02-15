@@ -35,9 +35,18 @@ export function usePlayer() {
   });
 
   const like = ref(playerCore.like);
-  playerCore.emitter.on("likeChange", (value) => {
-    like.value = value;
-  });
+
+  function likeRefUpdatePlayerCore() {
+    if (like.value != playerCore.like) {
+      like.value = playerCore.like;
+    }
+  }
+
+  playerCore.emitter.on("likeChange", likeRefUpdatePlayerCore);
+
+  watch(like,(value)=>{
+    playerCore.like=value
+  })
 
   const volume = ref(playerCore.volume);
 
