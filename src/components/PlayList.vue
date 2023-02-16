@@ -1,6 +1,7 @@
 <script setup>
 import { usePlayer } from "@/hooks/usePlayer";
-const { playList, handleLike } = usePlayer();
+const { playList, handleLike,handleListPlay } = usePlayer();
+
 </script>
 
 <template>
@@ -15,7 +16,7 @@ const { playList, handleLike } = usePlayer();
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in playList" :key="index">
+        <tr v-for="(item, index) in playList" :key="index" @click="handleListPlay(index)">
           <td @click="handleLike(index)">
             <svg-icon
               :name="item.like ? 'like' : 'unlike'"

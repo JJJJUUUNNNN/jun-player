@@ -120,5 +120,6 @@ export function usePlayer() {
     toggle: playerCore.toggle.bind(playerCore),
     toNext: playerCore.toNext.bind(playerCore),
     formatTime,
+    handleListPlay:playerCore.handleListPlay.bind(playerCore)
   };
 }

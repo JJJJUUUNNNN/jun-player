@@ -320,6 +320,11 @@ export class PlayerCore {
     this.emitter.emit("like:song", this.currentSong.like);
   }
 
+  handleListPlay(index=this.songIndex){
+    console.log('handleListPlay',index)
+    this.play()
+  }
+
   toggleMode() {
     if (this.modeListIndex + 1 == this.modeList.length) {
       this.modeListIndex = 0;
