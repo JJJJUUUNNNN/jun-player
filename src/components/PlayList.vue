@@ -1,6 +1,6 @@
 <script setup>
 import { usePlayer } from "@/hooks/usePlayer";
-const { playList, like, handleLike } = usePlayer();
+const { playList, handleLike } = usePlayer();
 </script>
 
 <template>

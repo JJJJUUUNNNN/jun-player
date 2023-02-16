@@ -44,19 +44,22 @@ export function usePlayer() {
     playList.value = [...value];
   });
 
-  const like = ref(playerCore.like);
+  // const like = ref(playerCore.like)
+  // playerCore.emitter.on("like", (value) => {
+  //   like.value = value
+  // });
 
-  function likeRefUpdatePlayerCore() {
-    if (like.value != playerCore.like) {
-      like.value = playerCore.like;
-    }
-  }
+  // function likeRefUpdatePlayerCore() {
+  //   if (like.value != playerCore.like) {
+  //     like.value = playerCore.like;
+  //   }
+  // }
 
-  playerCore.emitter.on("likeChange", likeRefUpdatePlayerCore);
+  // playerCore.emitter.on("likeChange", likeRefUpdatePlayerCore);
 
-  watch(like, (value) => {
-    playerCore.like = value;
-  });
+  // watch(like, (value) => {
+  //   playerCore.like = value;
+  // });
 
   const volume = ref(playerCore.volume);
 
@@ -123,12 +126,11 @@ export function usePlayer() {
     timeBar,
     durationText,
     currentText,
-    like,
+    // like,
     volume,
     playList,
-
-    // playList: playerCore.playList,
     emitter: playerCore.emitter,
+
     // methods
     handleLike: playerCore.handleLike.bind(playerCore),
     toggleMode: playerCore.toggleMode.bind(playerCore),

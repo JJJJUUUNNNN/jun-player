@@ -17,7 +17,6 @@ export class PlayerCore {
    */
   constructor(options) {
     this.playList = options.playList || [];
-    this.like = false;
     this.songIndex = 0;
     this.audio.controls = true;
     document.body.appendChild(this.audio);
@@ -120,7 +119,7 @@ export class PlayerCore {
    * @type { object }
    */
   get currentSong() {
-    return {...this.playList[this.songIndex]};
+    return { ...this.playList[this.songIndex] };
   }
 
   /**
@@ -200,23 +199,23 @@ export class PlayerCore {
     setItem("player_volume", value);
   }
 
-  /**
-   * @description 喜欢音乐
-   * @type { boolean }
-   * @private
-   */
+  // /**
+  //  * @description 喜欢音乐
+  //  * @type { boolean }
+  //  */
+  // get like() {
+  //   return this.currentSong ? this.currentSong.like : false;
+  // }
 
-  _like = false;
-
-  get like() {
-    return this._like;
-  }
-
-  set like(value) {
-    if (value == this._like) return;
-    this._like = value;
-    this.emitter.emit("likeChange", value);
-  }
+  // set like(value) {
+  //   if (!this.playList[this.songIndex]) return
+  //   if (this.playList[this.songIndex].like != value) {
+  //     this.playList[this.songIndex].like = value;
+  //     this.emitter.emit("playListChange", this.playList);
+  //     this.emitter.emit("like:song", this.currentSong.like);
+  //     this.emitter.emit("like", value);
+  //   }
+  // }
 
   /**
    * @description 播放模式列表
@@ -339,7 +338,7 @@ export class PlayerCore {
     this.emitter.emit("toggle:song", this.currentSong);
   }
 
-  handleLike(index=this.songIndex) {
+  handleLike(index = this.songIndex) {
     this.playList[index].like = !this.playList[index].like;
     this.emitter.emit("playListChange", this.playList);
     this.emitter.emit("like:song", this.currentSong.like);
