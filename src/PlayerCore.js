@@ -199,24 +199,6 @@ export class PlayerCore {
     setItem("player_volume", value);
   }
 
-  // /**
-  //  * @description 喜欢音乐
-  //  * @type { boolean }
-  //  */
-  // get like() {
-  //   return this.currentSong ? this.currentSong.like : false;
-  // }
-
-  // set like(value) {
-  //   if (!this.playList[this.songIndex]) return
-  //   if (this.playList[this.songIndex].like != value) {
-  //     this.playList[this.songIndex].like = value;
-  //     this.emitter.emit("playListChange", this.playList);
-  //     this.emitter.emit("like:song", this.currentSong.like);
-  //     this.emitter.emit("like", value);
-  //   }
-  // }
-
   /**
    * @description 播放模式列表
    * @type { ModeType[] }
@@ -282,10 +264,6 @@ export class PlayerCore {
     this.playerState == "play" ? this.pause() : this.play();
   }
 
-  reset() {
-    this.currentTime = 0;
-  }
-
   getNextSongIndex() {
     if (this.currentMode.key == "loop") {
       if (this.songIndex == this.playList.length - 1) {
@@ -301,7 +279,6 @@ export class PlayerCore {
   }
 
   toNext() {
-    console.log("22");
     this.pause();
     const nextSongIndex = this.getNextSongIndex();
     if (nextSongIndex != undefined) {
@@ -327,7 +304,6 @@ export class PlayerCore {
   }
 
   toPerv() {
-    console.log("11");
     this.pause();
     const prevSongIndex = this.getPervSongIndex();
     if (prevSongIndex != undefined) {

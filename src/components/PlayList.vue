@@ -15,7 +15,7 @@ const { playList, handleLike } = usePlayer();
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item,index) in playList" :key="index">
+        <tr v-for="(item, index) in playList" :key="index">
           <td @click="handleLike(index)">
             <svg-icon
               :name="item.like ? 'like' : 'unlike'"

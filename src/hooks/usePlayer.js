@@ -31,11 +31,11 @@ export function usePlayer() {
 
   const currentSong = ref(playerCore.currentSong);
   playerCore.emitter.on("toggle:song", (value) => {
-    currentSong.value = value
+    currentSong.value = value;
   });
 
   playerCore.emitter.on("like:song", (like) => {
-    currentSong.value.like = like
+    currentSong.value.like = like;
   });
 
   const playList = ref(playerCore.playList);
@@ -43,23 +43,6 @@ export function usePlayer() {
   playerCore.emitter.on("playListChange", (value) => {
     playList.value = [...value];
   });
-
-  // const like = ref(playerCore.like)
-  // playerCore.emitter.on("like", (value) => {
-  //   like.value = value
-  // });
-
-  // function likeRefUpdatePlayerCore() {
-  //   if (like.value != playerCore.like) {
-  //     like.value = playerCore.like;
-  //   }
-  // }
-
-  // playerCore.emitter.on("likeChange", likeRefUpdatePlayerCore);
-
-  // watch(like, (value) => {
-  //   playerCore.like = value;
-  // });
 
   const volume = ref(playerCore.volume);
 
@@ -126,7 +109,6 @@ export function usePlayer() {
     timeBar,
     durationText,
     currentText,
-    // like,
     volume,
     playList,
     emitter: playerCore.emitter,

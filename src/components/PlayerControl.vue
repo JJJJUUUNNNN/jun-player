@@ -3,7 +3,8 @@ import { ref } from "vue";
 import SliderBar from "./SliderBar.vue";
 import { usePlayer } from "@/hooks/usePlayer";
 
-const { state,volume, handleLike, toPerv, toggle, toNext,currentSong } = usePlayer();
+const { state, volume, handleLike, toPerv, toggle, toNext, currentSong } =
+  usePlayer();
 
 const isShow = ref(false);
 
@@ -27,7 +28,7 @@ function popOut() {
     </div>
     <button contenteditable="true" @click="handleLike()">
       <svg-icon
-        :name="currentSong.like?'like':'unlike'"
+        :name="currentSong.like ? 'like' : 'unlike'"
         size="20px"
         class="player-button"
       ></svg-icon>
