@@ -31,7 +31,17 @@ export function usePlayer() {
 
   const currentSong = ref(playerCore.currentSong);
   playerCore.emitter.on("toggle:song", (value) => {
-    currentSong.value = value;
+    currentSong.value = value
+  });
+
+  playerCore.emitter.on("like:song", (like) => {
+    currentSong.value.like = like
+  });
+
+  const playList = ref(playerCore.playList);
+
+  playerCore.emitter.on("playListChange", (value) => {
+    playList.value = [...value];
   });
 
   const like = ref(playerCore.like);
@@ -44,9 +54,9 @@ export function usePlayer() {
 
   playerCore.emitter.on("likeChange", likeRefUpdatePlayerCore);
 
-  watch(like,(value)=>{
-    playerCore.like=value
-  })
+  watch(like, (value) => {
+    playerCore.like = value;
+  });
 
   const volume = ref(playerCore.volume);
 
@@ -94,7 +104,8 @@ export function usePlayer() {
   const darkColor = useCssVar(ThemeDarkColor);
   const lightColor = useCssVar(ThemeLightColor);
 
-  function updateColor(_currentSong) {
+  function updateColor(_currentSong, lastSong) {
+    if (lastSong && lastSong.theme == _currentSong.theme) return;
     darkColor.value = lightDarkenColor(`#${_currentSong.theme}`, -70);
     lightColor.value = "#" + _currentSong.theme;
   }
@@ -114,8 +125,9 @@ export function usePlayer() {
     currentText,
     like,
     volume,
+    playList,
 
-    playList: playerCore.playList,
+    // playList: playerCore.playList,
     emitter: playerCore.emitter,
     // methods
     handleLike: playerCore.handleLike.bind(playerCore),

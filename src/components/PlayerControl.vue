@@ -16,6 +16,7 @@ function popOut() {
 </script>
 
 <template>
+  
   <div class="player-control">
     <div class="voice">
       <button @mousedown="popUp" @mouseleave="popOut">
@@ -25,11 +26,10 @@ function popOut() {
         </div>
       </button>
     </div>
-    {{ like }}
-    <button contenteditable="true" @click="handleLike(currentSong.id)">
+    <button contenteditable="true" @click="handleLike()">
       <svg-icon
-        v-model="like"
-        :name="like?'like':'unlike'"
+        v-model="currentSong.like"
+        :name="currentSong.like?'like':'unlike'"
         size="20px"
         class="player-button"
       ></svg-icon>

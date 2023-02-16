@@ -16,8 +16,7 @@ const playerCore = new PlayerCore({
       cover: "/cover/faith.jpg",
       songUrl: "/music/勾指起誓言-洛天依.mp3",
       theme: "f6b3d8",
-      like:true,
-      id:10
+      like: false,
     },
     {
       name: "盛夏的果实",
@@ -26,8 +25,7 @@ const playerCore = new PlayerCore({
       cover: "/cover/summer.jpg",
       songUrl: "/music/盛夏的果实-莫文蔚.mp3",
       theme: "c1d3df",
-      like:false,
-      id:11
+      like: false,
     },
     {
       name: "我的美丽",
@@ -36,8 +34,7 @@ const playerCore = new PlayerCore({
       cover: "/cover/myBeauty.jpg",
       songUrl: "/music/我的美丽-小霞.mp3",
       theme: "b7b7b7",
-      like:false,
-      id:12
+      like: false,
     },
   ],
 });
