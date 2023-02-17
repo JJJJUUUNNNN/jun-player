@@ -68,6 +68,8 @@ export function usePlayer() {
 
   playerCore.emitter.on("timeupdate", progressRefUpdatePlayerCore);
   playerCore.emitter.on("durationChange", progressRefUpdatePlayerCore);
+  playerCore.emitter.on('volumechange',progressRefUpdatePlayerCore)
+  
 
   watch(progress, (value) => {
     playerCore.progress = value;

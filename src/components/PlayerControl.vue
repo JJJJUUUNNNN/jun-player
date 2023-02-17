@@ -2,8 +2,9 @@
 import { ref } from "vue";
 import SliderBar from "./SliderBar.vue";
 import { usePlayer } from "@/hooks/usePlayer";
+import {setItem,getItem} from '@/utils/index'
 
-const { state, volume, handleLike, toPerv, toggle, toNext, currentSong } =
+const { state, volume, handleLike, toPerv, toggle, toNext, currentSong,emitter } =
   usePlayer();
 
 const isShow = ref(false);
@@ -14,13 +15,22 @@ function popUp() {
 function popOut() {
   isShow.value = false;
 }
+
+function handleMute(){
+  if(volume.value!=0){
+    setItem('volume_mute',volume.value)
+    volume.value=Number(0)
+  }else{
+    volume.value = Number(getItem("volume_mute"));
+  }
+}
 </script>
 
 <template>
   <div class="player-control">
     <div class="voice">
-      <button @mousedown="popUp" @mouseleave="popOut">
-        <svg-icon name="volume" size="20px" class="player-button"></svg-icon>
+      <button @mouseenter="popUp" @mousedown="handleMute" @mouseleave="popOut">
+        <svg-icon :name="volume==0?'mute':'volume'" size="20px" class="player-button"></svg-icon>
         <div class="pop-up" v-if="isShow">
           <SliderBar class="sliderBar" style="width: 120px" v-model="volume" />
         </div>

@@ -57,7 +57,7 @@ export class PlayerCore {
     });
 
     this.audio.addEventListener("volumechange", () => {
-      this.volume = this.audio.volume;
+      this.volume = this.audio.muted == false ? this.audio.volume:0
       this.emitter.emit("volumechange");
     });
   }
@@ -250,7 +250,8 @@ export class PlayerCore {
   }
 
   // methods
-  play() {
+  play(index = this.songIndex) {
+    if (index != this.songIndex) this.songIndex = index;
     this.playerState = "play";
     this.audio.play();
   }
@@ -262,6 +263,10 @@ export class PlayerCore {
 
   toggle() {
     this.playerState == "play" ? this.pause() : this.play();
+  }
+
+  reset() {
+    this.currentTime = 0;
   }
 
   getNextSongIndex() {
@@ -279,6 +284,7 @@ export class PlayerCore {
   }
 
   toNext() {
+    this.reset();
     this.pause();
     const nextSongIndex = this.getNextSongIndex();
     if (nextSongIndex != undefined) {
@@ -304,6 +310,7 @@ export class PlayerCore {
   }
 
   toPerv() {
+    this.reset();
     this.pause();
     const prevSongIndex = this.getPervSongIndex();
     if (prevSongIndex != undefined) {
@@ -320,9 +327,10 @@ export class PlayerCore {
     this.emitter.emit("like:song", this.currentSong.like);
   }
 
-  handleListPlay(index=this.songIndex){
-    console.log('handleListPlay',index)
-    this.play()
+  handleListPlay(index = this.songIndex) {
+    this.play(index);
+    this.emitter.emit("playerStateChange", this.playerState);
+    this.emitter.emit("toggle:song", this.currentSong);
   }
 
   toggleMode() {
