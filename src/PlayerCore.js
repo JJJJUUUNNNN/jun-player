@@ -327,10 +327,11 @@ export class PlayerCore {
     this.emitter.emit("like:song", this.currentSong.like);
   }
 
-  handleListPlay(index = this.songIndex) {
+  handleListPlay(index = this.songIndex,target) {
     this.play(index);
     this.emitter.emit("playerStateChange", this.playerState);
     this.emitter.emit("toggle:song", this.currentSong);
+    console.log(target)
   }
 
   toggleMode() {
