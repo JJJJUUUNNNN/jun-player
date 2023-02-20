@@ -1,12 +1,19 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import SliderBar from "./SliderBar.vue";
 import { usePlayer } from "@/hooks/usePlayer";
-import {setItem,getItem} from '@/utils/index'
-// import {watchEffect} from 'vue'
 
-const { state, volume, handleLike, toPerv, toggle, toNext, currentSong,emitter } =
-  usePlayer();
+const {
+  state,
+  volume,
+  muted,
+  handleLike,
+  toPerv,
+  toggle,
+  toNext,
+  currentSong,
+  handleMute,
+} = usePlayer();
 
 const isShow = ref(false);
 
@@ -17,27 +24,37 @@ function popOut() {
   isShow.value = false;
 }
 
-function handleMute(){
-  if(volume.value!=0){
-    setItem('volume_mute',volume.value)
-    volume.value=Number(0)
-  }else{
-    volume.value = Number(getItem("volume_mute"));
-  }
-}
-
-// watchEffect(()=>volume.value,handleMute(),{immediate:true,deep:true})
+const volumeValue = computed({
+  get() {
+    return muted.value === true ? 0 : volume.value;
+  },
+  set(value) {
+    if (muted.value == false) volume.value = value;
+  },
+});
 </script>
 
 <template>
   <div class="player-control">
-    <div class="voice">
-      <button @mouseenter="popUp" @mousedown="handleMute" @mouseleave="popOut">
-        <svg-icon :name="volume==0?'mute':'volume'" size="20px" class="player-button"></svg-icon>
-        <div class="pop-up" v-if="isShow">
-          <SliderBar class="sliderBar" style="width: 120px" v-model="volume" />
-        </div>
+    <div
+      class="voice"
+      @mouseenter="popUp"
+      @mouseleave="popOut"
+    >
+      <button @mousedown="handleMute">
+        <svg-icon
+          :name="muted ? 'mute' : 'volume'"
+          size="20px"
+          class="player-button"
+        ></svg-icon>
       </button>
+      <div class="pop-up" v-if="isShow">
+        <SliderBar
+          class="sliderBar"
+          style="width: 120px"
+          v-model="volumeValue"
+        />
+      </div>
     </div>
     <button contenteditable="true" @click="handleLike()">
       <svg-icon
@@ -81,6 +98,7 @@ function handleMute(){
   background-color: #e2dede;
   border-radius: 10px;
   position: absolute;
+  top: 25px;
   left: 50%;
   transform: translate(-50%);
 }

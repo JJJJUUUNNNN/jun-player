@@ -5,8 +5,21 @@ import random from "@/assets/icon/random-play.png";
 import { getItem } from "./utils";
 import { setItem } from "./utils";
 
+// function
 /**
- * @typedef {{name:string;key:string;icon:string;isShow:boolean}} ModeType
+ *
+ * @param {boolean} value
+ */
+function setMuted(value) {
+  setItem("volume_muted", value == true ? "1" : "0");
+}
+
+function getMuted() {
+  return !!Number(getItem("volume_muted"));
+}
+
+/**
+ * @typedef {{name:string;key:string;icon:string}} ModeType
  */
 export class PlayerCore {
   audio = document.createElement("audio");
@@ -26,8 +39,12 @@ export class PlayerCore {
 
   initPlayer() {
     const volumeCache = getItem("player_volume");
+    const mutedCache = getMuted();
     if (volumeCache != null) {
       this.audio.volume = Number(volumeCache);
+    }
+    if (this.audio.muted != mutedCache) {
+      this.audio.muted = mutedCache;
     }
   }
 
@@ -57,8 +74,14 @@ export class PlayerCore {
     });
 
     this.audio.addEventListener("volumechange", () => {
-      this.volume = this.audio.muted == false ? this.audio.volume:0
-      this.emitter.emit("volumechange");
+      if (this.volume != this.audio.volume) {
+        this.volume = this.audio.volume;
+        this.emitter.emit("volumechange");
+      }
+      if (this.muted != this.audio.muted) {
+        this.muted = this.audio.muted;
+        this.emitter.emit("mutedchange");
+      }
     });
   }
 
@@ -200,6 +223,25 @@ export class PlayerCore {
   }
 
   /**
+   * @description 静音
+   * @type { boolean }
+   * @private
+   */
+  _muted = getMuted();
+
+  get muted() {
+    return this._muted;
+  }
+
+  set muted(value) {
+    if (value == this._muted) return;
+    console.log(123)
+    this._muted = value;
+    this.audio.muted = value;
+    setMuted(value);
+  }
+
+  /**
    * @description 播放模式列表
    * @type { ModeType[] }
    */
@@ -209,19 +251,16 @@ export class PlayerCore {
         name: "列表循环",
         key: "loop",
         icon: loop,
-        isShow: true,
       },
       {
         name: "单曲循环",
         key: "single",
         icon: single,
-        isShow: false,
       },
       {
         name: "随机播放",
         key: "random",
         icon: random,
-        isShow: false,
       },
     ];
   }
@@ -327,8 +366,8 @@ export class PlayerCore {
     this.emitter.emit("like:song", this.currentSong.like);
   }
 
-  handleListPlay(index = this.songIndex,target) {
-    if(target.toLocaleString().includes('SVG')) return
+  handleListPlay(index = this.songIndex, target) {
+    if (target.toLocaleString().includes("SVG")) return;
     this.play(index);
     this.emitter.emit("playerStateChange", this.playerState);
     this.emitter.emit("toggle:song", this.currentSong);
@@ -345,5 +384,10 @@ export class PlayerCore {
 
   getRandomIndex() {
     return Math.floor(Math.random() * this.playList.length);
+  }
+
+  handleMute() {
+    this.muted = !this.muted;
+    this.emitter.emit("mutedchange", this.muted);
   }
 }

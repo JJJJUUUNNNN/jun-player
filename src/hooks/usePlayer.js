@@ -4,6 +4,8 @@ import { computed, inject, ref, watch } from "vue";
 import { PlayerCore } from "../PlayerCore";
 import { useCssVar } from "@vueuse/core";
 
+
+
 export function usePlayer() {
   /**
    * @type { PlayerCore }
@@ -58,6 +60,20 @@ export function usePlayer() {
     playerCore.volume = value;
   });
 
+  const muted = ref(playerCore.muted);
+
+  function mutedRefUpdatePlayerCore() {
+    if (muted.value != playerCore.muted) {
+      muted.value = playerCore.muted;
+    }
+  }
+
+  playerCore.emitter.on("mutedchange", mutedRefUpdatePlayerCore);
+
+  watch(muted, (value) => {
+    playerCore.muted = value;
+  });
+
   const progress = ref(playerCore.progress);
 
   function progressRefUpdatePlayerCore() {
@@ -68,8 +84,6 @@ export function usePlayer() {
 
   playerCore.emitter.on("timeupdate", progressRefUpdatePlayerCore);
   playerCore.emitter.on("durationChange", progressRefUpdatePlayerCore);
-  playerCore.emitter.on('volumechange',progressRefUpdatePlayerCore)
-  
 
   watch(progress, (value) => {
     playerCore.progress = value;
@@ -112,16 +126,18 @@ export function usePlayer() {
     durationText,
     currentText,
     volume,
+    muted,
     playList,
     emitter: playerCore.emitter,
 
     // methods
+    handleMute: playerCore.handleMute.bind(playerCore),
     handleLike: playerCore.handleLike.bind(playerCore),
     toggleMode: playerCore.toggleMode.bind(playerCore),
     toPerv: playerCore.toPerv.bind(playerCore),
     toggle: playerCore.toggle.bind(playerCore),
     toNext: playerCore.toNext.bind(playerCore),
     formatTime,
-    handleListPlay:playerCore.handleListPlay.bind(playerCore)
+    handleListPlay: playerCore.handleListPlay.bind(playerCore),
   };
 }

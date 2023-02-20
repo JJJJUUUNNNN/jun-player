@@ -11,20 +11,20 @@ const props = defineProps({
     default: 500,
   },
 });
-const emit = defineEmits(["update:modelValue", "changeClickValue"]);
+const emit = defineEmits(["update:modelValue", "changeClickValue","drag"]);
 const clickValue = ref(props.modelValue);
 
 const sliderBarRef = ref();
-let isDrag = ref(false);
+const isDrag = ref(false);
 let isTouch = false;
 let barLeft = 0;
 
 watch(isDrag, () => {
-  emit("drag", isDrag);
+  emit("drag", isDrag.value);
 });
 
 function handleMouseDown(event) {
-  isDrag = true;
+  isDrag.value = true;
 
   document.onmousemove = document.ontouchmove = handleMouseMove;
   handleMouseMove(event);
@@ -37,7 +37,7 @@ function handleMouseDown(event) {
 }
 
 function handleMouseMove(event) {
-  if (!isDrag) return;
+  if (!isDrag.value) return;
   if (event.type == "touchstart" || event.type == "touchmove") {
     isTouch = true;
   } else {
@@ -64,7 +64,7 @@ function updateValue() {
 }
 
 function handleMouseleaveOrUp(event) {
-  isDrag = false;
+  isDrag.value = false;
   document.onmousemove = null;
   document.ontouchmove = null;
   document.onmouseup = null;
@@ -77,10 +77,9 @@ function handleMouseleaveOrUp(event) {
 watch(
   () => props.modelValue,
   () => {
-    if (isDrag) return;
+    if (isDrag.value) return;
     if (clickValue.value == props.value) return;
     clickValue.value = props.modelValue;
-    console.log('55',clickValue.value)
   }
 );
 </script>
