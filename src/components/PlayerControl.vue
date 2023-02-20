@@ -12,17 +12,22 @@ const {
   toggle,
   toNext,
   currentSong,
-  handleMute,
+  toggleMute,
 } = usePlayer();
 
-const isShow = ref(false);
-
+const isHover = ref(false);
+const isDrag = ref(false);
+function updateIsDrag(val) {
+  isDrag.value = val;
+}
 function popUp() {
-  isShow.value = true;
+  isHover.value = true;
 }
 function popOut() {
-  isShow.value = false;
+  isHover.value = false;
 }
+
+const isShow = computed(() => isHover.value || isDrag.value);
 
 const volumeValue = computed({
   get() {
@@ -37,7 +42,7 @@ const volumeValue = computed({
 <template>
   <div class="player-control">
     <div class="voice" @mouseenter="popUp" @mouseleave="popOut">
-      <button @mousedown="handleMute">
+      <button @mousedown="toggleMute">
         <svg-icon
           :name="muted ? 'mute' : 'volume'"
           size="20px"
@@ -46,6 +51,7 @@ const volumeValue = computed({
       </button>
       <div class="pop-up" v-if="isShow">
         <SliderBar
+          @drag="updateIsDrag"
           class="sliderBar"
           style="width: 120px"
           v-model="volumeValue"

@@ -129,13 +129,13 @@ export function usePlayer() {
     emitter: playerCore.emitter,
 
     // methods
-    handleMute: playerCore.handleMute.bind(playerCore),
+    toggleMute: playerCore.toggleMute.bind(playerCore),
     handleLike: playerCore.handleLike.bind(playerCore),
     toggleMode: playerCore.toggleMode.bind(playerCore),
     toPerv: playerCore.toPerv.bind(playerCore),
     toggle: playerCore.toggle.bind(playerCore),
     toNext: playerCore.toNext.bind(playerCore),
-    formatTime,
     handleListPlay: playerCore.handleListPlay.bind(playerCore),
+    formatTime,
   };
 }

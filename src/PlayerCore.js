@@ -367,7 +367,6 @@ export class PlayerCore {
   }
 
   handleListPlay(index = this.songIndex, target) {
-    if (target.toLocaleString().includes("SVG")) return;
     this.play(index);
     this.emitter.emit("playerStateChange", this.playerState);
     this.emitter.emit("toggle:song", this.currentSong);
@@ -386,7 +385,7 @@ export class PlayerCore {
     return Math.floor(Math.random() * this.playList.length);
   }
 
-  handleMute() {
+  toggleMute() {
     this.muted = !this.muted;
     this.emitter.emit("mutedchange", this.muted);
   }
