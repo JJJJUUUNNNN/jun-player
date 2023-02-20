@@ -328,10 +328,10 @@ export class PlayerCore {
   }
 
   handleListPlay(index = this.songIndex,target) {
+    if(target.toLocaleString().includes('SVG')) return
     this.play(index);
     this.emitter.emit("playerStateChange", this.playerState);
     this.emitter.emit("toggle:song", this.currentSong);
-    console.log(target)
   }
 
   toggleMode() {
