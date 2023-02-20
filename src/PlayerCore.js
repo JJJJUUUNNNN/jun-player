@@ -235,7 +235,6 @@ export class PlayerCore {
 
   set muted(value) {
     if (value == this._muted) return;
-    console.log(123)
     this._muted = value;
     this.audio.muted = value;
     setMuted(value);
