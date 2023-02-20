@@ -360,7 +360,8 @@ export class PlayerCore {
     this.emitter.emit("toggle:song", this.currentSong);
   }
 
-  handleLike(index = this.songIndex) {
+  handleLike(index = this.songIndex,target) {
+    if (target && !target.toLocaleString().includes("SVG")) return;
     this.playList[index].like = !this.playList[index].like;
     this.emitter.emit("playListChange", this.playList);
     this.emitter.emit("like:song", this.currentSong.like);

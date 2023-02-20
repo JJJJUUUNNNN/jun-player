@@ -23,7 +23,7 @@ document.addEventListener('mousedown', (e) => {
       </thead>
       <tbody>
         <tr v-for="(item, index) in playList" :key="index" @click="handleListPlay(index,target)">
-          <td @click="handleLike(index)">
+          <td @click="handleLike(index,target)">
             <svg-icon
               :name="item.like ? 'like' : 'unlike'"
               size="20px"
