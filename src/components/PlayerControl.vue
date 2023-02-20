@@ -3,6 +3,7 @@ import { ref } from "vue";
 import SliderBar from "./SliderBar.vue";
 import { usePlayer } from "@/hooks/usePlayer";
 import {setItem,getItem} from '@/utils/index'
+// import {watchEffect} from 'vue'
 
 const { state, volume, handleLike, toPerv, toggle, toNext, currentSong,emitter } =
   usePlayer();
@@ -24,6 +25,8 @@ function handleMute(){
     volume.value = Number(getItem("volume_mute"));
   }
 }
+
+// watchEffect(()=>volume.value,handleMute(),{immediate:true,deep:true})
 </script>
 
 <template>

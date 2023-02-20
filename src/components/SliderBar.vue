@@ -80,6 +80,7 @@ watch(
     if (isDrag) return;
     if (clickValue.value == props.value) return;
     clickValue.value = props.modelValue;
+    console.log('55',clickValue.value)
   }
 );
 </script>
