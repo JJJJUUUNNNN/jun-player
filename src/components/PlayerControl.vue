@@ -36,11 +36,7 @@ const volumeValue = computed({
 
 <template>
   <div class="player-control">
-    <div
-      class="voice"
-      @mouseenter="popUp"
-      @mouseleave="popOut"
-    >
+    <div class="voice" @mouseenter="popUp" @mouseleave="popOut">
       <button @mousedown="handleMute">
         <svg-icon
           :name="muted ? 'mute' : 'volume'"

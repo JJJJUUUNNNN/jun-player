@@ -11,7 +11,7 @@ const props = defineProps({
     default: 500,
   },
 });
-const emit = defineEmits(["update:modelValue", "changeClickValue","drag"]);
+const emit = defineEmits(["update:modelValue", "changeClickValue", "drag"]);
 const clickValue = ref(props.modelValue);
 
 const sliderBarRef = ref();

@@ -1,13 +1,13 @@
 <script setup>
-import {ref} from 'vue'
+import { ref } from "vue";
 import { usePlayer } from "@/hooks/usePlayer";
-const { playList, handleLike,handleListPlay } = usePlayer();
+const { playList, handleLike, handleListPlay } = usePlayer();
 
-const target=ref(null)
+const target = ref(null);
 
-document.addEventListener('mousedown', (e) => {
-    target.value = e.target
-})
+document.addEventListener("mousedown", (e) => {
+  target.value = e.target;
+});
 </script>
 
 <template>
@@ -22,8 +22,12 @@ document.addEventListener('mousedown', (e) => {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in playList" :key="index" @click="handleListPlay(index,target)">
-          <td @click="handleLike(index,target)">
+        <tr
+          v-for="(item, index) in playList"
+          :key="index"
+          @click="handleListPlay(index, target)"
+        >
+          <td @click="handleLike(index, target)">
             <svg-icon
               :name="item.like ? 'like' : 'unlike'"
               size="20px"

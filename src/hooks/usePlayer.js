@@ -4,8 +4,6 @@ import { computed, inject, ref, watch } from "vue";
 import { PlayerCore } from "../PlayerCore";
 import { useCssVar } from "@vueuse/core";
 
-
-
 export function usePlayer() {
   /**
    * @type { PlayerCore }
