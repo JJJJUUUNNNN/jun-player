@@ -1,25 +1,25 @@
 <script setup>
-import { usePlayer } from "@/hooks/usePlayer";
-import { ref, watch } from "vue";
-import SliderBar from "./SliderBar.vue";
+import { usePlayer } from '@/hooks/usePlayer'
+import { ref, watch } from 'vue'
+import SliderBar from './SliderBar.vue'
 const { formatTime, progress, currentTime, duration, durationText } =
-  usePlayer();
+  usePlayer()
 
-let isDrag = false;
+let isDrag = false
 
-const ctime = ref(currentTime.value);
+const ctime = ref(currentTime.value)
 
 watch(currentTime, (value) => {
-  if (isDrag) return;
-  ctime.value = value;
-});
+  if (isDrag) return
+  ctime.value = value
+})
 
-function changeClickValue(pre) {
-  ctime.value = duration.value * pre;
+function changeClickValue (pre) {
+  ctime.value = duration.value * pre
 }
 
-function updateIsDrag(val) {
-  isDrag = val;
+function updateIsDrag (val) {
+  isDrag = val
 }
 </script>
 

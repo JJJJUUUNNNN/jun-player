@@ -1,87 +1,87 @@
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch } from 'vue'
 
 const props = defineProps({
   modelValue: {
     type: Number,
-    default: 0,
+    default: 0
   },
   duration: {
     type: Number,
-    default: 500,
-  },
-});
-const emit = defineEmits(["update:modelValue", "changeClickValue", "drag"]);
-const clickValue = ref(props.modelValue);
+    default: 500
+  }
+})
+const emit = defineEmits(['update:modelValue', 'changeClickValue', 'drag'])
+const clickValue = ref(props.modelValue)
 
-const sliderBarRef = ref();
-const isDrag = ref(false);
-let isTouch = false;
-let barLeft = 0;
+const sliderBarRef = ref()
+const isDrag = ref(false)
+let isTouch = false
+let barLeft = 0
 
 watch(isDrag, () => {
-  emit("drag", isDrag.value);
-});
+  emit('drag', isDrag.value)
+})
 
-function handleMouseDown(event) {
-  isDrag.value = true;
+function handleMouseDown (event) {
+  isDrag.value = true
 
-  document.onmousemove = document.ontouchmove = handleMouseMove;
-  handleMouseMove(event);
+  document.onmousemove = document.ontouchmove = handleMouseMove
+  handleMouseMove(event)
 
   document.onmouseup =
     document.ontouchend =
     document.onmouseleave =
     document.onvisibilitychange =
-      handleMouseleaveOrUp;
+      handleMouseleaveOrUp
 }
 
-function handleMouseMove(event) {
-  if (!isDrag.value) return;
-  if (event.type == "touchstart" || event.type == "touchmove") {
-    isTouch = true;
+function handleMouseMove (event) {
+  if (!isDrag.value) return
+  if (event.type === 'touchstart' || event.type === 'touchmove') {
+    isTouch = true
   } else {
-    isTouch = false;
+    isTouch = false
   }
-  barLeft = sliderBarRef.value.getBoundingClientRect().x;
-  const x = isTouch ? event.changedTouches[0].clientX : event.clientX;
-  const diff = x - barLeft;
-  const per = diff / sliderBarRef.value.offsetWidth;
-  const perValue = per >= 0 ? (per <= 1 ? per : 1) : 0;
-  clickValue.value = perValue;
-  emit("changeClickValue", clickValue.value);
+  barLeft = sliderBarRef.value.getBoundingClientRect().x
+  const x = isTouch ? event.changedTouches[0].clientX : event.clientX
+  const diff = x - barLeft
+  const per = diff / sliderBarRef.value.offsetWidth
+  const perValue = per >= 0 ? (per <= 1 ? per : 1) : 0
+  clickValue.value = perValue
+  emit('changeClickValue', clickValue.value)
 }
 
-function updateValue() {
-  const value = clickValue.value;
+function updateValue () {
+  const value = clickValue.value
   if (value >= 0 && value <= 1) {
-    if (props.modelValue != value) {
-      emit("update:modelValue", value);
+    if (props.modelValue !== value) {
+      emit('update:modelValue', value)
     }
   } else {
-    console.log("error value:", value);
+    console.log('error value:', value)
   }
 }
 
-function handleMouseleaveOrUp(event) {
-  isDrag.value = false;
-  document.onmousemove = null;
-  document.ontouchmove = null;
-  document.onmouseup = null;
-  document.ontouchend = null;
-  document.onmouseleave = null;
-  document.onvisibilitychange = null;
-  updateValue();
+function handleMouseleaveOrUp (event) {
+  isDrag.value = false
+  document.onmousemove = null
+  document.ontouchmove = null
+  document.onmouseup = null
+  document.ontouchend = null
+  document.onmouseleave = null
+  document.onvisibilitychange = null
+  updateValue()
 }
 
 watch(
   () => props.modelValue,
   () => {
-    if (isDrag.value) return;
-    if (clickValue.value == props.value) return;
-    clickValue.value = props.modelValue;
+    if (isDrag.value) return
+    if (clickValue.value === props.value) return
+    clickValue.value = props.modelValue
   }
-);
+)
 </script>
 
 <template>

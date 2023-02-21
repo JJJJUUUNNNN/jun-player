@@ -1,7 +1,7 @@
 <script setup>
-import { ref, computed } from "vue";
-import SliderBar from "./SliderBar.vue";
-import { usePlayer } from "@/hooks/usePlayer";
+import { ref, computed } from 'vue'
+import SliderBar from './SliderBar.vue'
+import { usePlayer } from '@/hooks/usePlayer'
 
 const {
   state,
@@ -12,31 +12,31 @@ const {
   toggle,
   toNext,
   currentSong,
-  toggleMute,
-} = usePlayer();
+  toggleMute
+} = usePlayer()
 
-const isHover = ref(false);
-const isDrag = ref(false);
-function updateIsDrag(val) {
-  isDrag.value = val;
+const isHover = ref(false)
+const isDrag = ref(false)
+function updateIsDrag (val) {
+  isDrag.value = val
 }
-function popUp() {
-  isHover.value = true;
+function popUp () {
+  isHover.value = true
 }
-function popOut() {
-  isHover.value = false;
+function popOut () {
+  isHover.value = false
 }
 
-const isShow = computed(() => isHover.value || isDrag.value);
+const isShow = computed(() => isHover.value || isDrag.value)
 
 const volumeValue = computed({
-  get() {
-    return muted.value === true ? 0 : volume.value;
+  get () {
+    return muted.value === true ? 0 : volume.value
   },
-  set(value) {
-    if (muted.value == false) volume.value = value;
-  },
-});
+  set (value) {
+    if (muted.value === false) volume.value = value
+  }
+})
 </script>
 
 <template>
@@ -70,7 +70,7 @@ const volumeValue = computed({
     </button>
     <button @click="toggle">
       <svg-icon
-        :name="state == 'play' ? 'play' : 'pause'"
+        :name="state === 'play' ? 'play' : 'pause'"
         size="2em"
         class="player-button"
       ></svg-icon>

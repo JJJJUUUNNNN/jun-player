@@ -1,5 +1,5 @@
 <script setup>
-import Player from "./components/Player.vue";
+import Player from './components/Player.vue'
 </script>
 
 <template>
