@@ -28,12 +28,12 @@ function toggleList () {
 </template>
 <style>
 .player-action {
-  margin-top: 20px;
   display: flex;
   width: 100%;
   justify-content: space-between;
   align-items: center;
   box-sizing: border-box;
+  padding: 10px;
 }
 
 button {

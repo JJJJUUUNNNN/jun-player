@@ -38,8 +38,11 @@ document.addEventListener('click', (e) => {
 </template>
 
 <style scoped>
+.music-list{
+  width: 100%;
+}
 .music-list-ul {
-  width: 350px;
+  width: 100%;
   list-style: none;
   display: flex;
   flex-direction: column;
@@ -47,6 +50,7 @@ document.addEventListener('click', (e) => {
   align-items: center;
   box-sizing: border-box;
   padding: 0px;
+  margin: 0px;
 }
 .music-list-ul li{
   box-sizing: border-box;
@@ -54,7 +58,7 @@ document.addEventListener('click', (e) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 5px;
+  margin-bottom: 5px;
   padding: 0 15px;
 }
 

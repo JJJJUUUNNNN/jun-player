@@ -87,6 +87,7 @@ const volumeValue = computed({
   width: 100%;
   justify-content: space-between;
   padding-left: 167px;
+  padding-top: 10px;
   box-sizing: border-box;
   padding-right: 10px;
   user-select: none;

@@ -68,10 +68,9 @@ provide('playerCore', playerCore)
 }
 
 .player {
-  width: 360px;
+  width: 100%;
   color: #fff;
   opacity: 0.9;
-  padding: 10px;
   position: relative;
   display: flex;
   flex-direction: column;
