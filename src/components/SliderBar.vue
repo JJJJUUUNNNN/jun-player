@@ -63,7 +63,7 @@ function updateValue () {
   }
 }
 
-function handleMouseleaveOrUp (event) {
+function handleMouseleaveOrUp () {
   isDrag.value = false
   document.onmousemove = null
   document.ontouchmove = null

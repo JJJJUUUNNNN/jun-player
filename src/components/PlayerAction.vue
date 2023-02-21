@@ -5,6 +5,7 @@ import PlayerProgress from './PlayerProgress.vue'
 import PlayList from './PlayList.vue'
 
 const { currentMode, toggleMode } = usePlayer()
+
 const isShow = ref(true)
 function toggleList () {
   isShow.value = !isShow.value

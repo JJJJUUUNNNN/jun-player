@@ -58,8 +58,7 @@ document.addEventListener('click', (e) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 5px;
-  padding: 0 15px;
+  padding: 3px 15px;
 }
 
 .music-list-ul li span:nth-child(1){

@@ -1,12 +1,11 @@
 import { ThemeDarkColor, ThemeLightColor } from '@/utils/const'
 import { lightDarkenColor } from '@/utils/index'
 import { computed, inject, ref, watch } from 'vue'
-// import { PlayerCore } from '../PlayerCore'
 import { useCssVar } from '@vueuse/core'
 
 export function usePlayer () {
   /**
-   * @type { PlayerCore }
+   * @type { playerCore }
    */
   const playerCore = inject('playerCore')
   const state = ref(playerCore.playerState)
