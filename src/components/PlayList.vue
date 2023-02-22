@@ -51,6 +51,7 @@ document.addEventListener('click', (e) => {
   box-sizing: border-box;
   padding: 0px;
   margin: 0px;
+  user-select: none;
 }
 .music-list-ul li{
   box-sizing: border-box;

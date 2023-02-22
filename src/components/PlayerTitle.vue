@@ -1,36 +1,8 @@
 <script setup>
 import { usePlayer } from '@/hooks/usePlayer'
-import { computed, ref, onBeforeUnmount } from 'vue'
-const { emitter, state, currentSong } = usePlayer()
-const rotateValue = ref(0)
-function roll () {
-  if (state.value === 'play') {
-    rotateValue.value++
-  }
-  loop()
-}
 
-let timer = null
-function loop () {
-  timer = setTimeout(() => {
-    clearTimeout(timer)
-    roll()
-  }, 40)
-}
-
-function reset () {
-  rotateValue.value = 0
-}
-const rotate = computed(() => `rotate(${rotateValue.value}deg)`)
+const { loop, currentSong, rotate } = usePlayer()
 loop()
-
-onBeforeUnmount(() => {
-  clearTimeout(timer)
-})
-
-emitter.on('toggle:song', () => {
-  reset()
-})
 </script>
 
 <template>

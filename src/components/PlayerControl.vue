@@ -1,47 +1,27 @@
 <script setup>
-import { ref, computed } from 'vue'
 import SliderBar from './SliderBar.vue'
 import { usePlayer } from '@/hooks/usePlayer'
 
 const {
-  state,
-  volume,
+  playerState,
   muted,
   handleLike,
   toPerv,
   toggle,
   toNext,
   currentSong,
-  toggleMute
+  toggleMute,
+  volumeValue,
+  voiceShow,
+  voiceMouseEnter,
+  voiceMouseLeave,
+  updatevoiceDrag
 } = usePlayer()
-
-const isHover = ref(false)
-const isDrag = ref(false)
-function updateIsDrag (val) {
-  isDrag.value = val
-}
-function popUp () {
-  isHover.value = true
-}
-function popOut () {
-  isHover.value = false
-}
-
-const isShow = computed(() => isHover.value || isDrag.value)
-
-const volumeValue = computed({
-  get () {
-    return muted.value === true ? 0 : volume.value
-  },
-  set (value) {
-    if (muted.value === false) volume.value = value
-  }
-})
 </script>
 
 <template>
   <div class="player-control">
-    <div class="voice" @mouseenter="popUp" @mouseleave="popOut">
+    <div class="voice" @mouseenter="voiceMouseEnter" @mouseleave="voiceMouseLeave">
       <button @mousedown="toggleMute">
         <svg-icon
           :name="muted ? 'mute' : 'volume'"
@@ -49,9 +29,9 @@ const volumeValue = computed({
           class="player-button"
         ></svg-icon>
       </button>
-      <div class="pop-up" v-if="isShow">
+      <div class="pop-up" v-if="voiceShow">
         <SliderBar
-          @drag="updateIsDrag"
+          @drag="updatevoiceDrag"
           class="sliderBar"
           style="width: 120px"
           v-model="volumeValue"
@@ -70,7 +50,7 @@ const volumeValue = computed({
     </button>
     <button @click="toggle">
       <svg-icon
-        :name="state === 'play' ? 'play' : 'pause'"
+        :name="playerState === 'play' ? 'play' : 'pause'"
         size="2em"
         class="player-button"
       ></svg-icon>
