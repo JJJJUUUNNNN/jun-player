@@ -1,11 +1,13 @@
 <script setup>
-import { usePlayer } from '@/hooks/usePlayer'
+import { usePlayer, useLoop } from '@/hooks/usePlayer'
 
-const { loop, currentSong, rotate } = usePlayer()
-loop()
+const { currentSong } = usePlayer()
+const { rotate } = useLoop()
+
 </script>
 
 <template>
+
   <div class="player-info">
     <div class="cover-container" :style="{ transform: rotate }">
       <img class="cover" :src="currentSong.cover" />

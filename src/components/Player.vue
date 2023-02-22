@@ -2,9 +2,11 @@
 import PlayerControl from './PlayerControl.vue'
 import PlayerTitle from './PlayerTitle.vue'
 import PlayerAction from './PlayerAction.vue'
+
 </script>
 
 <template>
+
   <div class="player">
     <PlayerTitle />
     <PlayerControl />
@@ -13,6 +15,10 @@ import PlayerAction from './PlayerAction.vue'
 </template>
 
 <style>
+.btn{
+  border: 10px solid;
+  margin: 20px;
+}
 .player,
 .cover-container {
   background-color: var(--theme-light-color) !important;

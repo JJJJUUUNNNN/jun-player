@@ -1,46 +1,10 @@
 import { ThemeDarkColor, ThemeLightColor } from '@/utils/const'
 import { lightDarkenColor } from '@/utils/index'
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, onUnmounted } from 'vue'
 import { useCssVar } from '@vueuse/core'
-import { PlayerCore } from '@/PlayerCore'
-
-const playerCore = new PlayerCore({
-  playList: [
-    {
-      name: '勾指起誓言',
-      author: '洛天依',
-      duration: '3:03',
-      cover: '/cover/faith.jpg',
-      songUrl: '/music/勾指起誓言-洛天依.mp3',
-      theme: 'f6b3d8',
-      like: false
-    },
-    {
-      name: '盛夏的果实',
-      author: '莫文蔚',
-      duration: '4:10',
-      cover: '/cover/summer.jpg',
-      songUrl: '/music/盛夏的果实-莫文蔚.mp3',
-      theme: 'c1d3df',
-      like: false
-    },
-    {
-      name: '我的美丽',
-      author: '小霞',
-      duration: '5:08',
-      cover: '/cover/myBeauty.jpg',
-      songUrl: '/music/我的美丽-小霞.mp3',
-      theme: 'b7b7b7',
-      like: false
-    }
-  ]
-})
+import { playerCore } from './player'
 
 export function usePlayer () {
-  /**
-   * @type { playerCore }
-   */
-
   /**
    * @description 播放状态
    */
@@ -140,36 +104,34 @@ export function usePlayer () {
   /**
    * @description 声音进度条是否显示
    */
-  const isHover = ref(playerCore.isHover)
 
-  function isHoverUpdatePlayerCore () {
-    if (isHover.value !== playerCore.isHover) {
-      isHover.value = playerCore.isHover
-    }
-  }
+  // function isHoverUpdatePlayerCore () {
+  //   if (isHover.value !== playerCore.isHover) {
+  //     isHover.value = playerCore.isHover
+  //   }
+  // }
 
-  playerCore.emitter.on('isHoverchange', isHoverUpdatePlayerCore)
+  // playerCore.emitter.on('isHoverchange', isHoverUpdatePlayerCore)
 
-  watch(isHover, (value) => {
-    playerCore.isHover = value
-  })
+  // watch(isHover, (value) => {
+  //   playerCore.isHover = value
+  // })
 
   /**
    * @description 声音进度条是否还在被拖拽
    */
-  const voiceDrag = ref(playerCore.voiceDrag)
 
-  function voiceDragUpdatePlayerCore () {
-    if (voiceDrag.value !== playerCore.voiceDrag) {
-      voiceDrag.value = playerCore.voiceDrag
-    }
-  }
+  // function voiceDragUpdatePlayerCore () {
+  //   if (voiceDrag.value !== playerCore.voiceDrag) {
+  //     voiceDrag.value = playerCore.voiceDrag
+  //   }
+  // }
 
-  playerCore.emitter.on('voiceDragchange', voiceDragUpdatePlayerCore)
+  // playerCore.emitter.on('voiceDragchange', voiceDragUpdatePlayerCore)
 
-  watch(voiceDrag, (value) => {
-    playerCore.voiceDrag = value
-  })
+  // watch(voiceDrag, (value) => {
+  //   playerCore.voiceDrag = value
+  // })
 
   /**
    * @description 音乐进度条是否还在被拖拽
@@ -226,22 +188,22 @@ export function usePlayer () {
   /**
    * @description 旋转度数
    */
-  const rotateValue = ref(playerCore.rotateValue)
+  // const rotateValue = ref(playerCore.rotateValue)
 
-  function rotateValueUpdatePlayerCore () {
-    if (rotateValue.value !== playerCore.rotateValue) {
-      rotateValue.value = playerCore.rotateValue
-    }
-  }
+  // function rotateValueUpdatePlayerCore () {
+  //   if (rotateValue.value !== playerCore.rotateValue) {
+  //     rotateValue.value = playerCore.rotateValue
+  //   }
+  // }
 
-  playerCore.emitter.on('rotateValueChange', rotateValueUpdatePlayerCore)
-  playerCore.emitter.on('toggle:song', () => {
-    rotateValue.value = 0
-  })
+  // playerCore.emitter.on('rotateValueChange', rotateValueUpdatePlayerCore)
+  // playerCore.emitter.on('toggle:song', () => {
+  //   rotateValue.value = 0
+  // })
 
-  watch(rotateValue, (value) => {
-    playerCore.rotateValue = value
-  })
+  // watch(rotateValue, (value) => {
+  //   playerCore.rotateValue = value
+  // })
 
   // function
   function add0 (value) {
@@ -258,8 +220,6 @@ export function usePlayer () {
   const durationText = computed(() => formatTime(duration.value))
   const currentText = computed(() => formatTime(currentTime.value))
   const timeBar = computed(() => `${currentText.value}/${durationText.value}`)
-  const rotate = computed(() => `rotate(${rotateValue.value}deg)`)
-  const voiceShow = computed(() => isHover.value || voiceDrag.value)
   const volumeValue = computed({
     get () {
       return muted.value === true ? 0 : volume.value
@@ -281,10 +241,28 @@ export function usePlayer () {
 
   watch(currentSong, updateColor, { immediate: true })
 
+  //
+  const isHover = ref(false)
+  const voiceDrag = ref(false)
+  const voiceShow = computed(() => isHover.value || voiceDrag.value)
+
+  function voiceMouseEnter () {
+    isHover.value = true
+  }
+  function voiceMouseLeave () {
+    isHover.value = false
+  }
+  function updatevoiceDrag (value) {
+    voiceDrag.value = value
+  }
+
+  onUnmounted(() => {
+    playerCore.destroy()
+  })
+
   return {
     // attrs
     playerState,
-    rotate,
     currentMode,
     currentSong,
     progress,
@@ -303,11 +281,65 @@ export function usePlayer () {
     toggle: playerCore.toggle.bind(playerCore),
     toNext: playerCore.toNext.bind(playerCore),
     handleListPlay: playerCore.handleListPlay.bind(playerCore),
-    loop: playerCore.loop.bind(playerCore),
     toggleList: playerCore.toggleList.bind(playerCore),
-    voiceMouseEnter: playerCore.voiceMouseEnter.bind(playerCore),
-    voiceMouseLeave: playerCore.voiceMouseLeave.bind(playerCore),
-    updatevoiceDrag: playerCore.updatevoiceDrag.bind(playerCore),
-    updatemusicDrag: playerCore.updatemusicDrag.bind(playerCore)
+    // voiceMouseEnter: playerCore.voiceMouseEnter.bind(playerCore),
+    // voiceMouseLeave: playerCore.voiceMouseLeave.bind(playerCore),
+    // updatevoiceDrag: playerCore.updatevoiceDrag.bind(playerCore),
+    voiceMouseEnter,
+    voiceMouseLeave,
+    updatevoiceDrag,
+    currentTime,
+    formatTime,
+    durationText,
+    duration,
+
+    updatemusicDrag: playerCore.updatemusicDrag.bind(playerCore),
+    emitter: playerCore.emitter
+  }
+}
+
+export function useLoop () {
+  const rotateValue = ref(0)
+
+  // playerCore.emitter.on('rotateValueChange', rotateValueUpdatePlayerCore)
+  playerCore.emitter.on('toggle:song', () => {
+    rotateValue.value = 0
+  })
+
+  function roll () {
+    if (playerCore.playerState === 'play') {
+      rotateValue.value++
+    }
+    loop()
+  }
+
+  let timer = null
+
+  function loop () {
+    timer = setTimeout(() => {
+      clearTimeout(timer)
+      roll()
+    }, 40)
+  }
+
+  loop()
+
+  const rotate = computed(() => `rotate(${rotateValue.value}deg)`)
+
+  return {
+    rotate
+  }
+}
+
+export function useDrag () {
+  const isDrag = ref(false)
+
+  function updateIsDrag (val) {
+    isDrag.value = val
+  }
+
+  return {
+    isDrag,
+    updateIsDrag
   }
 }

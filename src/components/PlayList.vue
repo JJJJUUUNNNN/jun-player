@@ -1,13 +1,16 @@
 <script setup>
-import { ref } from 'vue'
 import { usePlayer } from '@/hooks/usePlayer'
 const { playList, handleLike, handleListPlay, currentSong } = usePlayer()
 
-const event = ref(undefined)
-
-document.addEventListener('click', (e) => {
-  event.value = e
-})
+function handleLike2 (index, e) {
+  e = window.event || event
+  if (e.stopPropagation) {
+    e.stopPropagation()
+  } else {
+    e.cancelBubble = true // ie兼容
+  }
+  handleLike()
+}
 </script>
 
 <template>
@@ -21,8 +24,8 @@ document.addEventListener('click', (e) => {
       </li>
       <li v-for="(item, index) in playList"
           :key="index"
-          @click="handleListPlay(index)" :class="{'playing':currentSong.name==item.name}">
-          <span @click="handleLike(index,event)">
+          @click.stop="handleListPlay(index)" :class="{'playing':currentSong.name==item.name}">
+          <span @click="($event)=>handleLike2(index,$event)">
             <svg-icon
               :name="item.like ? 'like' : 'unlike'"
               size="20px"

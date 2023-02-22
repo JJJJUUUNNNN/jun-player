@@ -1,6 +1,7 @@
 <script setup>
 import SliderBar from './SliderBar.vue'
-import { usePlayer } from '@/hooks/usePlayer'
+import { ref, computed } from 'vue'
+import { useDrag, usePlayer } from '@/hooks/usePlayer'
 
 const {
   playerState,
@@ -11,12 +12,21 @@ const {
   toNext,
   currentSong,
   toggleMute,
-  volumeValue,
-  voiceShow,
-  voiceMouseEnter,
-  voiceMouseLeave,
-  updatevoiceDrag
+  volumeValue
+
 } = usePlayer()
+const { isDrag, updateIsDrag } = useDrag()
+
+const isHover = ref(false)
+const voiceShow = computed(() => isHover.value || isDrag.value)
+
+function voiceMouseEnter () {
+  isHover.value = true
+}
+function voiceMouseLeave () {
+  isHover.value = false
+}
+
 </script>
 
 <template>
@@ -31,7 +41,7 @@ const {
       </button>
       <div class="pop-up" v-if="voiceShow">
         <SliderBar
-          @drag="updatevoiceDrag"
+          @drag="updateIsDrag"
           class="sliderBar"
           style="width: 120px"
           v-model="volumeValue"

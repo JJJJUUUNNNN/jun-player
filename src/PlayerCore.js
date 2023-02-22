@@ -15,14 +15,14 @@ function setMuted (value) {
 function getMuted () {
   return !!Number(getItem('volume_muted'))
 }
-
+let pid = 1000
 /**
  * @typedef {{name:string;key:string;icon:string}} ModeType
  */
 export class PlayerCore {
   audio = document.createElement('audio')
   emitter = new EventEmitter()
-
+  _pid = pid++
   /**
    * @param { {playList:any} } options
    */
@@ -32,6 +32,7 @@ export class PlayerCore {
     this.audio.controls = true
     document.body.appendChild(this.audio)
     this.initPlayer()
+    //
     this.initAudioEvents()
   }
 
@@ -461,16 +462,16 @@ export class PlayerCore {
   /**
    *@description 喜欢音乐
    */
-  handleLike (index = this.songIndex, event) {
+  handleLike (index = this.songIndex) {
     this.playList[index].like = !this.playList[index].like
     this.emitter.emit('playListChange', this.playList)
     this.emitter.emit('like:song', this.currentSong.like)
-    const e = window.event || event
-    if (e.stopPropagation) {
-      e.stopPropagation()
-    } else {
-      e.cancelBubble = true // ie兼容
-    }
+    // const e = window.event || event
+    // if (e.stopPropagation) {
+    //   e.stopPropagation()
+    // } else {
+    //   e.cancelBubble = true // ie兼容
+    // }
   }
 
   /**
@@ -544,9 +545,11 @@ export class PlayerCore {
     this.loop()
   }
 
+  timer = null
+
   loop () {
-    const timer = setTimeout(() => {
-      clearTimeout(timer)
+    this.timer = setTimeout(() => {
+      clearTimeout(this.timer)
       this.roll()
     }, 40)
   }
@@ -565,5 +568,10 @@ export class PlayerCore {
   updatemusicDrag (val) {
     this.musicDrag = val
     this.emitter.emit('musicDragchange')
+  }
+
+  destroy () {
+    this.audio.remove()
+    this.playList = []
   }
 }
