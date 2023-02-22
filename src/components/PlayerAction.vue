@@ -4,6 +4,7 @@ import PlayerProgress from './PlayerProgress.vue'
 import PlayList from './PlayList.vue'
 
 const { currentMode, toggleMode, showList, toggleList } = usePlayer()
+
 </script>
 
 <template>
