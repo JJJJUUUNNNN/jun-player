@@ -67,3 +67,13 @@ export function lightDarkenColor (color, num) {
   }
   return 'rgba(' + sColorChange.join(',') + ',1)'
 }
+
+export function add0 (value) {
+  return value >= 10 ? value + '' : '0' + value
+}
+
+export function formatTime (value) {
+  const min = Math.floor(value / 60)
+  const sec = Math.floor(value % 60)
+  return `${add0(min)}:${add0(sec)}`
+}

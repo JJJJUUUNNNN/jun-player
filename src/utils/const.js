@@ -1,2 +1,2 @@
-export const ThemeDarkColor = '--theme-dark-color'
-export const ThemeLightColor = '--theme-light-color'
+export const THEME_DARK_COLOR = '--theme-dark-color'
+export const THEME_LIGHT_COLOR = '--theme-light-color'

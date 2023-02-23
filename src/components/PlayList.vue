@@ -1,16 +1,7 @@
+
 <script setup>
 import { usePlayer } from '@/hooks/usePlayer'
 const { playList, handleLike, handleListPlay, currentSong } = usePlayer()
-
-function handleLike2 (index, e) {
-  e = window.event || event
-  if (e.stopPropagation) {
-    e.stopPropagation()
-  } else {
-    e.cancelBubble = true // ie兼容
-  }
-  handleLike()
-}
 </script>
 
 <template>
@@ -24,8 +15,8 @@ function handleLike2 (index, e) {
       </li>
       <li v-for="(item, index) in playList"
           :key="index"
-          @click.stop="handleListPlay(index)" :class="{'playing':currentSong.name==item.name}">
-          <span @click="($event)=>handleLike2(index,$event)">
+          @click="handleListPlay(index)" :class="{'playing':currentSong.name==item.name}">
+          <span @click.stop="handleLike(index)">
             <svg-icon
               :name="item.like ? 'like' : 'unlike'"
               size="20px"

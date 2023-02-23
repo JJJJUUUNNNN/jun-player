@@ -26,14 +26,14 @@ watch(isDrag, () => {
 function handleMouseDown (event) {
   isDrag.value = true
 
-  document.onmousemove = document.ontouchmove = handleMouseMove
   handleMouseMove(event)
 
+  document.onmousemove = document.ontouchmove = handleMouseMove
+
   document.onmouseup =
-    document.ontouchend =
-    document.onmouseleave =
-    document.onvisibilitychange =
-      handleMouseleaveOrUp
+  document.ontouchend =
+  document.onmouseleave =
+  document.onvisibilitychange = handleMouseleaveOrUp
 }
 
 function handleMouseMove (event) {
@@ -49,6 +49,7 @@ function handleMouseMove (event) {
   const per = diff / sliderBarRef.value.offsetWidth
   const perValue = per >= 0 ? (per <= 1 ? per : 1) : 0
   clickValue.value = perValue
+  // 随拖随触发
   emit('changeClickValue', clickValue.value)
 }
 
@@ -56,6 +57,7 @@ function updateValue () {
   const value = clickValue.value
   if (value >= 0 && value <= 1) {
     if (props.modelValue !== value) {
+      // 拖完了 触发
       emit('update:modelValue', value)
     }
   } else {

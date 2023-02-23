@@ -1,8 +1,10 @@
 <script setup>
-import { usePlayer, useDrag } from '@/hooks/usePlayer'
+import { useDrag } from '@/hooks/useDrag'
+import { usePlayer } from '@/hooks/usePlayer'
+import { formatTime } from '@/utils'
 import { ref, watch } from 'vue'
 import SliderBar from './SliderBar.vue'
-const { formatTime, progress, currentTime, duration, durationText } = usePlayer()
+const { progress, currentTime, duration, durationText } = usePlayer()
 const { isDrag, updateIsDrag } = useDrag()
 
 const ctime = ref(currentTime.value)

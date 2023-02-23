@@ -1,9 +1,8 @@
 <script setup>
-import { usePlayer, useLoop } from '@/hooks/usePlayer'
-
+import { useLoop } from '@/hooks/useLoop'
+import { usePlayer } from '@/hooks/usePlayer'
 const { currentSong } = usePlayer()
 const { rotate } = useLoop()
-
 </script>
 
 <template>

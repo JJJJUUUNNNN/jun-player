@@ -1,7 +1,8 @@
 <script setup>
 import SliderBar from './SliderBar.vue'
 import { ref, computed } from 'vue'
-import { useDrag, usePlayer } from '@/hooks/usePlayer'
+import { usePlayer } from '@/hooks/usePlayer'
+import { useDrag } from '@/hooks/useDrag'
 
 const {
   playerState,
@@ -12,9 +13,9 @@ const {
   toNext,
   currentSong,
   toggleMute,
-  volumeValue
-
+  volume
 } = usePlayer()
+
 const { isDrag, updateIsDrag } = useDrag()
 
 const isHover = ref(false)
@@ -44,7 +45,7 @@ function voiceMouseLeave () {
           @drag="updateIsDrag"
           class="sliderBar"
           style="width: 120px"
-          v-model="volumeValue"
+          v-model="volume"
         />
       </div>
     </div>

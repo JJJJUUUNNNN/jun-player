@@ -3,26 +3,28 @@ import loop from '@/assets/icon/list-loop.png'
 import single from '@/assets/icon/single-play.png'
 import random from '@/assets/icon/random-play.png'
 import { getItem, setItem } from './utils'
-
+export const VOLUME_MUTED = 'volume_muted'
+export const PLAYER_VOLUME = 'player_volume'
+export const PLAYER_LAST_VOLUME = 'PLAYER_LAST_VOLUME'
 /**
  *
  * @param {boolean} value
  */
-function setMuted (value) {
-  setItem('volume_muted', value === true ? '1' : '0')
+function setCacheMuted (value) {
+  setItem(VOLUME_MUTED, value === true ? '1' : '0')
 }
 
-function getMuted () {
-  return !!Number(getItem('volume_muted'))
+function getCacheMuted () {
+  return !!Number(getItem(VOLUME_MUTED))
 }
-let pid = 1000
+
+// on{aaaa}Change
 /**
  * @typedef {{name:string;key:string;icon:string}} ModeType
  */
 export class PlayerCore {
   audio = document.createElement('audio')
   emitter = new EventEmitter()
-  _pid = pid++
   /**
    * @param { {playList:any} } options
    */
@@ -32,13 +34,12 @@ export class PlayerCore {
     this.audio.controls = true
     document.body.appendChild(this.audio)
     this.initPlayer()
-    //
     this.initAudioEvents()
   }
 
   initPlayer () {
-    const volumeCache = getItem('player_volume')
-    const mutedCache = getMuted()
+    const volumeCache = getItem(PLAYER_VOLUME)
+    const mutedCache = getCacheMuted()
     if (volumeCache != null) {
       this.audio.volume = Number(volumeCache)
     }
@@ -79,7 +80,7 @@ export class PlayerCore {
       }
       if (this.muted != this.audio.muted) {
         this.muted = this.audio.muted
-        this.emitter.emit('mutedchange')
+        this.emitter.emit('mutedChange')
       }
     })
   }
@@ -98,21 +99,6 @@ export class PlayerCore {
   set playerState (value) {
     this._playerState = value
     this.emitter.emit('playerStateChange', value)
-  }
-
-  /**
-   * @description 显示播放列表
-   * @type { boolean }
-   * @private
-   */
-  _showList = true
-
-  get showList () {
-    return this._showList
-  }
-
-  set showList (value) {
-    this._showList = value
   }
 
   /**
@@ -181,7 +167,7 @@ export class PlayerCore {
   set currentTime (value) {
     if (this._currentTime != value) {
       this._currentTime = value
-      this.emitter.emit('onCurrentTimeChange', value)
+      this.emitter.emit('currentTimeChange', value)
       if (this.audio.currentTime != value) {
         this.audio.currentTime = value
       }
@@ -223,7 +209,7 @@ export class PlayerCore {
    * @type { number }
    * @private
    */
-  _volume = Number(getItem('player_volume')) || this.audio.volume
+  _volume = Number(getItem(PLAYER_VOLUME)) || this.audio.volume
 
   get volume () {
     return this._volume
@@ -232,8 +218,20 @@ export class PlayerCore {
   set volume (value) {
     if (value == this._volume) return
     this._volume = value
+    this.lastVolume = value
     this.audio.volume = value
-    setItem('player_volume', value)
+    setItem(PLAYER_VOLUME, value)
+  }
+
+  _lastVolume = Number(getItem(PLAYER_LAST_VOLUME || 1))
+
+  get lastVolume () {
+    return this._lastVolume
+  }
+
+  set lastVolume (value) {
+    if (value == 0) return
+    setItem(PLAYER_LAST_VOLUME, value)
   }
 
   /**
@@ -241,7 +239,7 @@ export class PlayerCore {
    * @type { boolean }
    * @private
    */
-  _muted = getMuted()
+  _muted = getCacheMuted()
 
   get muted () {
     return this._muted
@@ -251,49 +249,7 @@ export class PlayerCore {
     if (value == this._muted) return
     this._muted = value
     this.audio.muted = value
-    setMuted(value)
-  }
-
-  /**
-   * @description 声音进度条是否显示
-   * @type {boolean}
-   */
-  _isHover = false
-
-  get isHover () {
-    return this._isHover
-  }
-
-  set isHover (value) {
-    this._isHover = value
-  }
-
-  /**
-   * @description 声音进度条是否还在被拖拽
-   * @type {boolean}
-   */
-  _voiceDrag = false
-
-  get voiceDrag () {
-    return this._voiceDrag
-  }
-
-  set voiceDrag (value) {
-    this._voiceDrag = value
-  }
-
-  /**
-   * @description 音乐进度条是否还在被拖拽
-   * @type {boolean}
-   */
-  _musicDrag = false
-
-  get musicDrag () {
-    return this._musicDrag
-  }
-
-  set musicDrag (value) {
-    this._musicDrag = value
+    setCacheMuted(value)
   }
 
   /**
@@ -333,21 +289,6 @@ export class PlayerCore {
 
   set modeListIndex (value) {
     this._modeListIndex = value
-  }
-
-  /**
-   * @description 旋转度数
-   * @type { number }
-   * @private
-   */
-  _rotateValue = 0
-
-  get rotateValue () {
-    return this._rotateValue
-  }
-
-  set rotateValue (value) {
-    this._rotateValue = value
   }
 
   /**
@@ -466,12 +407,6 @@ export class PlayerCore {
     this.playList[index].like = !this.playList[index].like
     this.emitter.emit('playListChange', this.playList)
     this.emitter.emit('like:song', this.currentSong.like)
-    // const e = window.event || event
-    // if (e.stopPropagation) {
-    //   e.stopPropagation()
-    // } else {
-    //   e.cancelBubble = true // ie兼容
-    // }
   }
 
   /**
@@ -496,14 +431,6 @@ export class PlayerCore {
   }
 
   /**
-   *@description 切换播放列表显示状态
-   */
-  toggleList () {
-    this.showList = !this.showList
-    this.emitter.emit('showListChange')
-  }
-
-  /**
    *@description 获得随机索引 用于随机模式
    */
   getRandomIndex () {
@@ -515,59 +442,7 @@ export class PlayerCore {
    */
   toggleMute () {
     this.muted = !this.muted
-    this.emitter.emit('mutedchange', this.muted)
-  }
-
-  /**
-   * @description 声音进度条鼠标进入事件@mouseenter
-   */
-  voiceMouseEnter () {
-    this.isHover = true
-    this.emitter.emit('isHoverchange')
-  }
-
-  /**
-   * @description 声音进度条鼠标离开事件@mouseleave
-   */
-  voiceMouseLeave () {
-    this.isHover = false
-    this.emitter.emit('isHoverchange')
-  }
-
-  /**
-   *@description 旋转
-   */
-  roll () {
-    if (this.playerState === 'play') {
-      this.rotateValue++
-      this.emitter.emit('rotateValueChange')
-    }
-    this.loop()
-  }
-
-  timer = null
-
-  loop () {
-    this.timer = setTimeout(() => {
-      clearTimeout(this.timer)
-      this.roll()
-    }, 40)
-  }
-
-  /**
-   * @description 处理声音进度条拖拽事件@drag
-   */
-  updatevoiceDrag (val) {
-    this.voiceDrag = val
-    this.emitter.emit('voiceDragchange')
-  }
-
-  /**
-   * @description 处理音乐进度条拖拽事件@drag
-   */
-  updatemusicDrag (val) {
-    this.musicDrag = val
-    this.emitter.emit('musicDragchange')
+    this.emitter.emit('mutedChange', this.muted)
   }
 
   destroy () {

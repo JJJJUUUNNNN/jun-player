@@ -2,8 +2,14 @@
 import { usePlayer } from '@/hooks/usePlayer'
 import PlayerProgress from './PlayerProgress.vue'
 import PlayList from './PlayList.vue'
+import { ref } from 'vue'
 
-const { currentMode, toggleMode, showList, toggleList } = usePlayer()
+const { currentMode, toggleMode } = usePlayer()
+
+const isShow = ref(true)
+function toggleList () {
+  isShow.value = !isShow.value
+}
 
 </script>
 
@@ -21,7 +27,7 @@ const { currentMode, toggleMode, showList, toggleList } = usePlayer()
       <svg-icon name="music-list" size="2em" class="player-button"></svg-icon>
     </button>
   </div>
-  <PlayList v-if="showList" />
+  <PlayList v-if="isShow" />
 </template>
 
 <style>
