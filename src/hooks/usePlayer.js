@@ -28,7 +28,6 @@ export function useState (key, emits = [], isWatch = false) {
     playerCore.emitter.on(emit, update)
   })
   watch(state, (value) => {
-    console.log(value)
     if (isWatch) {
       playerCore[key] = value
     }

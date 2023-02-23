@@ -434,6 +434,7 @@ export class PlayerCore {
    *@description 列表中播放音乐
    */
   handleListPlay (index = this.songIndex) {
+    this.reset()
     this.play(index)
     this.emitter.emit('playerStateChange', this.playerState)
     this.emitter.emit('toggle:song', this.currentSong)

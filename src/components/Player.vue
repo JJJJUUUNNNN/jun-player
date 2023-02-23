@@ -57,10 +57,6 @@ onUnmounted(() => {
 </template>
 
 <style>
-.btn{
-  border: 10px solid;
-  margin: 20px;
-}
 .player,
 .cover-container {
   background-color: var(--theme-light-color) !important;
