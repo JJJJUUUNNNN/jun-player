@@ -5,7 +5,7 @@ import random from '@/assets/icon/random-play.png'
 import { getItem, setItem } from './utils'
 export const VOLUME_MUTED = 'volume_muted'
 export const PLAYER_VOLUME = 'player_volume'
-export const PLAYER_LAST_VOLUME = 'PLAYER_LAST_VOLUME'
+export const PLAYER_LAST_VOLUME = 'player_last_volume'
 /**
  *
  * @param {boolean} value
@@ -17,8 +17,29 @@ function setCacheMuted (value) {
 function getCacheMuted () {
   return !!Number(getItem(VOLUME_MUTED))
 }
+/**
+ *
+ * @param {boolean} value
+ */
+function setCacheVolume (value) {
+  setItem(PLAYER_VOLUME, value)
+}
 
-// on{aaaa}Change
+function getCacheVolume () {
+  return Number(getItem(PLAYER_VOLUME))
+}
+/**
+ *
+ * @param {boolean} value
+ */
+function setCacheLastVolume (value) {
+  setItem(PLAYER_LAST_VOLUME, value)
+}
+
+function getCacheLastVolume () {
+  return Number(getItem(PLAYER_LAST_VOLUME || 1))
+}
+
 /**
  * @typedef {{name:string;key:string;icon:string}} ModeType
  */
@@ -38,7 +59,7 @@ export class PlayerCore {
   }
 
   initPlayer () {
-    const volumeCache = getItem(PLAYER_VOLUME)
+    const volumeCache = getCacheVolume()
     const mutedCache = getCacheMuted()
     if (volumeCache != null) {
       this.audio.volume = Number(volumeCache)
@@ -209,7 +230,7 @@ export class PlayerCore {
    * @type { number }
    * @private
    */
-  _volume = Number(getItem(PLAYER_VOLUME)) || this.audio.volume
+  _volume = getCacheVolume() || this.audio.volume
 
   get volume () {
     return this._volume
@@ -220,10 +241,10 @@ export class PlayerCore {
     this._volume = value
     this.lastVolume = value
     this.audio.volume = value
-    setItem(PLAYER_VOLUME, value)
+    setCacheVolume(value)
   }
 
-  _lastVolume = Number(getItem(PLAYER_LAST_VOLUME || 1))
+  _lastVolume = getCacheLastVolume()
 
   get lastVolume () {
     return this._lastVolume
@@ -231,7 +252,7 @@ export class PlayerCore {
 
   set lastVolume (value) {
     if (value == 0) return
-    setItem(PLAYER_LAST_VOLUME, value)
+    setCacheLastVolume(value)
   }
 
   /**
